@@ -19,7 +19,6 @@ export function PropertiesPanel() {
     updateElement,
     removeElement,
     moveBlock,
-    updatePage,
     updatePageHeader,
     updatePageFooter,
   } = useEditorStore();
@@ -28,49 +27,6 @@ export function PropertiesPanel() {
   const blocks = currentPage?.blocks || [];
   const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
   const selectedElement = selectedBlock?.elements.find((e) => e.id === selectedElementId);
-
-  // Page Properties
-  if (!selectedBlockId && !selectedElementId && !selectedHeaderFooter && currentPage) {
-    return (
-      <div className="w-80 bg-editor-panel border-l border-border flex flex-col h-screen">
-        <div className="p-4 border-b border-border">
-          <h3 className="font-display font-semibold">Propriedades da Página</h3>
-          <p className="text-xs text-muted-foreground">Personalize sua página</p>
-        </div>
-
-        <ScrollArea className="flex-1">
-          <div className="p-4 space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="page-name">Nome da Página</Label>
-              <Input
-                id="page-name"
-                value={currentPage.name}
-                onChange={(e) => updatePage(currentPage.id, { name: e.target.value })}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="page-bg">Cor de Fundo da Página</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="page-bg"
-                  type="color"
-                  className="w-16 h-10"
-                  value={currentPage.backgroundColor}
-                  onChange={(e) => updatePage(currentPage.id, { backgroundColor: e.target.value })}
-                />
-                <Input
-                  value={currentPage.backgroundColor}
-                  onChange={(e) => updatePage(currentPage.id, { backgroundColor: e.target.value })}
-                  className="flex-1"
-                />
-              </div>
-            </div>
-          </div>
-        </ScrollArea>
-      </div>
-    );
-  }
 
   // Header/Footer Properties
   if (selectedHeaderFooter && currentPage) {
@@ -558,11 +514,21 @@ export function PropertiesPanel() {
     );
   }
 
-  // Default state
+  // Default state - no selection
   return (
     <div className="w-80 bg-editor-panel border-l border-border flex items-center justify-center p-8 text-center">
-      <div className="text-sm text-muted-foreground">
-        Selecione um bloco, elemento, header ou footer para editar suas propriedades
+      <div className="space-y-3">
+        <div className="text-sm text-muted-foreground">
+          Selecione um elemento para editar:
+        </div>
+        <ul className="text-xs text-muted-foreground space-y-2">
+          <li>• Clique em um bloco no preview</li>
+          <li>• Clique no header ou footer</li>
+          <li>• Clique em um elemento dentro de um bloco</li>
+        </ul>
+        <div className="pt-4 border-t text-xs text-muted-foreground">
+          💡 Para editar a página, clique no ícone de configuração ao lado do seletor de páginas
+        </div>
       </div>
     </div>
   );
