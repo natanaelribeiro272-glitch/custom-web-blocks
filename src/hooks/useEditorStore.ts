@@ -2,6 +2,13 @@ import { create } from 'zustand';
 import { Block, BlockElement, EditorState, Page, HeaderTemplate, FooterTemplate, HeaderFooterConfig } from '@/types/editor';
 
 interface EditorStore extends EditorState {
+  projectId: string | null;
+  projectName: string;
+  
+  // Project actions
+  loadProject: (projectId: string) => void;
+  setProjectName: (name: string) => void;
+  
   // Page actions
   addPage: () => void;
   removePage: (pageId: string) => void;
@@ -60,7 +67,50 @@ const createDefaultFooter = (): HeaderFooterConfig => ({
   textColor: "#ffffff",
 });
 
+// Helper to save state to localStorage
+const saveToLocalStorage = (projectId: string, state: Partial<EditorStore>) => {
+  if (!projectId) return;
+  
+  const dataToSave = {
+    pages: state.pages,
+    currentPageId: state.currentPageId,
+    projectName: state.projectName,
+  };
+  
+  localStorage.setItem(`editorState-${projectId}`, JSON.stringify(dataToSave));
+  
+  // Update project in user projects list
+  const savedProjects = localStorage.getItem("userProjects");
+  if (savedProjects) {
+    const projects = JSON.parse(savedProjects);
+    const projectIndex = projects.findIndex((p: any) => p.id === projectId);
+    if (projectIndex !== -1) {
+      projects[projectIndex].updatedAt = new Date().toISOString();
+      projects[projectIndex].name = state.projectName || projects[projectIndex].name;
+      localStorage.setItem("userProjects", JSON.stringify(projects));
+    }
+  }
+};
+
+// Helper to load state from localStorage
+const loadFromLocalStorage = (projectId: string) => {
+  if (!projectId) return null;
+  
+  const saved = localStorage.getItem(`editorState-${projectId}`);
+  if (saved) {
+    try {
+      return JSON.parse(saved);
+    } catch (e) {
+      console.error("Failed to load project:", e);
+      return null;
+    }
+  }
+  return null;
+};
+
 export const useEditorStore = create<EditorStore>((set, get) => ({
+  projectId: null,
+  projectName: "Novo Site",
   pages: [
     {
       id: 'page-1',
@@ -80,6 +130,29 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   insertBlockIndex: 0,
   floatingBarPosition: { x: 0, y: 0, isDocked: true },
 
+  // Project actions
+  loadProject: (projectId: string) => {
+    const savedState = loadFromLocalStorage(projectId);
+    if (savedState) {
+      set({
+        projectId,
+        pages: savedState.pages,
+        currentPageId: savedState.currentPageId,
+        projectName: savedState.projectName || "Novo Site",
+      });
+    } else {
+      set({ projectId });
+    }
+  },
+
+  setProjectName: (name: string) => {
+    set({ projectName: name });
+    const state = get();
+    if (state.projectId) {
+      saveToLocalStorage(state.projectId, state);
+    }
+  },
+
   // Page actions
   addPage: () =>
     set((state) => {
@@ -91,10 +164,14 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         footer: createDefaultFooter(),
         blocks: [],
       };
-      return {
+      const newState = {
         pages: [...state.pages, newPage],
         currentPageId: newPage.id,
       };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
     }),
 
   removePage: (pageId) =>
@@ -104,18 +181,28 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         // Always keep at least one page
         return state;
       }
-      return {
+      const newState = {
         pages: newPages,
         currentPageId: state.currentPageId === pageId ? newPages[0].id : state.currentPageId,
       };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
     }),
 
   updatePage: (pageId, updates) =>
-    set((state) => ({
-      pages: state.pages.map((p) =>
-        p.id === pageId ? { ...p, ...updates } : p
-      ),
-    })),
+    set((state) => {
+      const newState = {
+        pages: state.pages.map((p) =>
+          p.id === pageId ? { ...p, ...updates } : p
+        ),
+      };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
+    }),
 
   setCurrentPage: (pageId) =>
     set({
@@ -127,18 +214,30 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     }),
 
   updatePageHeader: (pageId, header) =>
-    set((state) => ({
-      pages: state.pages.map((p) =>
-        p.id === pageId ? { ...p, header: { ...p.header, ...header } } : p
-      ),
-    })),
+    set((state) => {
+      const newState = {
+        pages: state.pages.map((p) =>
+          p.id === pageId ? { ...p, header: { ...p.header, ...header } } : p
+        ),
+      };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
+    }),
 
   updatePageFooter: (pageId, footer) =>
-    set((state) => ({
-      pages: state.pages.map((p) =>
-        p.id === pageId ? { ...p, footer: { ...p.footer, ...footer } } : p
-      ),
-    })),
+    set((state) => {
+      const newState = {
+        pages: state.pages.map((p) =>
+          p.id === pageId ? { ...p, footer: { ...p.footer, ...footer } } : p
+        ),
+      };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
+    }),
 
   // Block actions
   addBlock: (type) =>
@@ -161,13 +260,17 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         },
       };
 
-      return {
+      const newState = {
         pages: state.pages.map((p) =>
           p.id === state.currentPageId
             ? { ...p, blocks: [...p.blocks, newBlock] }
             : p
         ),
       };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
     }),
 
   addBlockAt: (type, index) =>
@@ -193,7 +296,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       const blocks = [...currentPage.blocks];
       blocks.splice(index, 0, newBlock);
 
-      return {
+      const newState = {
         pages: state.pages.map((p) =>
           p.id === state.currentPageId
             ? { ...p, blocks }
@@ -202,29 +305,45 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         selectedBlockId: newBlock.id,
         activeSheet: null,
       };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
     }),
 
   removeBlock: (blockId) =>
-    set((state) => ({
-      pages: state.pages.map((p) =>
-        p.id === state.currentPageId
-          ? { ...p, blocks: p.blocks.filter((b) => b.id !== blockId) }
-          : p
-      ),
-      selectedBlockId: state.selectedBlockId === blockId ? null : state.selectedBlockId,
-    })),
+    set((state) => {
+      const newState = {
+        pages: state.pages.map((p) =>
+          p.id === state.currentPageId
+            ? { ...p, blocks: p.blocks.filter((b) => b.id !== blockId) }
+            : p
+        ),
+        selectedBlockId: state.selectedBlockId === blockId ? null : state.selectedBlockId,
+      };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
+    }),
 
   updateBlock: (blockId, updates) =>
-    set((state) => ({
-      pages: state.pages.map((p) =>
-        p.id === state.currentPageId
-          ? {
-              ...p,
-              blocks: p.blocks.map((b) => (b.id === blockId ? { ...b, ...updates } : b)),
-            }
-          : p
-      ),
-    })),
+    set((state) => {
+      const newState = {
+        pages: state.pages.map((p) =>
+          p.id === state.currentPageId
+            ? {
+                ...p,
+                blocks: p.blocks.map((b) => (b.id === blockId ? { ...b, ...updates } : b)),
+              }
+            : p
+        ),
+      };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
+    }),
 
   selectBlock: (blockId) =>
     set({ selectedBlockId: blockId, selectedElementId: null, selectedHeaderFooter: null, showingPageConfig: false }),
@@ -243,65 +362,87 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
       [blocks[index], blocks[newIndex]] = [blocks[newIndex], blocks[index]];
 
-      return {
+      const newState = {
         pages: state.pages.map((p) =>
           p.id === state.currentPageId ? { ...p, blocks } : p
         ),
       };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
     }),
 
   // Element actions
   addElement: (blockId, element) =>
-    set((state) => ({
-      pages: state.pages.map((p) =>
-        p.id === state.currentPageId
-          ? {
-              ...p,
-              blocks: p.blocks.map((b) =>
-                b.id === blockId ? { ...b, elements: [...b.elements, element] } : b
-              ),
-            }
-          : p
-      ),
-    })),
+    set((state) => {
+      const newState = {
+        pages: state.pages.map((p) =>
+          p.id === state.currentPageId
+            ? {
+                ...p,
+                blocks: p.blocks.map((b) =>
+                  b.id === blockId ? { ...b, elements: [...b.elements, element] } : b
+                ),
+              }
+            : p
+        ),
+      };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
+    }),
 
   removeElement: (blockId, elementId) =>
-    set((state) => ({
-      pages: state.pages.map((p) =>
-        p.id === state.currentPageId
-          ? {
-              ...p,
-              blocks: p.blocks.map((b) =>
-                b.id === blockId
-                  ? { ...b, elements: b.elements.filter((e) => e.id !== elementId) }
-                  : b
-              ),
-            }
-          : p
-      ),
-      selectedElementId: state.selectedElementId === elementId ? null : state.selectedElementId,
-    })),
+    set((state) => {
+      const newState = {
+        pages: state.pages.map((p) =>
+          p.id === state.currentPageId
+            ? {
+                ...p,
+                blocks: p.blocks.map((b) =>
+                  b.id === blockId
+                    ? { ...b, elements: b.elements.filter((e) => e.id !== elementId) }
+                    : b
+                ),
+              }
+            : p
+        ),
+        selectedElementId: state.selectedElementId === elementId ? null : state.selectedElementId,
+      };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
+    }),
 
   updateElement: (blockId, elementId, updates) =>
-    set((state) => ({
-      pages: state.pages.map((p) =>
-        p.id === state.currentPageId
-          ? {
-              ...p,
-              blocks: p.blocks.map((b) =>
-                b.id === blockId
-                  ? {
-                      ...b,
-                      elements: b.elements.map((e) =>
-                        e.id === elementId ? { ...e, ...updates } : e
-                      ),
-                    }
-                  : b
-              ),
-            }
-          : p
-      ),
-    })),
+    set((state) => {
+      const newState = {
+        pages: state.pages.map((p) =>
+          p.id === state.currentPageId
+            ? {
+                ...p,
+                blocks: p.blocks.map((b) =>
+                  b.id === blockId
+                    ? {
+                        ...b,
+                        elements: b.elements.map((e) =>
+                          e.id === elementId ? { ...e, ...updates } : e
+                        ),
+                      }
+                    : b
+                ),
+              }
+            : p
+        ),
+      };
+      if (state.projectId) {
+        saveToLocalStorage(state.projectId, { ...state, ...newState });
+      }
+      return newState;
+    }),
 
   selectElement: (elementId) =>
     set({ selectedElementId: elementId, selectedHeaderFooter: null, showingPageConfig: false }),
