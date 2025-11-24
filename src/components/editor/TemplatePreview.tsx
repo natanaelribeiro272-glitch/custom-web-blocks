@@ -1,5 +1,4 @@
 import { HeaderTemplate, FooterTemplate } from "@/types/editor";
-import { Menu } from "lucide-react";
 
 interface TemplatePreviewProps {
   type: "header" | "footer";
@@ -21,7 +20,6 @@ export function TemplatePreview({ type, template }: TemplatePreviewProps) {
     if (headerTemplate === "simple") {
       return (
         <div className="w-full bg-card rounded-md border-2 overflow-hidden">
-          {/* Menu sempre visível */}
           <div className="h-14 bg-white flex items-center justify-between px-4">
             <span className="text-sm font-semibold text-foreground">Marca</span>
             <div className="flex gap-3">
@@ -29,13 +27,6 @@ export function TemplatePreview({ type, template }: TemplatePreviewProps) {
               <div className="text-xs text-muted-foreground">Sobre</div>
               <div className="text-xs text-muted-foreground">Contato</div>
             </div>
-          </div>
-          {/* Separador */}
-          <div className="h-px bg-border"></div>
-          {/* Menu hambúrguer alternativo */}
-          <div className="h-14 bg-muted/20 flex items-center justify-between px-4">
-            <span className="text-sm font-semibold text-foreground">Marca</span>
-            <Menu className="h-4 w-4 text-muted-foreground" />
           </div>
         </div>
       );
@@ -44,7 +35,6 @@ export function TemplatePreview({ type, template }: TemplatePreviewProps) {
     if (headerTemplate === "centered") {
       return (
         <div className="w-full bg-card rounded-md border-2 overflow-hidden">
-          {/* Menu sempre visível */}
           <div className="h-16 bg-white flex flex-col items-center justify-center gap-1.5 py-2">
             <span className="text-sm font-bold text-foreground">Marca</span>
             <div className="flex gap-3">
@@ -53,14 +43,6 @@ export function TemplatePreview({ type, template }: TemplatePreviewProps) {
               <div className="text-xs text-muted-foreground">Contato</div>
             </div>
           </div>
-          {/* Separador */}
-          <div className="h-px bg-border"></div>
-          {/* Menu hambúrguer alternativo */}
-          <div className="h-14 bg-muted/20 flex items-center justify-between px-4">
-            <div className="w-6"></div>
-            <span className="text-sm font-bold text-foreground">Marca</span>
-            <Menu className="h-4 w-4 text-muted-foreground" />
-          </div>
         </div>
       );
     }
@@ -68,7 +50,6 @@ export function TemplatePreview({ type, template }: TemplatePreviewProps) {
     if (headerTemplate === "with-logo") {
       return (
         <div className="w-full bg-card rounded-md border-2 overflow-hidden">
-          {/* Menu sempre visível */}
           <div className="h-14 bg-white flex items-center justify-between px-4">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 bg-primary/30 rounded flex items-center justify-center text-xs font-bold">L</div>
@@ -78,16 +59,6 @@ export function TemplatePreview({ type, template }: TemplatePreviewProps) {
               <div className="text-xs text-muted-foreground">Home</div>
               <div className="text-xs text-muted-foreground">Sobre</div>
             </div>
-          </div>
-          {/* Separador */}
-          <div className="h-px bg-border"></div>
-          {/* Menu hambúrguer alternativo */}
-          <div className="h-14 bg-muted/20 flex items-center justify-between px-4">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-primary/30 rounded flex items-center justify-center text-xs font-bold">L</div>
-              <span className="text-sm font-semibold text-foreground">Marca</span>
-            </div>
-            <Menu className="h-4 w-4 text-muted-foreground" />
           </div>
         </div>
       );
