@@ -47,16 +47,21 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+        editor: {
+          sidebar: "hsl(var(--editor-sidebar))",
+          preview: "hsl(var(--editor-preview))",
+          panel: "hsl(var(--editor-panel))",
         },
+        selected: "hsl(var(--selected-block))",
+        hover: "hsl(var(--hover-element))",
+      },
+      fontFamily: {
+        sans: ["DM Sans", "sans-serif"],
+        display: ["Outfit", "sans-serif"],
+      },
+      transitionProperty: {
+        smooth: "var(--transition-smooth)",
+        fast: "var(--transition-fast)",
       },
       borderRadius: {
         lg: "var(--radius)",
