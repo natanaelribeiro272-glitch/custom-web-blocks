@@ -1,10 +1,13 @@
 import { useEditorStore } from "@/hooks/useEditorStore";
 import { BlockRenderer } from "./BlockRenderer";
+import { HeaderFooterRenderer } from "./HeaderFooterRenderer";
 import { Smartphone, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function MobilePreview() {
-  const { blocks, addBlock } = useEditorStore();
+  const { pages, currentPageId, addBlock } = useEditorStore();
+  const currentPage = pages.find((p) => p.id === currentPageId);
+  const blocks = currentPage?.blocks || [];
 
   return (
     <div className="flex-1 bg-editor-preview p-8 flex items-start justify-center overflow-auto">
@@ -13,7 +16,13 @@ export function MobilePreview() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-gray-800 rounded-b-3xl z-10" />
         
         {/* Screen Content */}
-        <div className="absolute inset-0 overflow-auto mt-8 mb-2">
+        <div 
+          className="absolute inset-0 overflow-auto mt-8 mb-2"
+          style={{ backgroundColor: currentPage?.backgroundColor || "#ffffff" }}
+        >
+          {/* Header */}
+          {currentPage && <HeaderFooterRenderer config={currentPage.header} type="header" pageId={currentPage.id} />}
+          
           {blocks.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full px-8 text-center">
               <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
@@ -38,6 +47,9 @@ export function MobilePreview() {
               ))}
             </div>
           )}
+          
+          {/* Footer */}
+          {currentPage && <HeaderFooterRenderer config={currentPage.footer} type="footer" pageId={currentPage.id} />}
         </div>
       </div>
     </div>
