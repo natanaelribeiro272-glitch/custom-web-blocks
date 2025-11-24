@@ -1,4 +1,4 @@
-import { LayoutGrid, AlignCenter, Columns2, Grid3x3, Type, FileText, Image, Video, MousePointerClick, Link as LinkIcon } from "lucide-react";
+import { LayoutGrid, AlignCenter, Columns2, Grid3x3, Type, FileText, Image, Video, MousePointerClick, Link as LinkIcon, Timer, ShoppingBag, ListOrdered, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEditorStore } from "@/hooks/useEditorStore";
@@ -19,6 +19,10 @@ const elementTypes: { type: ElementType; icon: any; label: string; description: 
   { type: "video", icon: Video, label: "Vídeo", description: "Vídeo do YouTube ou Vimeo" },
   { type: "button", icon: MousePointerClick, label: "Botão", description: "Botão de ação/CTA" },
   { type: "link", icon: LinkIcon, label: "Link", description: "Link de texto" },
+  { type: "carousel", icon: ImageIcon, label: "Carrossel", description: "Galeria de imagens" },
+  { type: "countdown", icon: Timer, label: "Contador", description: "Contador regressivo" },
+  { type: "product", icon: ShoppingBag, label: "Produto", description: "Card de produto completo" },
+  { type: "list", icon: ListOrdered, label: "Lista", description: "Lista customizável" },
 ];
 
 export function EditorSidebar() {
@@ -37,6 +41,25 @@ export function EditorSidebar() {
         text: type === "title" ? "Novo Título" : type === "text" ? "Novo texto" : type === "button" ? "Clique aqui" : "",
         url: type === "image" ? "" : undefined,
         href: type === "link" || type === "button" ? "#" : undefined,
+        // Countdown
+        targetDate: type === "countdown" ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() : undefined,
+        countdownLabel: type === "countdown" ? "Faltam:" : undefined,
+        // Product
+        productName: type === "product" ? "Nome do Produto" : undefined,
+        productPrice: type === "product" ? "R$ 49,90" : undefined,
+        productOriginalPrice: type === "product" ? "" : undefined,
+        productDescription: type === "product" ? "Descrição do produto aqui" : undefined,
+        productImage: type === "product" ? "" : undefined,
+        productButtonText: type === "product" ? "Comprar Agora" : undefined,
+        productButtonLink: type === "product" ? "#" : undefined,
+        // List
+        listItems: type === "list" ? ["Item 1", "Item 2", "Item 3"] : undefined,
+        listIcon: type === "list" ? "check" : undefined,
+        listStyle: type === "list" ? ("bullet" as const) : undefined,
+        // Carousel
+        carouselImages: type === "carousel" ? [] : undefined,
+        carouselAutoplay: type === "carousel" ? true : undefined,
+        carouselInterval: type === "carousel" ? 3000 : undefined,
       },
     };
 
