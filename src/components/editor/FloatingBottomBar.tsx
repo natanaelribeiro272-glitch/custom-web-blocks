@@ -166,33 +166,35 @@ export function FloatingBottomBar() {
           </Button>
         )}
 
-        {/* Page selector with add button */}
-        <div className="flex items-center gap-1">
-          <Select value={currentPageId || ""} onValueChange={setCurrentPage}>
-            <SelectTrigger className="w-[140px] h-9 text-sm">
-              <SelectValue placeholder="Página" />
-            </SelectTrigger>
-            <SelectContent>
-              {pages.map((page) => (
-                <SelectItem key={page.id} value={page.id}>
-                  {page.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              const { addPage } = useEditorStore.getState();
-              addPage();
-            }}
-            className="h-9 w-9 p-0"
-            title="Nova página"
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
+        {/* Page selector with add button - only show when nothing is selected */}
+        {!hasSelection && (
+          <div className="flex items-center gap-1">
+            <Select value={currentPageId || ""} onValueChange={setCurrentPage}>
+              <SelectTrigger className="w-[140px] h-9 text-sm">
+                <SelectValue placeholder="Página" />
+              </SelectTrigger>
+              <SelectContent>
+                {pages.map((page) => (
+                  <SelectItem key={page.id} value={page.id}>
+                    {page.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                const { addPage } = useEditorStore.getState();
+                addPage();
+              }}
+              className="h-9 w-9 p-0"
+              title="Nova página"
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
 
         <div className="flex items-center gap-2 flex-wrap">
           {/* Show add element and properties when block is selected */}
@@ -205,7 +207,7 @@ export function FloatingBottomBar() {
                 className="gap-2"
               >
                 <Plus className="h-4 w-4" />
-                <span className="hidden sm:inline">Elemento</span>
+                <span>Adicionar Elemento</span>
               </Button>
               <Button
                 variant="outline"
@@ -214,7 +216,7 @@ export function FloatingBottomBar() {
                 className="gap-2"
               >
                 <Settings className="h-4 w-4" />
-                <span className="hidden sm:inline">Propriedades</span>
+                <span>Propriedades</span>
               </Button>
             </>
           )}
@@ -228,10 +230,10 @@ export function FloatingBottomBar() {
               className="gap-2"
             >
               <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">
+              <span>
                 {selectedHeaderFooter ? 
-                  (selectedHeaderFooter === "header" ? "Header" : "Rodapé") : 
-                  "Elemento"}
+                  (selectedHeaderFooter === "header" ? "Propriedades Header" : "Propriedades Rodapé") : 
+                  "Propriedades Elemento"}
               </span>
             </Button>
           )}
