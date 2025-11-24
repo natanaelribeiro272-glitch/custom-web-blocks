@@ -236,25 +236,28 @@ export function FloatingBottomBar() {
             </Button>
           )}
 
-          {/* Page settings button */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleOpenPageSettings}
-            className="gap-2"
-          >
-            <FileText className="h-4 w-4" />
-            <span className="hidden sm:inline">Página</span>
-          </Button>
+          {/* Show Page settings and Preview buttons only when nothing is selected */}
+          {!hasSelection && (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleOpenPageSettings}
+                className="gap-2"
+              >
+                <FileText className="h-4 w-4" />
+                <span className="hidden sm:inline">Página</span>
+              </Button>
 
-          {/* Preview button */}
-          <Button
-            size="sm"
-            className="gap-2"
-          >
-            <Eye className="h-4 w-4" />
-            <span className="hidden sm:inline">Visualizar</span>
-          </Button>
+              <Button
+                size="sm"
+                className="gap-2"
+              >
+                <Eye className="h-4 w-4" />
+                <span className="hidden sm:inline">Visualizar</span>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>
