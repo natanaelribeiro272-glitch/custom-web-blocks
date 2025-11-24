@@ -959,28 +959,6 @@ export function PropertiesPanel() {
     );
   }
 
-  // Default state - no selection
-  return (
-    <div className="w-80 bg-editor-panel border-l border-border flex items-center justify-center p-8 text-center">
-      <div className="space-y-3">
-        <div className="text-sm text-muted-foreground">
-          Selecione um elemento para editar:
-        </div>
-        <ul className="text-xs text-muted-foreground space-y-2">
-          <li>• Clique em um bloco no preview</li>
-          <li>• Clique no header ou footer</li>
-          <li>• Clique em um elemento dentro de um bloco</li>
-        </ul>
-        <div className="pt-4 border-t text-xs">
-          <div className="flex items-center justify-center gap-2 text-primary">
-            <Settings className="h-4 w-4" />
-            <span className="font-medium">Para editar a página</span>
-          </div>
-          <p className="text-muted-foreground mt-1">
-            Clique no ícone de configuração ao lado do seletor de páginas
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+  // Default state - no selection, return null since sheet shouldn't be open
+  return null;
 }
