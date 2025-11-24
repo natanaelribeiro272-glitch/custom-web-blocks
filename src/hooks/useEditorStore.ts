@@ -52,6 +52,7 @@ const createDefaultHeader = (): HeaderFooterConfig => ({
   links: [],
   backgroundColor: "#ffffff",
   textColor: "#1a1a1a",
+  menuStyle: "always-visible", // Padrão: menu sempre visível
 });
 
 const createDefaultFooter = (): HeaderFooterConfig => ({

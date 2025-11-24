@@ -1,7 +1,8 @@
 import { HeaderFooterConfig } from "@/types/editor";
 import { cn } from "@/lib/utils";
 import { useEditorStore } from "@/hooks/useEditorStore";
-import { Facebook, Instagram, Twitter, Linkedin, Youtube, Globe } from "lucide-react";
+import { Facebook, Instagram, Twitter, Linkedin, Youtube, Globe, Menu, X } from "lucide-react";
+import { useState } from "react";
 
 const socialIcons: Record<string, any> = {
   facebook: Facebook,
@@ -20,6 +21,7 @@ interface HeaderFooterRendererProps {
 
 export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRendererProps) {
   const { selectedHeaderFooter, selectHeaderFooter, setActiveSheet } = useEditorStore();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isSelected = selectedHeaderFooter === type;
 
   if (config.template === "none") {
@@ -37,6 +39,8 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
     isSelected && "ring-2 ring-accent ring-offset-2"
   );
 
+  const isHamburgerMenu = config.menuStyle === "hamburger";
+
   // Header Templates
   if (type === "header") {
     if (config.template === "simple") {
@@ -48,13 +52,45 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
         >
           <div className="flex items-center justify-between px-4 py-3">
             <span className="font-display font-semibold">{config.brandName || "Brand"}</span>
-            <nav className="flex gap-4">
-              {config.links?.map((link, i) => (
-                <a key={i} href={link.href} className="text-sm hover:opacity-70">
-                  {link.text}
-                </a>
-              ))}
-            </nav>
+            
+            {isHamburgerMenu ? (
+              <>
+                <button
+                  className="p-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMobileMenuOpen(!mobileMenuOpen);
+                  }}
+                >
+                  {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                </button>
+                {mobileMenuOpen && (
+                  <nav
+                    className="absolute top-full left-0 right-0 bg-card border-b shadow-lg z-50 py-2"
+                    style={{ backgroundColor: config.backgroundColor }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {config.links?.map((link, i) => (
+                      <a
+                        key={i}
+                        href={link.href}
+                        className="block px-4 py-2 text-sm hover:bg-muted/50"
+                      >
+                        {link.text}
+                      </a>
+                    ))}
+                  </nav>
+                )}
+              </>
+            ) : (
+              <nav className="flex gap-4">
+                {config.links?.map((link, i) => (
+                  <a key={i} href={link.href} className="text-sm hover:opacity-70">
+                    {link.text}
+                  </a>
+                ))}
+              </nav>
+            )}
           </div>
           {isSelected && (
             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 z-10">
@@ -75,15 +111,53 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
           onClick={handleClick}
         >
           <div className="flex flex-col items-center text-center px-4 py-4">
-            <span className="font-display font-bold text-lg">{config.brandName || "Brand"}</span>
-            {config.tagline && <span className="text-xs opacity-70 mt-1">{config.tagline}</span>}
-            <nav className="flex gap-4 mt-3">
-              {config.links?.map((link, i) => (
-                <a key={i} href={link.href} className="text-sm hover:opacity-70">
-                  {link.text}
-                </a>
-              ))}
-            </nav>
+            <div className="flex items-center justify-between w-full">
+              <div className="w-8"></div>
+              <div className="flex flex-col items-center">
+                <span className="font-display font-bold text-lg">{config.brandName || "Brand"}</span>
+                {config.tagline && <span className="text-xs opacity-70 mt-1">{config.tagline}</span>}
+              </div>
+              {isHamburgerMenu && (
+                <button
+                  className="p-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMobileMenuOpen(!mobileMenuOpen);
+                  }}
+                >
+                  {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                </button>
+              )}
+              {!isHamburgerMenu && <div className="w-8"></div>}
+            </div>
+            
+            {isHamburgerMenu && mobileMenuOpen && (
+              <nav
+                className="w-full mt-3 bg-card border rounded-lg shadow-lg z-50 py-2"
+                style={{ backgroundColor: config.backgroundColor }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {config.links?.map((link, i) => (
+                  <a
+                    key={i}
+                    href={link.href}
+                    className="block px-4 py-2 text-sm hover:bg-muted/50"
+                  >
+                    {link.text}
+                  </a>
+                ))}
+              </nav>
+            )}
+            
+            {!isHamburgerMenu && (
+              <nav className="flex gap-4 mt-3">
+                {config.links?.map((link, i) => (
+                  <a key={i} href={link.href} className="text-sm hover:opacity-70">
+                    {link.text}
+                  </a>
+                ))}
+              </nav>
+            )}
           </div>
           {isSelected && (
             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 z-10">
@@ -114,13 +188,45 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
               )}
               <span className="font-display font-semibold">{config.brandName || "Brand"}</span>
             </div>
-            <nav className="flex gap-3">
-              {config.links?.map((link, i) => (
-                <a key={i} href={link.href} className="text-sm hover:opacity-70">
-                  {link.text}
-                </a>
-              ))}
-            </nav>
+            
+            {isHamburgerMenu ? (
+              <>
+                <button
+                  className="p-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMobileMenuOpen(!mobileMenuOpen);
+                  }}
+                >
+                  {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                </button>
+                {mobileMenuOpen && (
+                  <nav
+                    className="absolute top-full left-0 right-0 bg-card border-b shadow-lg z-50 py-2"
+                    style={{ backgroundColor: config.backgroundColor }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {config.links?.map((link, i) => (
+                      <a
+                        key={i}
+                        href={link.href}
+                        className="block px-4 py-2 text-sm hover:bg-muted/50"
+                      >
+                        {link.text}
+                      </a>
+                    ))}
+                  </nav>
+                )}
+              </>
+            ) : (
+              <nav className="flex gap-3">
+                {config.links?.map((link, i) => (
+                  <a key={i} href={link.href} className="text-sm hover:opacity-70">
+                    {link.text}
+                  </a>
+                ))}
+              </nav>
+            )}
           </div>
           {isSelected && (
             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 z-10">

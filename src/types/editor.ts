@@ -61,6 +61,7 @@ export interface HeaderFooterConfig {
   textColor?: string;
   socialLinks?: { platform: string; url: string }[];
   copyright?: string;
+  menuStyle?: "always-visible" | "hamburger"; // Controla se menu é sempre visível ou ícone hambúrguer
 }
 
 export interface Page {

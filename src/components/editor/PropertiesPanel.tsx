@@ -249,6 +249,35 @@ export function PropertiesPanel() {
                 />
               </div>
             )}
+
+            <div className="space-y-2">
+              <Label className="text-xs">Estilo do Menu</Label>
+              <RadioGroup
+                value={config.menuStyle || "always-visible"}
+                onValueChange={(value) =>
+                  updateConfig(currentPage.id, { menuStyle: value as "always-visible" | "hamburger" })
+                }
+                className="space-y-2"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="always-visible" id="menu-visible" />
+                  <Label htmlFor="menu-visible" className="text-sm font-normal cursor-pointer">
+                    Sempre Visível
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="hamburger" id="menu-hamburger" />
+                  <Label htmlFor="menu-hamburger" className="text-sm font-normal cursor-pointer">
+                    Menu Hambúrguer (ícone)
+                  </Label>
+                </div>
+              </RadioGroup>
+              <p className="text-xs text-muted-foreground">
+                {config.menuStyle === "hamburger" 
+                  ? "Menu fica oculto e aparece ao clicar no ícone" 
+                  : "Links do menu sempre visíveis"}
+              </p>
+            </div>
           </>
         )}
 
