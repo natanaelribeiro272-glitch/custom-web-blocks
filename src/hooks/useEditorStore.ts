@@ -33,6 +33,9 @@ interface EditorStore extends EditorState {
   // Sheet management
   setActiveSheet: (sheet: "add-block" | "add-element" | "properties" | "page-settings" | null) => void;
   setInsertBlockIndex: (index: number) => void;
+  
+  // Floating bar position
+  setFloatingBarPosition: (position: { x: number; y: number; isDocked: boolean }) => void;
 }
 
 const createDefaultHeader = (): HeaderFooterConfig => ({
@@ -75,6 +78,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   showingPageConfig: false,
   activeSheet: null,
   insertBlockIndex: 0,
+  floatingBarPosition: { x: 0, y: 0, isDocked: true },
 
   // Page actions
   addPage: () =>
@@ -310,4 +314,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   setInsertBlockIndex: (index) =>
     set({ insertBlockIndex: index }),
+
+  setFloatingBarPosition: (position) =>
+    set({ floatingBarPosition: position }),
 }));
