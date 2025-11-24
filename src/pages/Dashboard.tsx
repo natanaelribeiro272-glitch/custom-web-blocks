@@ -3,6 +3,17 @@ import { Card } from "@/components/ui/card";
 import { Plus, Globe, Calendar, Trash2, Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface Project {
   id: string;
@@ -14,6 +25,8 @@ interface Project {
 const Dashboard = () => {
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [newProjectName, setNewProjectName] = useState("");
 
   useEffect(() => {
     // Carregar projetos salvos do localStorage
@@ -23,10 +36,22 @@ const Dashboard = () => {
     }
   }, []);
 
-  const createNewProject = () => {
+  const handleCreateProject = () => {
+    const trimmedName = newProjectName.trim();
+    
+    if (!trimmedName) {
+      toast.error("Por favor, digite um nome para o site");
+      return;
+    }
+
+    if (trimmedName.length > 50) {
+      toast.error("Nome muito longo (máximo 50 caracteres)");
+      return;
+    }
+
     const newProject: Project = {
       id: `project-${Date.now()}`,
-      name: `Novo Site ${projects.length + 1}`,
+      name: trimmedName,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -34,6 +59,12 @@ const Dashboard = () => {
     const updatedProjects = [...projects, newProject];
     setProjects(updatedProjects);
     localStorage.setItem("userProjects", JSON.stringify(updatedProjects));
+    
+    // Limpar e fechar
+    setNewProjectName("");
+    setShowCreateDialog(false);
+    
+    toast.success(`Site "${trimmedName}" criado com sucesso!`);
     
     // Redirecionar para o editor com o novo projeto
     navigate(`/editor?project=${newProject.id}`);
@@ -47,6 +78,8 @@ const Dashboard = () => {
     
     // Limpar dados do projeto deletado
     localStorage.removeItem(`editorState-${projectId}`);
+    
+    toast.success("Site removido");
   };
 
   const openProject = (projectId: string) => {
@@ -74,7 +107,7 @@ const Dashboard = () => {
                 Gerencie todos os seus projetos
               </p>
             </div>
-            <Button onClick={createNewProject} size="lg" className="gap-2">
+            <Button onClick={() => setShowCreateDialog(true)} size="lg" className="gap-2">
               <Plus className="h-5 w-5" />
               Novo Site
             </Button>
@@ -94,7 +127,7 @@ const Dashboard = () => {
               Comece criando seu primeiro site. É rápido, fácil e totalmente
               personalizável!
             </p>
-            <Button onClick={createNewProject} size="lg" className="gap-2">
+            <Button onClick={() => setShowCreateDialog(true)} size="lg" className="gap-2">
               <Plus className="h-5 w-5" />
               Criar Primeiro Site
             </Button>
@@ -145,6 +178,50 @@ const Dashboard = () => {
           </div>
         )}
       </div>
+
+      {/* Create Project Dialog */}
+      <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Criar Novo Site</DialogTitle>
+            <DialogDescription>
+              Escolha um nome para o seu novo site. Você pode alterá-lo depois.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="site-name">Nome do Site</Label>
+              <Input
+                id="site-name"
+                placeholder="Ex: Meu Portfólio, Landing Page..."
+                value={newProjectName}
+                onChange={(e) => setNewProjectName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleCreateProject();
+                  }
+                }}
+                maxLength={50}
+                autoFocus
+              />
+              <p className="text-xs text-muted-foreground">
+                {newProjectName.length}/50 caracteres
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => {
+              setShowCreateDialog(false);
+              setNewProjectName("");
+            }}>
+              Cancelar
+            </Button>
+            <Button onClick={handleCreateProject}>
+              Criar Site
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
