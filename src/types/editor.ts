@@ -55,4 +55,5 @@ export interface EditorState {
   selectedBlockId: string | null;
   selectedElementId: string | null;
   selectedHeaderFooter: "header" | "footer" | null;
+  showingPageConfig: boolean;
 }

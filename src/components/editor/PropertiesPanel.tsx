@@ -3,9 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Trash2, ArrowUp, ArrowDown, X, Plus } from "lucide-react";
+import { Trash2, ArrowUp, ArrowDown, X, Plus, Settings } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { HeaderTemplate, FooterTemplate } from "@/types/editor";
+import { TemplatePreview } from "./TemplatePreview";
 import {
   Select,
   SelectContent,
@@ -14,6 +17,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const headerTemplates: { value: HeaderTemplate; label: string; description: string }[] = [
+  { value: "none", label: "Nenhum", description: "Sem header" },
+  { value: "simple", label: "Simples", description: "Logo e menu horizontal" },
+  { value: "centered", label: "Centralizado", description: "Logo e menu centralizados" },
+  { value: "with-logo", label: "Com Logo", description: "Logo + marca + menu" },
+];
+
+const footerTemplates: { value: FooterTemplate; label: string; description: string }[] = [
+  { value: "none", label: "Nenhum", description: "Sem footer" },
+  { value: "simple", label: "Simples", description: "Apenas copyright" },
+  { value: "social", label: "Com Redes Sociais", description: "Links sociais + copyright" },
+  { value: "detailed", label: "Detalhado", description: "Múltiplas colunas" },
+];
+
 export function PropertiesPanel() {
   const {
     pages,
@@ -21,11 +38,13 @@ export function PropertiesPanel() {
     selectedBlockId,
     selectedElementId,
     selectedHeaderFooter,
+    showingPageConfig,
     updateBlock,
     removeBlock,
     updateElement,
     removeElement,
     moveBlock,
+    updatePage,
     updatePageHeader,
     updatePageFooter,
   } = useEditorStore();
@@ -34,6 +53,149 @@ export function PropertiesPanel() {
   const blocks = currentPage?.blocks || [];
   const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
   const selectedElement = selectedBlock?.elements.find((e) => e.id === selectedElementId);
+
+  // Page Configuration
+  if (showingPageConfig && currentPage) {
+    return (
+      <div className="w-80 bg-editor-panel border-l border-border flex flex-col h-screen">
+        <div className="p-4 border-b border-border">
+          <h3 className="font-display font-semibold">Configurações da Página</h3>
+          <p className="text-xs text-muted-foreground">Personalize sua página</p>
+        </div>
+
+        <ScrollArea className="flex-1">
+          <div className="p-4 space-y-6">
+            {/* Nome da Página */}
+            <div className="space-y-2">
+              <Label htmlFor="page-name">Nome da Página</Label>
+              <Input
+                id="page-name"
+                value={currentPage.name}
+                onChange={(e) => updatePage(currentPage.id, { name: e.target.value })}
+                placeholder="Ex: Home, Sobre, Contato"
+              />
+            </div>
+
+            {/* Cor de Fundo */}
+            <div className="space-y-2">
+              <Label htmlFor="page-bg">Cor de Fundo</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="page-bg"
+                  type="color"
+                  className="w-20 h-10 cursor-pointer"
+                  value={currentPage.backgroundColor}
+                  onChange={(e) =>
+                    updatePage(currentPage.id, { backgroundColor: e.target.value })
+                  }
+                />
+                <Input
+                  value={currentPage.backgroundColor}
+                  onChange={(e) =>
+                    updatePage(currentPage.id, { backgroundColor: e.target.value })
+                  }
+                  className="flex-1 font-mono"
+                  placeholder="#ffffff"
+                />
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Template de Header */}
+            <div className="space-y-3">
+              <Label>Template de Header</Label>
+              <RadioGroup
+                value={currentPage.header.template}
+                onValueChange={(value) => {
+                  updatePageHeader(currentPage.id, { template: value as HeaderTemplate });
+                }}
+                className="space-y-3"
+              >
+                {headerTemplates.map((template) => (
+                  <div key={template.value} className="relative">
+                    <RadioGroupItem
+                      value={template.value}
+                      id={`header-${template.value}`}
+                      className="peer sr-only"
+                    />
+                    <Label
+                      htmlFor={`header-${template.value}`}
+                      className="flex flex-col p-3 rounded-lg border-2 border-muted cursor-pointer hover:border-primary peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <span className="font-medium text-sm">{template.label}</span>
+                          <p className="text-xs text-muted-foreground">{template.description}</p>
+                        </div>
+                        {currentPage.header.template === template.value && (
+                          <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
+                      <TemplatePreview type="header" template={template.value} />
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+              {currentPage.header.template !== "none" && (
+                <p className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
+                  💡 Clique no header no preview para editar detalhes
+                </p>
+              )}
+            </div>
+
+            <Separator />
+
+            {/* Template de Rodapé */}
+            <div className="space-y-3">
+              <Label>Template de Rodapé</Label>
+              <RadioGroup
+                value={currentPage.footer.template}
+                onValueChange={(value) => {
+                  updatePageFooter(currentPage.id, { template: value as FooterTemplate });
+                }}
+                className="space-y-3"
+              >
+                {footerTemplates.map((template) => (
+                  <div key={template.value} className="relative">
+                    <RadioGroupItem
+                      value={template.value}
+                      id={`footer-${template.value}`}
+                      className="peer sr-only"
+                    />
+                    <Label
+                      htmlFor={`footer-${template.value}`}
+                      className="flex flex-col p-3 rounded-lg border-2 border-muted cursor-pointer hover:border-primary peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <span className="font-medium text-sm">{template.label}</span>
+                          <p className="text-xs text-muted-foreground">{template.description}</p>
+                        </div>
+                        {currentPage.footer.template === template.value && (
+                          <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
+                      <TemplatePreview type="footer" template={template.value} />
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+              {currentPage.footer.template !== "none" && (
+                <p className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
+                  💡 Clique no footer no preview para editar detalhes
+                </p>
+              )}
+            </div>
+          </div>
+        </ScrollArea>
+      </div>
+    );
+  }
 
   // Header/Footer Properties
   if (selectedHeaderFooter && currentPage) {
@@ -543,8 +705,14 @@ export function PropertiesPanel() {
           <li>• Clique no header ou footer</li>
           <li>• Clique em um elemento dentro de um bloco</li>
         </ul>
-        <div className="pt-4 border-t text-xs text-muted-foreground">
-          💡 Para editar a página, clique no ícone de configuração ao lado do seletor de páginas
+        <div className="pt-4 border-t text-xs">
+          <div className="flex items-center justify-center gap-2 text-primary">
+            <Settings className="h-4 w-4" />
+            <span className="font-medium">Para editar a página</span>
+          </div>
+          <p className="text-muted-foreground mt-1">
+            Clique no ícone de configuração ao lado do seletor de páginas
+          </p>
         </div>
       </div>
     </div>

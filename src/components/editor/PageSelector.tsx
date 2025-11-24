@@ -1,19 +1,17 @@
 import { useEditorStore } from "@/hooks/useEditorStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, FileText, Trash2, Check } from "lucide-react";
+import { Plus, FileText, Trash2, Check, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
-import { PageConfigDialog } from "./PageConfigDialog";
 
 export function PageSelector() {
-  const { pages, currentPageId, setCurrentPage, addPage, removePage, updatePage } = useEditorStore();
+  const { pages, currentPageId, setCurrentPage, addPage, removePage, updatePage, togglePageConfig } = useEditorStore();
   const [editingPageId, setEditingPageId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
 
@@ -111,7 +109,14 @@ export function PageSelector() {
         Nova Página
       </Button>
 
-      <PageConfigDialog />
+      <Button 
+        size="icon" 
+        variant="outline" 
+        className="h-9 w-9"
+        onClick={togglePageConfig}
+      >
+        <Settings className="h-4 w-4" />
+      </Button>
     </div>
   );
 }
