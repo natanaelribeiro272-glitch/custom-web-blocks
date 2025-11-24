@@ -133,6 +133,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   // Project actions
   loadProject: (projectId: string) => {
     const savedState = loadFromLocalStorage(projectId);
+    
+    // Se tem estado salvo, usar ele
     if (savedState) {
       set({
         projectId,
@@ -141,7 +143,26 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         projectName: savedState.projectName || "Novo Site",
       });
     } else {
-      set({ projectId });
+      // Se não tem estado salvo, buscar o nome na lista de projetos
+      const savedProjects = localStorage.getItem("userProjects");
+      let projectName = "Novo Site";
+      
+      if (savedProjects) {
+        const projects = JSON.parse(savedProjects);
+        const project = projects.find((p: any) => p.id === projectId);
+        if (project) {
+          projectName = project.name;
+        }
+      }
+      
+      set({ 
+        projectId,
+        projectName 
+      });
+      
+      // Salvar o estado inicial com o nome correto
+      const state = get();
+      saveToLocalStorage(projectId, state);
     }
   },
 
