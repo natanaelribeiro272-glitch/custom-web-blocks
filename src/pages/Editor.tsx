@@ -1,6 +1,7 @@
 import { EditorSidebar } from "@/components/editor/EditorSidebar";
 import { MobilePreview } from "@/components/editor/MobilePreview";
 import { PropertiesPanel } from "@/components/editor/PropertiesPanel";
+import { PageSelector } from "@/components/editor/PageSelector";
 import { Button } from "@/components/ui/button";
 import { Settings, Eye } from "lucide-react";
 
@@ -9,9 +10,9 @@ const Editor = () => {
     <div className="flex h-screen w-full overflow-hidden bg-background">
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 h-14 bg-card border-b border-border flex items-center justify-between px-4 z-50">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <h1 className="text-xl font-display font-bold">CreatePage</h1>
-          <span className="text-xs text-muted-foreground">Construtor de sites profissional</span>
+          <PageSelector />
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" className="gap-2">
