@@ -77,4 +77,5 @@ export interface EditorState {
   showingPageConfig: boolean;
   activeSheet: "add-block" | "add-element" | "properties" | "page-settings" | null;
   insertBlockIndex: number;
+  floatingBarPosition: { x: number; y: number; isDocked: boolean };
 }
