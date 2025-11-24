@@ -864,11 +864,30 @@ export function PropertiesPanel() {
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="bg-image" className="text-xs">Imagem de Background</Label>
+          <Label className="text-xs">Imagem de Background</Label>
+          <div className="flex gap-2">
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    updateBlock(selectedBlock.id, {
+                      style: { ...selectedBlock.style, backgroundImage: reader.result as string },
+                    });
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="h-8 text-sm flex-1"
+            />
+          </div>
           <Input
             id="bg-image"
-            placeholder="https://"
-            value={selectedBlock.style.backgroundImage || ""}
+            placeholder="Ou cole uma URL: https://"
+            value={selectedBlock.style.backgroundImage?.startsWith('data:') ? '' : selectedBlock.style.backgroundImage || ""}
             onChange={(e) =>
               updateBlock(selectedBlock.id, {
                 style: { ...selectedBlock.style, backgroundImage: e.target.value },
@@ -878,19 +897,86 @@ export function PropertiesPanel() {
           />
         </div>
 
-        <div className="space-y-1.5">
-          <Label htmlFor="bg-gradient" className="text-xs">Gradiente CSS</Label>
-          <Input
-            id="bg-gradient"
-            placeholder="Ex: linear-gradient(45deg, #667eea, #764ba2)"
-            value={selectedBlock.style.backgroundGradient || ""}
-            onChange={(e) =>
-              updateBlock(selectedBlock.id, {
-                style: { ...selectedBlock.style, backgroundGradient: e.target.value },
-              })
-            }
-            className="h-8 text-sm"
-          />
+        <div className="space-y-2">
+          <Label className="text-xs">Gradiente</Label>
+          
+          {/* Gradientes predefinidos */}
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { name: 'Sunset', value: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
+              { name: 'Ocean', value: 'linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%)' },
+              { name: 'Fire', value: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
+              { name: 'Forest', value: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
+              { name: 'Candy', value: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' },
+              { name: 'Night', value: 'linear-gradient(135deg, #2e3192 0%, #1bffff 100%)' },
+            ].map((gradient) => (
+              <button
+                key={gradient.name}
+                onClick={() =>
+                  updateBlock(selectedBlock.id, {
+                    style: { ...selectedBlock.style, backgroundGradient: gradient.value },
+                  })
+                }
+                className={`h-12 rounded-lg border-2 transition-all ${
+                  selectedBlock.style.backgroundGradient === gradient.value
+                    ? 'border-primary ring-2 ring-primary/20'
+                    : 'border-muted hover:border-primary/50'
+                }`}
+                style={{ background: gradient.value }}
+                title={gradient.name}
+              />
+            ))}
+          </div>
+
+          {/* Gradiente customizado */}
+          <div className="space-y-1.5 pt-2">
+            <Label className="text-xs">Ou crie seu gradiente</Label>
+            <div className="flex gap-2 items-center">
+              <Input
+                type="color"
+                className="w-12 h-8 p-1 cursor-pointer"
+                onChange={(e) => {
+                  const color1 = e.target.value;
+                  const color2 = selectedBlock.style.backgroundGradient?.match(/#[0-9A-Fa-f]{6}/g)?.[1] || '#764ba2';
+                  updateBlock(selectedBlock.id, {
+                    style: { ...selectedBlock.style, backgroundGradient: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` },
+                  });
+                }}
+              />
+              <span className="text-xs text-muted-foreground">→</span>
+              <Input
+                type="color"
+                className="w-12 h-8 p-1 cursor-pointer"
+                onChange={(e) => {
+                  const color2 = e.target.value;
+                  const color1 = selectedBlock.style.backgroundGradient?.match(/#[0-9A-Fa-f]{6}/g)?.[0] || '#667eea';
+                  updateBlock(selectedBlock.id, {
+                    style: { ...selectedBlock.style, backgroundGradient: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` },
+                  });
+                }}
+              />
+              {selectedBlock.style.backgroundGradient && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() =>
+                    updateBlock(selectedBlock.id, {
+                      style: { ...selectedBlock.style, backgroundGradient: '' },
+                    })
+                  }
+                  className="h-8 px-2"
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              )}
+            </div>
+            {selectedBlock.style.backgroundGradient && (
+              <div
+                className="h-8 rounded border"
+                style={{ background: selectedBlock.style.backgroundGradient }}
+              />
+            )}
+          </div>
         </div>
 
         <div className="space-y-1.5">
