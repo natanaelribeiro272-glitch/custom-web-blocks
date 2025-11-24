@@ -1069,11 +1069,15 @@ export function PropertiesPanel() {
           </div>
         </div>
 
+        <Separator />
+
         <Button
           variant="destructive"
           size="sm"
           className="w-full"
-          onClick={() => removeBlock(selectedBlock.id)}
+          onClick={() => {
+            removeBlock(selectedBlock.id);
+          }}
         >
           <Trash2 className="h-4 w-4 mr-2" />
           Remover Bloco

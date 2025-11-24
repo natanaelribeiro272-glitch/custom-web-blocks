@@ -41,8 +41,8 @@ export function PropertiesSheet({ open, onOpenChange }: PropertiesSheetProps) {
           </div>
           
           {/* Content - Compact scrollable area */}
-          <ScrollArea className="max-h-[50vh]">
-            <div className="px-4 py-3">
+          <ScrollArea className="max-h-[65vh]">
+            <div className="px-4 py-3 pb-6">
               <PropertiesPanel />
             </div>
           </ScrollArea>
