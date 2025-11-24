@@ -29,7 +29,7 @@ const Index = () => {
             <Button 
               size="lg" 
               className="gap-2 text-lg px-8 py-6"
-              onClick={() => navigate("/editor")}
+              onClick={() => navigate("/dashboard")}
             >
               Começar Agora
               <ArrowRight className="h-5 w-5" />
