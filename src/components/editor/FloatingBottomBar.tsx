@@ -1,6 +1,6 @@
 import { useEditorStore } from "@/hooks/useEditorStore";
 import { Button } from "@/components/ui/button";
-import { Settings, FileText, Eye, Plus, GripVertical, Minimize2 } from "lucide-react";
+import { Settings, FileText, Eye, Plus, GripVertical, Minimize2, ArrowLeft } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -9,9 +9,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 export function FloatingBottomBar() {
+  const navigate = useNavigate();
   const { 
     pages, 
     currentPageId, 
@@ -153,18 +155,16 @@ export function FloatingBottomBar() {
       </div>
 
       <div className="flex items-center justify-between px-4 py-3 gap-2">
-        {/* Dock button - only show when floating */}
-        {!floatingBarPosition.isDocked && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleDockBar}
-            className="h-8 w-8 p-0"
-            title="Ancorar embaixo"
-          >
-            <Minimize2 className="h-4 w-4" />
-          </Button>
-        )}
+        {/* Back button - always visible */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/dashboard")}
+          className="h-9 w-9 p-0 shrink-0"
+          title="Voltar para Dashboard"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
 
         {/* Page selector with add button - only show when nothing is selected */}
         {!hasSelection && (
