@@ -59,142 +59,138 @@ export function PropertiesPanel() {
   // Page Configuration
   if (showingPageConfig && currentPage) {
     return (
-      <div className="w-80 bg-editor-panel border-l border-border flex flex-col h-screen">
-        <div className="p-4 border-b border-border">
-          <h3 className="font-display font-semibold">Configurações da Página</h3>
-          <p className="text-xs text-muted-foreground">Personalize sua página</p>
+      <div className="space-y-4">
+        {/* Nome da Página */}
+        <div className="space-y-1.5">
+          <Label htmlFor="page-name" className="text-xs">Nome da Página</Label>
+          <Input
+            id="page-name"
+            value={currentPage.name}
+            onChange={(e) => updatePage(currentPage.id, { name: e.target.value })}
+            placeholder="Ex: Home, Sobre, Contato"
+            className="h-8 text-sm"
+          />
         </div>
 
-        <ScrollArea className="flex-1">
-          <div className="p-4 space-y-6">
-            {/* Nome da Página */}
-            <div className="space-y-2">
-              <Label htmlFor="page-name">Nome da Página</Label>
-              <Input
-                id="page-name"
-                value={currentPage.name}
-                onChange={(e) => updatePage(currentPage.id, { name: e.target.value })}
-                placeholder="Ex: Home, Sobre, Contato"
-              />
-            </div>
-
-            {/* Cor de Fundo */}
-            <div className="space-y-2">
-              <Label htmlFor="page-bg">Cor de Fundo</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="page-bg"
-                  type="color"
-                  className="w-20 h-10 cursor-pointer"
-                  value={currentPage.backgroundColor}
-                  onChange={(e) =>
-                    updatePage(currentPage.id, { backgroundColor: e.target.value })
-                  }
-                />
-                <Input
-                  value={currentPage.backgroundColor}
-                  onChange={(e) =>
-                    updatePage(currentPage.id, { backgroundColor: e.target.value })
-                  }
-                  className="flex-1 font-mono"
-                  placeholder="#ffffff"
-                />
-              </div>
-            </div>
-
-            <Separator />
-
-            {/* Template de Header */}
-            <div className="space-y-3">
-              <Label>Template de Header</Label>
-              <RadioGroup
-                value={currentPage.header.template}
-                onValueChange={(value) => {
-                  updatePageHeader(currentPage.id, { template: value as HeaderTemplate });
-                }}
-                className="space-y-3"
-              >
-                {headerTemplates.map((template) => (
-                  <div key={template.value} className="relative">
-                    <RadioGroupItem
-                      value={template.value}
-                      id={`header-${template.value}`}
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor={`header-${template.value}`}
-                      className="flex flex-col p-3 rounded-lg border-2 border-muted cursor-pointer hover:border-primary peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all"
-                    >
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <span className="font-medium text-sm">{template.label}</span>
-                          <p className="text-xs text-muted-foreground">{template.description}</p>
-                        </div>
-                        {currentPage.header.template === template.value && (
-                          <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                          </div>
-                        )}
-                      </div>
-                      <TemplatePreview type="header" template={template.value} />
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-              {currentPage.header.template !== "none" && (
-                <p className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
-                  💡 Clique no header no preview para editar detalhes
-                </p>
-              )}
-            </div>
-
-            <Separator />
-
-            {/* Template de Rodapé */}
-            <div className="space-y-3">
-              <Label>Template de Rodapé</Label>
-              <RadioGroup
-                value={currentPage.footer.template}
-                onValueChange={(value) => {
-                  updatePageFooter(currentPage.id, { template: value as FooterTemplate });
-                }}
-                className="space-y-3"
-              >
-                {footerTemplates.map((template) => (
-                  <div key={template.value} className="relative">
-                    <RadioGroupItem
-                      value={template.value}
-                      id={`footer-${template.value}`}
-                      className="peer sr-only"
-                    />
-                    <Label
-                      htmlFor={`footer-${template.value}`}
-                      className="flex flex-col p-3 rounded-lg border-2 border-muted cursor-pointer hover:border-primary peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all"
-                    >
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <span className="font-medium text-sm">{template.label}</span>
-                          <p className="text-xs text-muted-foreground">{template.description}</p>
-                        </div>
-                        {currentPage.footer.template === template.value && (
-                          <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                          </div>
-                        )}
-                      </div>
-                      <TemplatePreview type="footer" template={template.value} />
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-              {currentPage.footer.template !== "none" && (
-                <p className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
-                  💡 Clique no footer no preview para editar detalhes
-                </p>
-              )}
-            </div>
+        {/* Cor de Fundo */}
+        <div className="space-y-1.5">
+          <Label htmlFor="page-bg" className="text-xs">Cor de Fundo</Label>
+          <div className="flex gap-2">
+            <Input
+              id="page-bg"
+              type="color"
+              className="w-16 h-8 cursor-pointer p-1"
+              value={currentPage.backgroundColor}
+              onChange={(e) =>
+                updatePage(currentPage.id, { backgroundColor: e.target.value })
+              }
+            />
+            <Input
+              value={currentPage.backgroundColor}
+              onChange={(e) =>
+                updatePage(currentPage.id, { backgroundColor: e.target.value })
+              }
+              className="flex-1 font-mono h-8 text-sm"
+              placeholder="#ffffff"
+            />
           </div>
-        </ScrollArea>
+        </div>
+
+        <Separator />
+
+        {/* Template de Header */}
+        <div className="space-y-2">
+          <Label className="text-xs">Template de Header</Label>
+          <RadioGroup
+            value={currentPage.header.template}
+            onValueChange={(value) => {
+              updatePageHeader(currentPage.id, { template: value as HeaderTemplate });
+            }}
+            className="space-y-2"
+          >
+            {headerTemplates.map((template) => (
+              <div key={template.value} className="relative">
+                <RadioGroupItem
+                  value={template.value}
+                  id={`header-${template.value}`}
+                  className="peer sr-only"
+                />
+                <Label
+                  htmlFor={`header-${template.value}`}
+                  className="flex flex-col p-2 rounded-lg border border-muted cursor-pointer hover:border-primary peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <div>
+                      <span className="font-medium text-xs">{template.label}</span>
+                      <p className="text-[10px] text-muted-foreground">{template.description}</p>
+                    </div>
+                    {currentPage.header.template === template.value && (
+                      <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="scale-75 origin-top-left">
+                    <TemplatePreview type="header" template={template.value} />
+                  </div>
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+          {currentPage.header.template !== "none" && (
+            <p className="text-[10px] text-muted-foreground bg-muted/50 p-1.5 rounded">
+              💡 Clique no header no preview para editar
+            </p>
+          )}
+        </div>
+
+        <Separator />
+
+        {/* Template de Footer */}
+        <div className="space-y-2">
+          <Label className="text-xs">Template de Rodapé</Label>
+          <RadioGroup
+            value={currentPage.footer.template}
+            onValueChange={(value) => {
+              updatePageFooter(currentPage.id, { template: value as FooterTemplate });
+            }}
+            className="space-y-2"
+          >
+            {footerTemplates.map((template) => (
+              <div key={template.value} className="relative">
+                <RadioGroupItem
+                  value={template.value}
+                  id={`footer-${template.value}`}
+                  className="peer sr-only"
+                />
+                <Label
+                  htmlFor={`footer-${template.value}`}
+                  className="flex flex-col p-2 rounded-lg border border-muted cursor-pointer hover:border-primary peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <div>
+                      <span className="font-medium text-xs">{template.label}</span>
+                      <p className="text-[10px] text-muted-foreground">{template.description}</p>
+                    </div>
+                    {currentPage.footer.template === template.value && (
+                      <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="scale-75 origin-top-left">
+                    <TemplatePreview type="footer" template={template.value} />
+                  </div>
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+          {currentPage.footer.template !== "none" && (
+            <p className="text-[10px] text-muted-foreground bg-muted/50 p-1.5 rounded">
+              💡 Clique no rodapé no preview para editar
+            </p>
+          )}
+        </div>
       </div>
     );
   }
