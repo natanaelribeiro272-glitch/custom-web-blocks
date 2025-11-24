@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
+import { PageConfigDialog } from "./PageConfigDialog";
 
 export function PageSelector() {
   const { pages, currentPageId, setCurrentPage, addPage, removePage, updatePage } = useEditorStore();
@@ -109,6 +110,8 @@ export function PageSelector() {
         <Plus className="h-4 w-4" />
         Nova Página
       </Button>
+
+      <PageConfigDialog />
     </div>
   );
 }

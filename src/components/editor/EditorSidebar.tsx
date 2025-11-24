@@ -1,16 +1,9 @@
-import { LayoutGrid, AlignCenter, Columns2, Grid3x3, Type, FileText, Image, Video, MousePointerClick, Link as LinkIcon, PanelTop, PanelBottom } from "lucide-react";
+import { LayoutGrid, AlignCenter, Columns2, Grid3x3, Type, FileText, Image, Video, MousePointerClick, Link as LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEditorStore } from "@/hooks/useEditorStore";
-import { BlockType, ElementType, HeaderTemplate, FooterTemplate } from "@/types/editor";
+import { BlockType, ElementType } from "@/types/editor";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 const blockTypes: { type: BlockType; icon: any; label: string; description: string }[] = [
   { type: "full-width", icon: LayoutGrid, label: "Largura Total", description: "Conteúdo ocupa toda largura" },
@@ -28,25 +21,8 @@ const elementTypes: { type: ElementType; icon: any; label: string; description: 
   { type: "link", icon: LinkIcon, label: "Link", description: "Link de texto" },
 ];
 
-// Import Label for templates tab
-import { Label } from "@/components/ui/label";
-
-const headerTemplates: { value: HeaderTemplate; label: string; description: string }[] = [
-  { value: "none", label: "Sem Header", description: "Nenhum header na página" },
-  { value: "simple", label: "Simples", description: "Logo e menu horizontal" },
-  { value: "centered", label: "Centralizado", description: "Logo e menu centralizados" },
-  { value: "with-logo", label: "Com Logo", description: "Logo + marca + menu" },
-];
-
-const footerTemplates: { value: FooterTemplate; label: string; description: string }[] = [
-  { value: "none", label: "Sem Footer", description: "Nenhum rodapé na página" },
-  { value: "simple", label: "Simples", description: "Apenas copyright" },
-  { value: "social", label: "Com Redes Sociais", description: "Links sociais + copyright" },
-  { value: "detailed", label: "Detalhado", description: "Múltiplas colunas de informação" },
-];
-
 export function EditorSidebar() {
-  const { pages, currentPageId, addBlock, addElement, selectedBlockId, updatePageHeader, updatePageFooter } = useEditorStore();
+  const { pages, currentPageId, addBlock, addElement, selectedBlockId } = useEditorStore();
   const currentPage = pages.find((p) => p.id === currentPageId);
 
   const handleAddElement = (type: ElementType) => {
@@ -75,18 +51,14 @@ export function EditorSidebar() {
       </div>
 
       <Tabs defaultValue="blocks" className="flex-1 flex flex-col">
-        <TabsList className="w-full grid grid-cols-3 m-4 mb-0 text-xs">
-          <TabsTrigger value="blocks" className="gap-1">
-            <LayoutGrid className="h-3 w-3" />
+        <TabsList className="w-full grid grid-cols-2 m-4 mb-0">
+          <TabsTrigger value="blocks" className="gap-2">
+            <LayoutGrid className="h-4 w-4" />
             Blocos
           </TabsTrigger>
-          <TabsTrigger value="elements" className="gap-1">
-            <MousePointerClick className="h-3 w-3" />
+          <TabsTrigger value="elements" className="gap-2">
+            <MousePointerClick className="h-4 w-4" />
             Elementos
-          </TabsTrigger>
-          <TabsTrigger value="templates" className="gap-1">
-            <PanelTop className="h-3 w-3" />
-            Templates
           </TabsTrigger>
         </TabsList>
 
@@ -141,84 +113,6 @@ export function EditorSidebar() {
                 ))}
               </>
             )}
-          </TabsContent>
-
-          <TabsContent value="templates" className="m-4 mt-2 space-y-4">
-            <div className="space-y-3">
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <PanelTop className="h-4 w-4 text-primary" />
-                  <Label className="text-sm font-semibold">Header da Página</Label>
-                </div>
-                <Select
-                  value={currentPage?.header.template || "none"}
-                  onValueChange={(value) => {
-                    if (currentPageId) {
-                      updatePageHeader(currentPageId, { template: value as HeaderTemplate });
-                    }
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {headerTemplates.map((template) => (
-                      <SelectItem key={template.value} value={template.value}>
-                        <div className="flex flex-col items-start">
-                          <span className="font-medium">{template.label}</span>
-                          <span className="text-xs text-muted-foreground">{template.description}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-muted-foreground mt-2">
-                  {currentPage?.header.template !== "none"
-                    ? "✓ Clique no header no preview para editar"
-                    : "Selecione um template acima"}
-                </p>
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <PanelBottom className="h-4 w-4 text-primary" />
-                  <Label className="text-sm font-semibold">Footer da Página</Label>
-                </div>
-                <Select
-                  value={currentPage?.footer.template || "none"}
-                  onValueChange={(value) => {
-                    if (currentPageId) {
-                      updatePageFooter(currentPageId, { template: value as FooterTemplate });
-                    }
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {footerTemplates.map((template) => (
-                      <SelectItem key={template.value} value={template.value}>
-                        <div className="flex flex-col items-start">
-                          <span className="font-medium">{template.label}</span>
-                          <span className="text-xs text-muted-foreground">{template.description}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-muted-foreground mt-2">
-                  {currentPage?.footer.template !== "none"
-                    ? "✓ Clique no footer no preview para editar"
-                    : "Selecione um template acima"}
-                </p>
-              </div>
-            </div>
-
-            <div className="border-t pt-4 space-y-2">
-              <p className="text-xs text-muted-foreground">
-                💡 <strong>Dica:</strong> Depois de adicionar header ou footer, clique neles no preview para editar textos, cores, logos e links!
-              </p>
-            </div>
           </TabsContent>
         </ScrollArea>
       </Tabs>
