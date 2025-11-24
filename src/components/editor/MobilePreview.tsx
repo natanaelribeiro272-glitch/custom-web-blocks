@@ -54,27 +54,27 @@ export function MobilePreview() {
           </div>
         ) : (
           <div className="space-y-0">
-            {blocks.map((block, index) => (
+            {blocks.map((block) => (
               <div key={block.id}>
                 <BlockRenderer block={block} />
-                
-                {/* Add block button between blocks */}
-                <div 
-                  className="flex items-center justify-center py-4 px-4"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Button
-                    onClick={() => handleAddBlockAt(index + 1)}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2 shadow-md border-2 hover:border-primary"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Adicionar bloco
-                  </Button>
-                </div>
               </div>
             ))}
+            
+            {/* Add block button only after last block */}
+            <div 
+              className="flex items-center justify-center py-4 px-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Button
+                onClick={() => handleAddBlockAt(blocks.length)}
+                variant="outline"
+                size="sm"
+                className="gap-2 shadow-md border-2 hover:border-primary"
+              >
+                <Plus className="h-4 w-4" />
+                Adicionar bloco
+              </Button>
+            </div>
           </div>
         )}
         
