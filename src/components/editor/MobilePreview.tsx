@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function MobilePreview() {
-  const { pages, currentPageId, setActiveSheet, setInsertBlockIndex } = useEditorStore();
+  const { pages, currentPageId, setActiveSheet, setInsertBlockIndex, selectBlock, selectElement, selectHeaderFooter } = useEditorStore();
   const currentPage = pages.find((p) => p.id === currentPageId);
   const blocks = currentPage?.blocks || [];
 
@@ -14,17 +14,28 @@ export function MobilePreview() {
     setActiveSheet("add-block");
   };
 
+  const handleBackgroundClick = () => {
+    // Deselect everything when clicking on the background
+    selectBlock(null);
+    selectElement(null);
+    selectHeaderFooter(null);
+  };
+
   return (
     <div className="flex-1 overflow-auto pb-20">
       <div 
         className="min-h-screen w-full relative"
         style={{ backgroundColor: currentPage?.backgroundColor || "#ffffff" }}
+        onClick={handleBackgroundClick}
       >
         {/* Header */}
         {currentPage && <HeaderFooterRenderer config={currentPage.header} type="header" pageId={currentPage.id} />}
         
         {blocks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-[60vh] px-8 text-center">
+          <div 
+            className="flex flex-col items-center justify-center min-h-[60vh] px-8 text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
               <Plus className="h-10 w-10 text-primary" />
             </div>
@@ -48,7 +59,10 @@ export function MobilePreview() {
                 <BlockRenderer block={block} />
                 
                 {/* Add block button between blocks */}
-                <div className="flex items-center justify-center py-4 px-4">
+                <div 
+                  className="flex items-center justify-center py-4 px-4"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <Button
                     onClick={() => handleAddBlockAt(index + 1)}
                     variant="outline"
