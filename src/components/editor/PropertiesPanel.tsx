@@ -864,6 +864,70 @@ export function PropertiesPanel() {
         </div>
 
         <div className="space-y-1.5">
+          <Label htmlFor="bg-image" className="text-xs">Imagem de Background</Label>
+          <Input
+            id="bg-image"
+            placeholder="https://"
+            value={selectedBlock.style.backgroundImage || ""}
+            onChange={(e) =>
+              updateBlock(selectedBlock.id, {
+                style: { ...selectedBlock.style, backgroundImage: e.target.value },
+              })
+            }
+            className="h-8 text-sm"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="bg-gradient" className="text-xs">Gradiente CSS</Label>
+          <Input
+            id="bg-gradient"
+            placeholder="Ex: linear-gradient(45deg, #667eea, #764ba2)"
+            value={selectedBlock.style.backgroundGradient || ""}
+            onChange={(e) =>
+              updateBlock(selectedBlock.id, {
+                style: { ...selectedBlock.style, backgroundGradient: e.target.value },
+              })
+            }
+            className="h-8 text-sm"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label className="text-xs">Opacidade do Background: {selectedBlock.style.backgroundOpacity || 100}%</Label>
+          <Slider
+            value={[selectedBlock.style.backgroundOpacity || 100]}
+            onValueChange={([value]) =>
+              updateBlock(selectedBlock.id, {
+                style: { ...selectedBlock.style, backgroundOpacity: value },
+              })
+            }
+            min={0}
+            max={100}
+            step={5}
+            className="py-2"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label className="text-xs">Desfoque do Background: {selectedBlock.style.backgroundBlur || 0}px</Label>
+          <Slider
+            value={[selectedBlock.style.backgroundBlur || 0]}
+            onValueChange={([value]) =>
+              updateBlock(selectedBlock.id, {
+                style: { ...selectedBlock.style, backgroundBlur: value },
+              })
+            }
+            min={0}
+            max={20}
+            step={1}
+            className="py-2"
+          />
+        </div>
+
+        <Separator />
+
+        <div className="space-y-1.5">
           <Label className="text-xs">Espaçamento: {selectedBlock.style.padding}rem</Label>
           <Slider
             value={[selectedBlock.style.padding || 2]}

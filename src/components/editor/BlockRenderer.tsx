@@ -33,13 +33,58 @@ export function BlockRenderer({ block }: BlockRendererProps) {
     selectBlock(block.id);
   };
 
+  const getBackgroundStyle = () => {
+    const style: React.CSSProperties = {
+      padding: `${block.style.padding}rem`,
+      minHeight: `${block.style.minHeight}px`,
+    };
+
+    // Base background color
+    if (block.style.backgroundColor) {
+      style.backgroundColor = block.style.backgroundColor;
+    }
+
+    // Background image
+    if (block.style.backgroundImage) {
+      style.backgroundImage = `url(${block.style.backgroundImage})`;
+      style.backgroundSize = 'cover';
+      style.backgroundPosition = 'center';
+      style.backgroundRepeat = 'no-repeat';
+    }
+
+    // Gradient overlay
+    if (block.style.backgroundGradient) {
+      if (block.style.backgroundImage) {
+        style.backgroundImage = `${block.style.backgroundGradient}, url(${block.style.backgroundImage})`;
+      } else {
+        style.backgroundImage = block.style.backgroundGradient;
+      }
+    }
+
+    // Opacity
+    if (block.style.backgroundOpacity !== undefined && block.style.backgroundOpacity !== 100) {
+      style.opacity = block.style.backgroundOpacity / 100;
+    }
+
+    return style;
+  };
+
+  const getBackdropStyle = () => {
+    if (block.style.backgroundBlur && block.style.backgroundBlur > 0) {
+      return {
+        backdropFilter: `blur(${block.style.backgroundBlur}px)`,
+        WebkitBackdropFilter: `blur(${block.style.backgroundBlur}px)`,
+      };
+    }
+    return {};
+  };
+
   return (
     <div
       className={getBlockClasses()}
       style={{
-        backgroundColor: block.style.backgroundColor,
-        padding: `${block.style.padding}rem`,
-        minHeight: `${block.style.minHeight}px`,
+        ...getBackgroundStyle(),
+        ...getBackdropStyle(),
       }}
       onClick={handleBlockClick}
     >
