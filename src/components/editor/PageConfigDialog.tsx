@@ -10,15 +10,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Settings } from "lucide-react";
 import { HeaderTemplate, FooterTemplate } from "@/types/editor";
+import { TemplatePreview } from "./TemplatePreview";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const headerTemplates: { value: HeaderTemplate; label: string; description: string }[] = [
   { value: "none", label: "Nenhum", description: "Sem header" },
@@ -92,76 +87,101 @@ export function PageConfigDialog() {
           </div>
 
           {/* Template de Header */}
-          <div className="space-y-2">
-            <Label htmlFor="header-template">Template de Header</Label>
-            <Select
+          <div className="space-y-3">
+            <Label>Template de Header</Label>
+            <RadioGroup
               value={currentPage.header.template}
               onValueChange={(value) => {
                 updatePageHeader(currentPage.id, { template: value as HeaderTemplate });
               }}
+              className="space-y-3"
             >
-              <SelectTrigger id="header-template">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {headerTemplates.map((template) => (
-                  <SelectItem key={template.value} value={template.value}>
-                    <div className="flex flex-col items-start">
-                      <span className="font-medium">{template.label}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {template.description}
-                      </span>
+              {headerTemplates.map((template) => (
+                <div key={template.value} className="relative">
+                  <RadioGroupItem
+                    value={template.value}
+                    id={`header-${template.value}`}
+                    className="peer sr-only"
+                  />
+                  <Label
+                    htmlFor={`header-${template.value}`}
+                    className="flex flex-col p-3 rounded-lg border-2 border-muted cursor-pointer hover:border-primary peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <span className="font-medium text-sm">{template.label}</span>
+                        <p className="text-xs text-muted-foreground">{template.description}</p>
+                      </div>
+                      {currentPage.header.template === template.value && (
+                        <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                      )}
                     </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                    <TemplatePreview type="header" template={template.value} />
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
             {currentPage.header.template !== "none" && (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
                 💡 Clique no header no preview para editar detalhes
               </p>
             )}
           </div>
 
           {/* Template de Rodapé */}
-          <div className="space-y-2">
-            <Label htmlFor="footer-template">Template de Rodapé</Label>
-            <Select
+          <div className="space-y-3">
+            <Label>Template de Rodapé</Label>
+            <RadioGroup
               value={currentPage.footer.template}
               onValueChange={(value) => {
                 updatePageFooter(currentPage.id, { template: value as FooterTemplate });
               }}
+              className="space-y-3"
             >
-              <SelectTrigger id="footer-template">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {footerTemplates.map((template) => (
-                  <SelectItem key={template.value} value={template.value}>
-                    <div className="flex flex-col items-start">
-                      <span className="font-medium">{template.label}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {template.description}
-                      </span>
+              {footerTemplates.map((template) => (
+                <div key={template.value} className="relative">
+                  <RadioGroupItem
+                    value={template.value}
+                    id={`footer-${template.value}`}
+                    className="peer sr-only"
+                  />
+                  <Label
+                    htmlFor={`footer-${template.value}`}
+                    className="flex flex-col p-3 rounded-lg border-2 border-muted cursor-pointer hover:border-primary peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 transition-all"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <span className="font-medium text-sm">{template.label}</span>
+                        <p className="text-xs text-muted-foreground">{template.description}</p>
+                      </div>
+                      {currentPage.footer.template === template.value && (
+                        <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                      )}
                     </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                    <TemplatePreview type="footer" template={template.value} />
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
             {currentPage.footer.template !== "none" && (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
                 💡 Clique no footer no preview para editar detalhes
               </p>
             )}
           </div>
 
           {/* Info adicional */}
-          <div className="rounded-lg bg-muted p-4 space-y-2 text-sm">
+          <div className="rounded-lg bg-primary/10 p-4 space-y-2 text-sm">
             <p className="font-medium">Como funciona:</p>
-            <ul className="space-y-1 text-muted-foreground">
-              <li>• Escolha templates de header e footer acima</li>
-              <li>• Clique neles no preview mobile para editar</li>
-              <li>• Personalize textos, cores, logos e links</li>
+            <ul className="space-y-1 text-muted-foreground text-xs">
+              <li>✓ Escolha templates de header e footer acima</li>
+              <li>✓ Visualize o preview antes de selecionar</li>
+              <li>✓ Clique neles no preview mobile para editar</li>
+              <li>✓ Personalize textos, cores, logos e links</li>
             </ul>
           </div>
         </div>

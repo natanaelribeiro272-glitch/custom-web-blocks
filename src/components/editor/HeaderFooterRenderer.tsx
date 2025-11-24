@@ -1,6 +1,16 @@
 import { HeaderFooterConfig } from "@/types/editor";
 import { cn } from "@/lib/utils";
 import { useEditorStore } from "@/hooks/useEditorStore";
+import { Facebook, Instagram, Twitter, Linkedin, Youtube, Globe } from "lucide-react";
+
+const socialIcons: Record<string, any> = {
+  facebook: Facebook,
+  instagram: Instagram,
+  twitter: Twitter,
+  linkedin: Linkedin,
+  youtube: Youtube,
+  site: Globe,
+};
 
 interface HeaderFooterRendererProps {
   config: HeaderFooterConfig;
@@ -155,11 +165,14 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
         >
           <div className="px-4 py-4 space-y-3">
             <div className="flex justify-center gap-4">
-              {config.socialLinks?.map((social, i) => (
-                <a key={i} href={social.url} className="text-sm hover:opacity-70">
-                  {social.platform}
-                </a>
-              ))}
+              {config.socialLinks?.map((social, i) => {
+                const IconComponent = socialIcons[social.platform.toLowerCase()] || Globe;
+                return (
+                  <a key={i} href={social.url} className="hover:opacity-70">
+                    <IconComponent className="h-5 w-5" />
+                  </a>
+                );
+              })}
             </div>
             <p className="text-xs text-center">{config.copyright}</p>
           </div>

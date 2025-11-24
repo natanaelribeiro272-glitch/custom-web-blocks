@@ -40,7 +40,11 @@ const createDefaultFooter = (): HeaderFooterConfig => ({
   template: "none",
   copyright: "© 2025 Todos os direitos reservados",
   links: [],
-  socialLinks: [],
+  socialLinks: [
+    { platform: "instagram", url: "https://instagram.com" },
+    { platform: "facebook", url: "https://facebook.com" },
+    { platform: "twitter", url: "https://twitter.com" },
+  ],
   backgroundColor: "#1a1a1a",
   textColor: "#ffffff",
 });
