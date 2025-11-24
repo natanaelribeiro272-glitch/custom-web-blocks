@@ -152,6 +152,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         elements: [],
         style: {
           backgroundColor: '#ffffff',
+          backgroundImage: '',
+          backgroundGradient: '',
+          backgroundOpacity: 100,
+          backgroundBlur: 0,
           padding: 2,
           minHeight: 120,
         },
@@ -177,6 +181,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         elements: [],
         style: {
           backgroundColor: '#ffffff',
+          backgroundImage: '',
+          backgroundGradient: '',
+          backgroundOpacity: 100,
+          backgroundBlur: 0,
           padding: 2,
           minHeight: 120,
         },

@@ -42,6 +42,10 @@ export interface Block {
   elements: BlockElement[];
   style: {
     backgroundColor?: string;
+    backgroundImage?: string;
+    backgroundGradient?: string;
+    backgroundBlur?: number;
+    backgroundOpacity?: number;
     padding?: number;
     minHeight?: number;
   };
