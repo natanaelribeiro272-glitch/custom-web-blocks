@@ -1,6 +1,7 @@
 import { MobilePreview } from "@/components/editor/MobilePreview";
 import { FloatingBottomBar } from "@/components/editor/FloatingBottomBar";
 import { AddBlockSheet } from "@/components/editor/AddBlockSheet";
+import { AddElementSheet } from "@/components/editor/AddElementSheet";
 import { PropertiesSheet } from "@/components/editor/PropertiesSheet";
 import { PageSettingsSheet } from "@/components/editor/PageSettingsSheet";
 import { useEditorStore } from "@/hooks/useEditorStore";
@@ -19,6 +20,10 @@ const Editor = () => {
       {/* Sheets for different actions */}
       <AddBlockSheet 
         open={activeSheet === "add-block"} 
+        onOpenChange={(open) => !open && setActiveSheet(null)} 
+      />
+      <AddElementSheet 
+        open={activeSheet === "add-element"} 
         onOpenChange={(open) => !open && setActiveSheet(null)} 
       />
       <PropertiesSheet 

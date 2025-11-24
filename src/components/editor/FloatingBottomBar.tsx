@@ -1,6 +1,6 @@
 import { useEditorStore } from "@/hooks/useEditorStore";
 import { Button } from "@/components/ui/button";
-import { Settings, FileText, Eye } from "lucide-react";
+import { Settings, FileText, Eye, Plus } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -21,6 +21,10 @@ export function FloatingBottomBar() {
     setActiveSheet("page-settings");
   };
 
+  const handleAddElement = () => {
+    setActiveSheet("add-element");
+  };
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-2xl z-50">
       <div className="flex items-center justify-between px-4 py-3 gap-2">
@@ -39,8 +43,32 @@ export function FloatingBottomBar() {
         </Select>
 
         <div className="flex items-center gap-2">
-          {/* Properties button - only show if something is selected */}
-          {(selectedBlockId || selectedElementId) && (
+          {/* Show add element and properties when block is selected */}
+          {selectedBlockId && !selectedElementId && (
+            <>
+              <Button
+                variant="default"
+                size="sm"
+                onClick={handleAddElement}
+                className="gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                <span className="hidden sm:inline">Elemento</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleOpenProperties}
+                className="gap-2"
+              >
+                <Settings className="h-4 w-4" />
+                <span className="hidden sm:inline">Propriedades</span>
+              </Button>
+            </>
+          )}
+
+          {/* Show only properties when element is selected */}
+          {selectedElementId && (
             <Button
               variant="outline"
               size="sm"

@@ -31,7 +31,7 @@ interface EditorStore extends EditorState {
   togglePageConfig: () => void;
   
   // Sheet management
-  setActiveSheet: (sheet: "add-block" | "properties" | "page-settings" | null) => void;
+  setActiveSheet: (sheet: "add-block" | "add-element" | "properties" | "page-settings" | null) => void;
   setInsertBlockIndex: (index: number) => void;
 }
 

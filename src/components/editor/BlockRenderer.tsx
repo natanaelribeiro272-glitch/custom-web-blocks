@@ -31,7 +31,6 @@ export function BlockRenderer({ block }: BlockRendererProps) {
   const handleBlockClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     selectBlock(block.id);
-    setActiveSheet("properties");
   };
 
   return (
