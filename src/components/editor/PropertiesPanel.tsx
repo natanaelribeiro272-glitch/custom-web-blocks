@@ -544,6 +544,30 @@ export function PropertiesPanel() {
               />
             </div>
             <div className="space-y-1.5">
+              <Label htmlFor="image-upload" className="text-xs">Ou fazer upload</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="image-upload"
+                  type="file"
+                  accept="image/*"
+                  className="h-8 text-sm"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        const dataUrl = event.target?.result as string;
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, url: dataUrl },
+                        });
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+              </div>
+            </div>
+            <div className="space-y-1.5">
               <Label htmlFor="element-alt" className="text-xs">Texto Alternativo</Label>
               <Input
                 id="element-alt"
@@ -555,6 +579,52 @@ export function PropertiesPanel() {
                 }
                 className="h-8 text-sm"
               />
+            </div>
+          </>
+        )}
+
+        {selectedElement.type === "video" && (
+          <>
+            <div className="space-y-1.5">
+              <Label htmlFor="video-url" className="text-xs">URL do Vídeo (YouTube/Vimeo)</Label>
+              <Input
+                id="video-url"
+                placeholder="https://www.youtube.com/embed/..."
+                value={selectedElement.content.url || ""}
+                onChange={(e) =>
+                  updateElement(selectedBlockId, selectedElement.id, {
+                    content: { ...selectedElement.content, url: e.target.value },
+                  })
+                }
+                className="h-8 text-sm"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="video-upload" className="text-xs">Ou fazer upload</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="video-upload"
+                  type="file"
+                  accept="video/*"
+                  className="h-8 text-sm"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        const dataUrl = event.target?.result as string;
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, url: dataUrl },
+                        });
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+              </div>
+              <p className="text-[10px] text-muted-foreground">
+                Para vídeos grandes, use YouTube ou Vimeo
+              </p>
             </div>
           </>
         )}
@@ -610,6 +680,28 @@ export function PropertiesPanel() {
                       })
                     }
                   />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="product-image-upload" className="text-xs">Ou fazer upload</Label>
+                    <Input
+                      id="product-image-upload"
+                      type="file"
+                      accept="image/*"
+                      className="h-8 text-sm"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            const dataUrl = event.target?.result as string;
+                            updateElement(selectedBlockId, selectedElement.id, {
+                              content: { ...selectedElement.content, productImage: dataUrl },
+                            });
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="product-name">Nome do Produto</Label>
@@ -769,30 +861,52 @@ export function PropertiesPanel() {
                 <div className="space-y-2">
                   <Label>Imagens do Carrossel</Label>
                   {selectedElement.content.carouselImages?.map((image, index) => (
-                    <div key={index} className="flex gap-2">
+                    <div key={index} className="space-y-2">
+                      <div className="flex gap-2">
+                        <Input
+                          value={image}
+                          onChange={(e) => {
+                            const newImages = [...(selectedElement.content.carouselImages || [])];
+                            newImages[index] = e.target.value;
+                            updateElement(selectedBlockId, selectedElement.id, {
+                              content: { ...selectedElement.content, carouselImages: newImages },
+                            });
+                          }}
+                          placeholder="https://"
+                        />
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => {
+                            const newImages = selectedElement.content.carouselImages?.filter((_, i) => i !== index);
+                            updateElement(selectedBlockId, selectedElement.id, {
+                              content: { ...selectedElement.content, carouselImages: newImages },
+                            });
+                          }}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
                       <Input
-                        value={image}
+                        type="file"
+                        accept="image/*"
+                        className="h-8 text-sm"
                         onChange={(e) => {
-                          const newImages = [...(selectedElement.content.carouselImages || [])];
-                          newImages[index] = e.target.value;
-                          updateElement(selectedBlockId, selectedElement.id, {
-                            content: { ...selectedElement.content, carouselImages: newImages },
-                          });
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                              const dataUrl = event.target?.result as string;
+                              const newImages = [...(selectedElement.content.carouselImages || [])];
+                              newImages[index] = dataUrl;
+                              updateElement(selectedBlockId, selectedElement.id, {
+                                content: { ...selectedElement.content, carouselImages: newImages },
+                              });
+                            };
+                            reader.readAsDataURL(file);
+                          }
                         }}
-                        placeholder="https://"
                       />
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => {
-                          const newImages = selectedElement.content.carouselImages?.filter((_, i) => i !== index);
-                          updateElement(selectedBlockId, selectedElement.id, {
-                            content: { ...selectedElement.content, carouselImages: newImages },
-                          });
-                        }}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
                     </div>
                   ))}
                   <Button
