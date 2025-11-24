@@ -166,19 +166,33 @@ export function FloatingBottomBar() {
           </Button>
         )}
 
-        {/* Page selector */}
-        <Select value={currentPageId || ""} onValueChange={setCurrentPage}>
-          <SelectTrigger className="w-[140px] h-9 text-sm">
-            <SelectValue placeholder="Página" />
-          </SelectTrigger>
-          <SelectContent>
-            {pages.map((page) => (
-              <SelectItem key={page.id} value={page.id}>
-                {page.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {/* Page selector with add button */}
+        <div className="flex items-center gap-1">
+          <Select value={currentPageId || ""} onValueChange={setCurrentPage}>
+            <SelectTrigger className="w-[140px] h-9 text-sm">
+              <SelectValue placeholder="Página" />
+            </SelectTrigger>
+            <SelectContent>
+              {pages.map((page) => (
+                <SelectItem key={page.id} value={page.id}>
+                  {page.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              const { addPage } = useEditorStore.getState();
+              addPage();
+            }}
+            className="h-9 w-9 p-0"
+            title="Nova página"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
 
         <div className="flex items-center gap-2 flex-wrap">
           {/* Show add element and properties when block is selected */}
