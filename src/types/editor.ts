@@ -1,6 +1,6 @@
 export type BlockType = "full-width" | "centered" | "split" | "grid";
 
-export type ElementType = "title" | "text" | "image" | "video" | "button" | "link" | "carousel";
+export type ElementType = "title" | "text" | "image" | "video" | "button" | "link" | "carousel" | "countdown" | "product" | "list";
 
 export type HeaderTemplate = "none" | "simple" | "centered" | "with-logo";
 export type FooterTemplate = "none" | "simple" | "social" | "detailed";
@@ -14,6 +14,25 @@ export interface BlockElement {
     alt?: string;
     href?: string;
     style?: Record<string, any>;
+    // Countdown
+    targetDate?: string;
+    countdownLabel?: string;
+    // Product
+    productName?: string;
+    productPrice?: string;
+    productOriginalPrice?: string;
+    productDescription?: string;
+    productImage?: string;
+    productButtonText?: string;
+    productButtonLink?: string;
+    // List
+    listItems?: string[];
+    listIcon?: string;
+    listStyle?: "bullet" | "numbered" | "checklist" | "icon";
+    // Carousel
+    carouselImages?: string[];
+    carouselAutoplay?: boolean;
+    carouselInterval?: number;
   };
 }
 

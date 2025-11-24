@@ -7,6 +7,8 @@ import { Trash2, ArrowUp, ArrowDown, X, Plus, Settings } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { HeaderTemplate, FooterTemplate } from "@/types/editor";
 import { TemplatePreview } from "./TemplatePreview";
 import {
@@ -555,6 +557,289 @@ export function PropertiesPanel() {
                     }
                   />
                 </div>
+              </>
+            )}
+
+            {/* Countdown Properties */}
+            {selectedElement.type === "countdown" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="countdown-label">Texto do Contador</Label>
+                  <Input
+                    id="countdown-label"
+                    value={selectedElement.content.countdownLabel || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, countdownLabel: e.target.value },
+                      })
+                    }
+                    placeholder="Ex: Faltam, Termina em"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="target-date">Data Final</Label>
+                  <Input
+                    id="target-date"
+                    type="datetime-local"
+                    value={
+                      selectedElement.content.targetDate
+                        ? new Date(selectedElement.content.targetDate).toISOString().slice(0, 16)
+                        : ""
+                    }
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, targetDate: new Date(e.target.value).toISOString() },
+                      })
+                    }
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Product Properties */}
+            {selectedElement.type === "product" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="product-image">URL da Imagem</Label>
+                  <Input
+                    id="product-image"
+                    placeholder="https://"
+                    value={selectedElement.content.productImage || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, productImage: e.target.value },
+                      })
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="product-name">Nome do Produto</Label>
+                  <Input
+                    id="product-name"
+                    value={selectedElement.content.productName || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, productName: e.target.value },
+                      })
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="product-description">Descrição</Label>
+                  <Textarea
+                    id="product-description"
+                    value={selectedElement.content.productDescription || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, productDescription: e.target.value },
+                      })
+                    }
+                    rows={3}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="product-price">Preço</Label>
+                    <Input
+                      id="product-price"
+                      placeholder="R$ 49,90"
+                      value={selectedElement.content.productPrice || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, productPrice: e.target.value },
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="product-original-price">Preço Original</Label>
+                    <Input
+                      id="product-original-price"
+                      placeholder="R$ 59,90"
+                      value={selectedElement.content.productOriginalPrice || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, productOriginalPrice: e.target.value },
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="product-button-text">Texto do Botão</Label>
+                  <Input
+                    id="product-button-text"
+                    value={selectedElement.content.productButtonText || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, productButtonText: e.target.value },
+                      })
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="product-button-link">Link do Botão</Label>
+                  <Input
+                    id="product-button-link"
+                    placeholder="https://"
+                    value={selectedElement.content.productButtonLink || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, productButtonLink: e.target.value },
+                      })
+                    }
+                  />
+                </div>
+              </>
+            )}
+
+            {/* List Properties */}
+            {selectedElement.type === "list" && (
+              <>
+                <div className="space-y-2">
+                  <Label>Estilo da Lista</Label>
+                  <Select
+                    value={selectedElement.content.listStyle || "bullet"}
+                    onValueChange={(value) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, listStyle: value as any },
+                      })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bullet">Marcadores (•)</SelectItem>
+                      <SelectItem value="numbered">Numerada (1, 2, 3)</SelectItem>
+                      <SelectItem value="checklist">Checklist (✓)</SelectItem>
+                      <SelectItem value="icon">Ícones (⚫)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Itens da Lista</Label>
+                  {selectedElement.content.listItems?.map((item, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        value={item}
+                        onChange={(e) => {
+                          const newItems = [...(selectedElement.content.listItems || [])];
+                          newItems[index] = e.target.value;
+                          updateElement(selectedBlockId, selectedElement.id, {
+                            content: { ...selectedElement.content, listItems: newItems },
+                          });
+                        }}
+                        placeholder={`Item ${index + 1}`}
+                      />
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => {
+                          const newItems = selectedElement.content.listItems?.filter((_, i) => i !== index);
+                          updateElement(selectedBlockId, selectedElement.id, {
+                            content: { ...selectedElement.content, listItems: newItems },
+                          });
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => {
+                      const newItems = [...(selectedElement.content.listItems || []), "Novo item"];
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, listItems: newItems },
+                      });
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Adicionar Item
+                  </Button>
+                </div>
+              </>
+            )}
+
+            {/* Carousel Properties */}
+            {selectedElement.type === "carousel" && (
+              <>
+                <div className="space-y-2">
+                  <Label>Imagens do Carrossel</Label>
+                  {selectedElement.content.carouselImages?.map((image, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        value={image}
+                        onChange={(e) => {
+                          const newImages = [...(selectedElement.content.carouselImages || [])];
+                          newImages[index] = e.target.value;
+                          updateElement(selectedBlockId, selectedElement.id, {
+                            content: { ...selectedElement.content, carouselImages: newImages },
+                          });
+                        }}
+                        placeholder="https://"
+                      />
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => {
+                          const newImages = selectedElement.content.carouselImages?.filter((_, i) => i !== index);
+                          updateElement(selectedBlockId, selectedElement.id, {
+                            content: { ...selectedElement.content, carouselImages: newImages },
+                          });
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => {
+                      const newImages = [...(selectedElement.content.carouselImages || []), ""];
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, carouselImages: newImages },
+                      });
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Adicionar Imagem
+                  </Button>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="carousel-autoplay">Reprodução Automática</Label>
+                    <Switch
+                      id="carousel-autoplay"
+                      checked={selectedElement.content.carouselAutoplay || false}
+                      onCheckedChange={(checked) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, carouselAutoplay: checked },
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+                {selectedElement.content.carouselAutoplay && (
+                  <div className="space-y-2">
+                    <Label htmlFor="carousel-interval">Intervalo (ms)</Label>
+                    <Input
+                      id="carousel-interval"
+                      type="number"
+                      value={selectedElement.content.carouselInterval || 3000}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, carouselInterval: parseInt(e.target.value) },
+                        })
+                      }
+                    />
+                  </div>
+                )}
               </>
             )}
 
