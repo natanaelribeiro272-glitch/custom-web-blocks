@@ -237,9 +237,22 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   updatePageHeader: (pageId, header) =>
     set((state) => {
+      const page = state.pages.find(p => p.id === pageId);
+      if (!page) return state;
+      
+      // Se está mudando de template e o novo não é "none", adiciona links de exemplo se não existirem
+      const updatedHeader = { ...page.header, ...header };
+      if (header.template && header.template !== "none" && (!updatedHeader.links || updatedHeader.links.length === 0)) {
+        updatedHeader.links = [
+          { text: "Home", href: "#home" },
+          { text: "Sobre", href: "#sobre" },
+          { text: "Contato", href: "#contato" },
+        ];
+      }
+      
       const newState = {
         pages: state.pages.map((p) =>
-          p.id === pageId ? { ...p, header: { ...p.header, ...header } } : p
+          p.id === pageId ? { ...p, header: updatedHeader } : p
         ),
       };
       if (state.projectId) {
