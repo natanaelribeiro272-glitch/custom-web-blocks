@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Trash2, ArrowUp, ArrowDown, X, Plus, Settings } from "lucide-react";
+import { Trash2, ArrowUp, ArrowDown, X, Plus, Settings, Upload } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -829,21 +829,14 @@ export function PropertiesPanel() {
   // Block Properties
   if (selectedBlock) {
     return (
-      <div className="space-y-4">
-        <div className="space-y-1.5">
-          <Label className="text-xs">Tipo de Bloco</Label>
-          <div className="text-sm font-medium capitalize">
-            {selectedBlock.type.replace("-", " ")}
-          </div>
-        </div>
-
+      <div className="space-y-3">
         <div className="space-y-1.5">
           <Label htmlFor="bg-color" className="text-xs">Cor de Fundo</Label>
           <div className="flex gap-2">
             <Input
               id="bg-color"
               type="color"
-              className="w-16 h-8 p-1"
+              className="w-12 h-8 p-1 cursor-pointer"
               value={selectedBlock.style.backgroundColor}
               onChange={(e) =>
                 updateBlock(selectedBlock.id, {
@@ -858,7 +851,7 @@ export function PropertiesPanel() {
                   style: { ...selectedBlock.style, backgroundColor: e.target.value },
                 })
               }
-              className="flex-1 h-8 text-sm"
+              className="flex-1 h-8 text-sm font-mono"
             />
           </div>
         </div>
@@ -866,42 +859,52 @@ export function PropertiesPanel() {
         <div className="space-y-1.5">
           <Label className="text-xs">Imagem de Background</Label>
           <div className="flex gap-2">
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    updateBlock(selectedBlock.id, {
-                      style: { ...selectedBlock.style, backgroundImage: reader.result as string },
-                    });
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
-              className="h-8 text-sm flex-1"
-            />
+            <label className="flex-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full h-8 text-xs"
+                type="button"
+                onClick={() => document.getElementById('bg-image-upload')?.click()}
+              >
+                <Upload className="h-3 w-3 mr-1" />
+                Upload ou URL
+              </Button>
+              <input
+                id="bg-image-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      updateBlock(selectedBlock.id, {
+                        style: { ...selectedBlock.style, backgroundImage: reader.result as string },
+                      });
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </label>
           </div>
           <Input
-            id="bg-image"
-            placeholder="Ou cole uma URL: https://"
+            placeholder="Ou cole URL: https://"
             value={selectedBlock.style.backgroundImage?.startsWith('data:') ? '' : selectedBlock.style.backgroundImage || ""}
             onChange={(e) =>
               updateBlock(selectedBlock.id, {
                 style: { ...selectedBlock.style, backgroundImage: e.target.value },
               })
             }
-            className="h-8 text-sm"
+            className="h-7 text-xs"
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <Label className="text-xs">Gradiente</Label>
-          
-          {/* Gradientes predefinidos */}
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-6 gap-1.5">
             {[
               { name: 'Sunset', value: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
               { name: 'Ocean', value: 'linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%)' },
@@ -917,9 +920,9 @@ export function PropertiesPanel() {
                     style: { ...selectedBlock.style, backgroundGradient: gradient.value },
                   })
                 }
-                className={`h-12 rounded-lg border-2 transition-all ${
+                className={`h-8 rounded border-2 transition-all ${
                   selectedBlock.style.backgroundGradient === gradient.value
-                    ? 'border-primary ring-2 ring-primary/20'
+                    ? 'border-primary ring-1 ring-primary/20'
                     : 'border-muted hover:border-primary/50'
                 }`}
                 style={{ background: gradient.value }}
@@ -928,59 +931,49 @@ export function PropertiesPanel() {
             ))}
           </div>
 
-          {/* Gradiente customizado */}
-          <div className="space-y-1.5 pt-2">
-            <Label className="text-xs">Ou crie seu gradiente</Label>
-            <div className="flex gap-2 items-center">
-              <Input
-                type="color"
-                className="w-12 h-8 p-1 cursor-pointer"
-                onChange={(e) => {
-                  const color1 = e.target.value;
-                  const color2 = selectedBlock.style.backgroundGradient?.match(/#[0-9A-Fa-f]{6}/g)?.[1] || '#764ba2';
-                  updateBlock(selectedBlock.id, {
-                    style: { ...selectedBlock.style, backgroundGradient: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` },
-                  });
-                }}
-              />
-              <span className="text-xs text-muted-foreground">→</span>
-              <Input
-                type="color"
-                className="w-12 h-8 p-1 cursor-pointer"
-                onChange={(e) => {
-                  const color2 = e.target.value;
-                  const color1 = selectedBlock.style.backgroundGradient?.match(/#[0-9A-Fa-f]{6}/g)?.[0] || '#667eea';
-                  updateBlock(selectedBlock.id, {
-                    style: { ...selectedBlock.style, backgroundGradient: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` },
-                  });
-                }}
-              />
-              {selectedBlock.style.backgroundGradient && (
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() =>
-                    updateBlock(selectedBlock.id, {
-                      style: { ...selectedBlock.style, backgroundGradient: '' },
-                    })
-                  }
-                  className="h-8 px-2"
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              )}
-            </div>
+          <div className="flex gap-2 items-center pt-1">
+            <Input
+              type="color"
+              className="w-10 h-7 p-0.5 cursor-pointer"
+              onChange={(e) => {
+                const color1 = e.target.value;
+                const color2 = selectedBlock.style.backgroundGradient?.match(/#[0-9A-Fa-f]{6}/g)?.[1] || '#764ba2';
+                updateBlock(selectedBlock.id, {
+                  style: { ...selectedBlock.style, backgroundGradient: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` },
+                });
+              }}
+            />
+            <span className="text-xs text-muted-foreground">→</span>
+            <Input
+              type="color"
+              className="w-10 h-7 p-0.5 cursor-pointer"
+              onChange={(e) => {
+                const color2 = e.target.value;
+                const color1 = selectedBlock.style.backgroundGradient?.match(/#[0-9A-Fa-f]{6}/g)?.[0] || '#667eea';
+                updateBlock(selectedBlock.id, {
+                  style: { ...selectedBlock.style, backgroundGradient: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` },
+                });
+              }}
+            />
             {selectedBlock.style.backgroundGradient && (
-              <div
-                className="h-8 rounded border"
-                style={{ background: selectedBlock.style.backgroundGradient }}
-              />
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() =>
+                  updateBlock(selectedBlock.id, {
+                    style: { ...selectedBlock.style, backgroundGradient: '' },
+                  })
+                }
+                className="h-7 w-7 p-0"
+              >
+                <X className="h-3 w-3" />
+              </Button>
             )}
           </div>
         </div>
 
         <div className="space-y-1.5">
-          <Label className="text-xs">Opacidade do Background: {selectedBlock.style.backgroundOpacity || 100}%</Label>
+          <Label className="text-xs">Opacidade: {selectedBlock.style.backgroundOpacity || 100}%</Label>
           <Slider
             value={[selectedBlock.style.backgroundOpacity || 100]}
             onValueChange={([value]) =>
@@ -991,12 +984,12 @@ export function PropertiesPanel() {
             min={0}
             max={100}
             step={5}
-            className="py-2"
+            className="py-1"
           />
         </div>
 
         <div className="space-y-1.5">
-          <Label className="text-xs">Desfoque do Background: {selectedBlock.style.backgroundBlur || 0}px</Label>
+          <Label className="text-xs">Desfoque: {selectedBlock.style.backgroundBlur || 0}px</Label>
           <Slider
             value={[selectedBlock.style.backgroundBlur || 0]}
             onValueChange={([value]) =>
@@ -1007,7 +1000,7 @@ export function PropertiesPanel() {
             min={0}
             max={20}
             step={1}
-            className="py-2"
+            className="py-1"
           />
         </div>
 
@@ -1025,7 +1018,7 @@ export function PropertiesPanel() {
             min={0}
             max={6}
             step={0.5}
-            className="py-2"
+            className="py-1"
           />
         </div>
 
@@ -1041,17 +1034,17 @@ export function PropertiesPanel() {
             min={80}
             max={500}
             step={10}
-            className="py-2"
+            className="py-1"
           />
         </div>
 
         <div className="space-y-1.5">
-          <Label className="text-xs">Reordenar Bloco</Label>
+          <Label className="text-xs">Reordenar</Label>
           <div className="flex gap-2">
             <Button
               variant="outline"
               size="sm"
-              className="flex-1"
+              className="flex-1 h-8 text-xs"
               onClick={() => moveBlock(selectedBlock.id, "up")}
             >
               <ArrowUp className="h-3 w-3 mr-1" />
@@ -1060,7 +1053,7 @@ export function PropertiesPanel() {
             <Button
               variant="outline"
               size="sm"
-              className="flex-1"
+              className="flex-1 h-8 text-xs"
               onClick={() => moveBlock(selectedBlock.id, "down")}
             >
               <ArrowDown className="h-3 w-3 mr-1" />
@@ -1074,12 +1067,12 @@ export function PropertiesPanel() {
         <Button
           variant="destructive"
           size="sm"
-          className="w-full"
+          className="w-full h-8"
           onClick={() => {
             removeBlock(selectedBlock.id);
           }}
         >
-          <Trash2 className="h-4 w-4 mr-2" />
+          <Trash2 className="h-3 w-3 mr-2" />
           Remover Bloco
         </Button>
       </div>
