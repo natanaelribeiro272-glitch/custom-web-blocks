@@ -19,6 +19,7 @@ export function FloatingBottomBar() {
     setActiveSheet, 
     selectedBlockId, 
     selectedElementId,
+    selectedHeaderFooter,
     floatingBarPosition,
     setFloatingBarPosition
   } = useEditorStore();
@@ -118,6 +119,10 @@ export function FloatingBottomBar() {
     };
   }, [isDragging, dragOffset, floatingBarPosition.isDocked, setFloatingBarPosition]);
 
+  // Determine what's selected and what to show
+  const hasSelection = selectedBlockId || selectedElementId || selectedHeaderFooter;
+  const showAddElement = selectedBlockId && !selectedElementId;
+
   return (
     <div
       ref={barRef}
@@ -177,7 +182,7 @@ export function FloatingBottomBar() {
 
         <div className="flex items-center gap-2 flex-wrap">
           {/* Show add element and properties when block is selected */}
-          {selectedBlockId && !selectedElementId && (
+          {showAddElement && (
             <>
               <Button
                 variant="default"
@@ -200,8 +205,8 @@ export function FloatingBottomBar() {
             </>
           )}
 
-          {/* Show only properties when element is selected */}
-          {selectedElementId && (
+          {/* Show only properties when element, header, or footer is selected */}
+          {(selectedElementId || selectedHeaderFooter) && (
             <Button
               variant="outline"
               size="sm"
@@ -209,7 +214,11 @@ export function FloatingBottomBar() {
               className="gap-2"
             >
               <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">Propriedades</span>
+              <span className="hidden sm:inline">
+                {selectedHeaderFooter ? 
+                  (selectedHeaderFooter === "header" ? "Header" : "Rodapé") : 
+                  "Elemento"}
+              </span>
             </Button>
           )}
 

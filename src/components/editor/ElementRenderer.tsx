@@ -11,7 +11,7 @@ interface ElementRendererProps {
 }
 
 export function ElementRenderer({ element, blockId }: ElementRendererProps) {
-  const { selectedElementId, selectElement } = useEditorStore();
+  const { selectedElementId, selectElement, setActiveSheet } = useEditorStore();
   const isSelected = selectedElementId === element.id;
   const [currentSlide, setCurrentSlide] = useState(0);
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -19,6 +19,7 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     selectElement(element.id);
+    setActiveSheet("properties");
   };
 
   const baseClasses = cn(
