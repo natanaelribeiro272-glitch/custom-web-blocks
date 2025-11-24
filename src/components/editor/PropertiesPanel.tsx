@@ -484,6 +484,8 @@ export function PropertiesPanel() {
 
   // Element Properties
   if (selectedElement && selectedBlockId) {
+    const elementStyle = selectedElement.content.style || {};
+    
     return (
       <div className="space-y-4">
         <div className="space-y-1.5">
@@ -491,6 +493,7 @@ export function PropertiesPanel() {
           <div className="text-sm font-medium capitalize">{selectedElement.type}</div>
         </div>
 
+        {/* CONTEÚDO */}
         {(selectedElement.type === "title" ||
           selectedElement.type === "text" ||
           selectedElement.type === "button" ||
@@ -953,6 +956,570 @@ export function PropertiesPanel() {
                     />
                   </div>
                 )}
+              </>
+            )}
+
+            {/* ESTILOS - Separador */}
+            <Separator />
+            <Label className="text-xs font-semibold">Estilos</Label>
+
+            {/* Estilos para Título e Texto */}
+            {(selectedElement.type === "title" || selectedElement.type === "text") && (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="font-size" className="text-xs">Tamanho</Label>
+                    <Input
+                      id="font-size"
+                      placeholder="16px"
+                      value={elementStyle.fontSize || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, fontSize: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="font-weight" className="text-xs">Peso</Label>
+                    <Select
+                      value={elementStyle.fontWeight || "normal"}
+                      onValueChange={(value) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, fontWeight: value } },
+                        })
+                      }
+                    >
+                      <SelectTrigger className="h-8">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="normal">Normal</SelectItem>
+                        <SelectItem value="bold">Negrito</SelectItem>
+                        <SelectItem value="lighter">Fino</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="text-color" className="text-xs">Cor do Texto</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="text-color"
+                      type="color"
+                      className="w-12 h-8 p-1 cursor-pointer"
+                      value={elementStyle.color || "#000000"}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
+                        })
+                      }
+                    />
+                    <Input
+                      value={elementStyle.color || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
+                        })
+                      }
+                      className="flex-1 h-8 text-sm"
+                      placeholder="#000000"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="text-align" className="text-xs">Alinhamento</Label>
+                  <Select
+                    value={elementStyle.textAlign || "left"}
+                    onValueChange={(value) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, textAlign: value } },
+                      })
+                    }
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="left">Esquerda</SelectItem>
+                      <SelectItem value="center">Centro</SelectItem>
+                      <SelectItem value="right">Direita</SelectItem>
+                      <SelectItem value="justify">Justificado</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
+
+            {/* Estilos para Botão */}
+            {selectedElement.type === "button" && (
+              <>
+                <div className="space-y-1.5">
+                  <Label htmlFor="btn-bg-color" className="text-xs">Cor de Fundo</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="btn-bg-color"
+                      type="color"
+                      className="w-12 h-8 p-1 cursor-pointer"
+                      value={elementStyle.backgroundColor || "#000000"}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
+                        })
+                      }
+                    />
+                    <Input
+                      value={elementStyle.backgroundColor || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
+                        })
+                      }
+                      className="flex-1 h-8 text-sm"
+                      placeholder="#000000"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="btn-text-color" className="text-xs">Cor do Texto</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="btn-text-color"
+                      type="color"
+                      className="w-12 h-8 p-1 cursor-pointer"
+                      value={elementStyle.color || "#ffffff"}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
+                        })
+                      }
+                    />
+                    <Input
+                      value={elementStyle.color || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
+                        })
+                      }
+                      className="flex-1 h-8 text-sm"
+                      placeholder="#ffffff"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="btn-width" className="text-xs">Largura</Label>
+                    <Input
+                      id="btn-width"
+                      placeholder="auto, 100%, 200px"
+                      value={elementStyle.width || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="btn-height" className="text-xs">Altura</Label>
+                    <Input
+                      id="btn-height"
+                      placeholder="auto, 40px"
+                      value={elementStyle.height || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="btn-border-radius" className="text-xs">Raio</Label>
+                    <Input
+                      id="btn-border-radius"
+                      placeholder="8px"
+                      value={elementStyle.borderRadius || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="btn-border-width" className="text-xs">Borda</Label>
+                    <Input
+                      id="btn-border-width"
+                      placeholder="2px"
+                      value={elementStyle.borderWidth || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, borderWidth: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="btn-border-color" className="text-xs">Cor Borda</Label>
+                    <Input
+                      id="btn-border-color"
+                      type="color"
+                      className="w-full h-8 p-1 cursor-pointer"
+                      value={elementStyle.borderColor || "#000000"}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, borderColor: e.target.value } },
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="btn-padding" className="text-xs">Padding</Label>
+                  <Input
+                    id="btn-padding"
+                    placeholder="12px 24px"
+                    value={elementStyle.padding || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, padding: e.target.value } },
+                      })
+                    }
+                    className="h-8 text-sm"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Estilos para Imagem */}
+            {selectedElement.type === "image" && (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="img-width" className="text-xs">Largura</Label>
+                    <Input
+                      id="img-width"
+                      placeholder="100%, 300px"
+                      value={elementStyle.width || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="img-height" className="text-xs">Altura</Label>
+                    <Input
+                      id="img-height"
+                      placeholder="auto, 200px"
+                      value={elementStyle.height || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="img-object-fit" className="text-xs">Ajuste</Label>
+                  <Select
+                    value={elementStyle.objectFit || "cover"}
+                    onValueChange={(value) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, objectFit: value } },
+                      })
+                    }
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="cover">Cobrir</SelectItem>
+                      <SelectItem value="contain">Conter</SelectItem>
+                      <SelectItem value="fill">Preencher</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="img-border-radius" className="text-xs">Raio da Borda</Label>
+                    <Input
+                      id="img-border-radius"
+                      placeholder="0px, 8px, 50%"
+                      value={elementStyle.borderRadius || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="img-border-width" className="text-xs">Espessura</Label>
+                    <Input
+                      id="img-border-width"
+                      placeholder="0px, 2px"
+                      value={elementStyle.borderWidth || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, borderWidth: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                </div>
+                {elementStyle.borderWidth && (
+                  <div className="space-y-1.5">
+                    <Label htmlFor="img-border-color" className="text-xs">Cor da Borda</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="img-border-color"
+                        type="color"
+                        className="w-12 h-8 p-1 cursor-pointer"
+                        value={elementStyle.borderColor || "#000000"}
+                        onChange={(e) =>
+                          updateElement(selectedBlockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, borderColor: e.target.value } },
+                          })
+                        }
+                      />
+                      <Input
+                        value={elementStyle.borderColor || ""}
+                        onChange={(e) =>
+                          updateElement(selectedBlockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, borderColor: e.target.value } },
+                          })
+                        }
+                        className="flex-1 h-8 text-sm"
+                        placeholder="#000000"
+                      />
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* Estilos para Vídeo */}
+            {selectedElement.type === "video" && (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="video-width" className="text-xs">Largura</Label>
+                    <Input
+                      id="video-width"
+                      placeholder="100%, 640px"
+                      value={elementStyle.width || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="video-height" className="text-xs">Altura</Label>
+                    <Input
+                      id="video-height"
+                      placeholder="auto, 360px"
+                      value={elementStyle.height || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="video-border-radius" className="text-xs">Raio da Borda</Label>
+                  <Input
+                    id="video-border-radius"
+                    placeholder="0px, 8px"
+                    value={elementStyle.borderRadius || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
+                      })
+                    }
+                    className="h-8 text-sm"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Estilos para Link */}
+            {selectedElement.type === "link" && (
+              <>
+                <div className="space-y-1.5">
+                  <Label htmlFor="link-color" className="text-xs">Cor</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="link-color"
+                      type="color"
+                      className="w-12 h-8 p-1 cursor-pointer"
+                      value={elementStyle.color || "#0000ff"}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
+                        })
+                      }
+                    />
+                    <Input
+                      value={elementStyle.color || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
+                        })
+                      }
+                      className="flex-1 h-8 text-sm"
+                      placeholder="#0000ff"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="link-decoration" className="text-xs">Decoração</Label>
+                  <Select
+                    value={elementStyle.textDecoration || "underline"}
+                    onValueChange={(value) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, textDecoration: value } },
+                      })
+                    }
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="underline">Sublinhado</SelectItem>
+                      <SelectItem value="none">Sem decoração</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="link-font-size" className="text-xs">Tamanho</Label>
+                  <Input
+                    id="link-font-size"
+                    placeholder="16px"
+                    value={elementStyle.fontSize || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, fontSize: e.target.value } },
+                      })
+                    }
+                    className="h-8 text-sm"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Estilos para Lista */}
+            {selectedElement.type === "list" && (
+              <>
+                <div className="space-y-1.5">
+                  <Label htmlFor="list-color" className="text-xs">Cor do Texto</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="list-color"
+                      type="color"
+                      className="w-12 h-8 p-1 cursor-pointer"
+                      value={elementStyle.color || "#000000"}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
+                        })
+                      }
+                    />
+                    <Input
+                      value={elementStyle.color || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
+                        })
+                      }
+                      className="flex-1 h-8 text-sm"
+                      placeholder="#000000"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="list-font-size" className="text-xs">Tamanho</Label>
+                    <Input
+                      id="list-font-size"
+                      placeholder="16px"
+                      value={elementStyle.fontSize || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, fontSize: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="list-spacing" className="text-xs">Espaçamento</Label>
+                    <Input
+                      id="list-spacing"
+                      placeholder="8px"
+                      value={elementStyle.gap || ""}
+                      onChange={(e) =>
+                        updateElement(selectedBlockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, gap: e.target.value } },
+                        })
+                      }
+                      className="h-8 text-sm"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Estilos para Carrossel */}
+            {selectedElement.type === "carousel" && (
+              <>
+                <div className="space-y-1.5">
+                  <Label htmlFor="carousel-height" className="text-xs">Altura</Label>
+                  <Input
+                    id="carousel-height"
+                    placeholder="300px, 400px"
+                    value={elementStyle.height || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
+                      })
+                    }
+                    className="h-8 text-sm"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="carousel-border-radius" className="text-xs">Raio da Borda</Label>
+                  <Input
+                    id="carousel-border-radius"
+                    placeholder="0px, 12px"
+                    value={elementStyle.borderRadius || ""}
+                    onChange={(e) =>
+                      updateElement(selectedBlockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
+                      })
+                    }
+                    className="h-8 text-sm"
+                  />
+                </div>
               </>
             )}
 

@@ -74,6 +74,7 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
         <h2
           className={cn(baseClasses, "text-2xl font-display font-bold px-2 py-1 cursor-pointer")}
           onClick={handleClick}
+          style={element.content.style || {}}
         >
           {element.content.text || "Título"}
         </h2>
@@ -84,6 +85,7 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
         <p
           className={cn(baseClasses, "text-sm leading-relaxed px-2 py-1 cursor-pointer")}
           onClick={handleClick}
+          style={element.content.style || {}}
         >
           {element.content.text || "Texto"}
         </p>
@@ -92,13 +94,28 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
     case "image":
       return (
         <div
-          className={cn(baseClasses, "aspect-video bg-muted flex items-center justify-center cursor-pointer overflow-hidden")}
+          className={cn(baseClasses, "cursor-pointer overflow-hidden")}
           onClick={handleClick}
+          style={{
+            width: element.content.style?.width || '100%',
+            height: element.content.style?.height || 'auto',
+            borderRadius: element.content.style?.borderRadius,
+            borderWidth: element.content.style?.borderWidth,
+            borderColor: element.content.style?.borderColor,
+            borderStyle: element.content.style?.borderWidth ? 'solid' : undefined,
+          }}
         >
           {element.content.url ? (
-            <img src={element.content.url} alt={element.content.alt || "Imagem"} className="w-full h-full object-cover" />
+            <img 
+              src={element.content.url} 
+              alt={element.content.alt || "Imagem"} 
+              className="w-full h-full"
+              style={{
+                objectFit: (element.content.style?.objectFit as any) || 'cover'
+              }}
+            />
           ) : (
-            <div className="flex flex-col items-center gap-2 text-muted-foreground">
+            <div className="aspect-video bg-muted flex flex-col items-center justify-center text-muted-foreground">
               <ImageIcon className="h-8 w-8" />
               <span className="text-xs">Adicione uma imagem</span>
             </div>
@@ -109,20 +126,55 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
     case "video":
       return (
         <div
-          className={cn(baseClasses, "aspect-video bg-muted flex items-center justify-center cursor-pointer")}
+          className={cn(baseClasses, "bg-muted flex items-center justify-center cursor-pointer overflow-hidden")}
           onClick={handleClick}
+          style={{
+            width: element.content.style?.width || '100%',
+            height: element.content.style?.height || 'auto',
+            borderRadius: element.content.style?.borderRadius,
+            aspectRatio: !element.content.style?.height ? '16/9' : undefined,
+          }}
         >
-          <div className="flex flex-col items-center gap-2 text-muted-foreground">
-            <Video className="h-8 w-8" />
-            <span className="text-xs">URL do vídeo</span>
-          </div>
+          {element.content.url ? (
+            element.content.url.startsWith('data:') ? (
+              <video controls className="w-full h-full">
+                <source src={element.content.url} />
+              </video>
+            ) : (
+              <iframe
+                src={element.content.url}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            )
+          ) : (
+            <div className="flex flex-col items-center gap-2 text-muted-foreground">
+              <Video className="h-8 w-8" />
+              <span className="text-xs">URL do vídeo</span>
+            </div>
+          )}
         </div>
       );
 
     case "button":
       return (
         <div onClick={handleClick} className="cursor-pointer">
-          <Button className={cn(baseClasses, "w-full")} size="lg">
+          <Button 
+            className={cn(baseClasses)} 
+            size="lg"
+            style={{
+              backgroundColor: element.content.style?.backgroundColor,
+              color: element.content.style?.color,
+              width: element.content.style?.width || '100%',
+              height: element.content.style?.height,
+              borderRadius: element.content.style?.borderRadius,
+              borderWidth: element.content.style?.borderWidth,
+              borderColor: element.content.style?.borderColor,
+              borderStyle: element.content.style?.borderWidth ? 'solid' : undefined,
+              padding: element.content.style?.padding,
+            }}
+          >
             {element.content.text || "Botão"}
           </Button>
         </div>
@@ -132,8 +184,13 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
       return (
         <a
           href={element.content.href}
-          className={cn(baseClasses, "flex items-center gap-2 text-primary hover:underline px-2 py-1 cursor-pointer")}
+          className={cn(baseClasses, "flex items-center gap-2 px-2 py-1 cursor-pointer")}
           onClick={handleClick}
+          style={{
+            color: element.content.style?.color || 'hsl(var(--primary))',
+            textDecoration: element.content.style?.textDecoration || 'underline',
+            fontSize: element.content.style?.fontSize,
+          }}
         >
           <LinkIcon className="h-4 w-4" />
           {element.content.text || "Link"}
@@ -209,8 +266,18 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
 
     case "list":
       return (
-        <div className={cn(baseClasses, "px-2 py-1 cursor-pointer")} onClick={handleClick}>
-          <ul className="space-y-2">
+        <div 
+          className={cn(baseClasses, "px-2 py-1 cursor-pointer")} 
+          onClick={handleClick}
+        >
+          <ul 
+            className="space-y-2"
+            style={{
+              color: element.content.style?.color,
+              fontSize: element.content.style?.fontSize,
+              gap: element.content.style?.gap,
+            }}
+          >
             {element.content.listItems?.map((item, index) => (
               <li key={index} className="flex items-start gap-2 text-sm">
                 {element.content.listStyle === "numbered" ? (
@@ -233,8 +300,13 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
       const images = element.content.carouselImages || [];
       return (
         <div
-          className={cn(baseClasses, "relative aspect-video bg-muted overflow-hidden cursor-pointer group")}
+          className={cn(baseClasses, "relative bg-muted overflow-hidden cursor-pointer group")}
           onClick={handleClick}
+          style={{
+            height: element.content.style?.height || '300px',
+            borderRadius: element.content.style?.borderRadius,
+            aspectRatio: !element.content.style?.height ? '16/9' : undefined,
+          }}
         >
           {images.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
