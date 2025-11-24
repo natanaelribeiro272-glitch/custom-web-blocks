@@ -5,9 +5,19 @@ import { AddElementSheet } from "@/components/editor/AddElementSheet";
 import { PropertiesSheet } from "@/components/editor/PropertiesSheet";
 import { PageSettingsSheet } from "@/components/editor/PageSettingsSheet";
 import { useEditorStore } from "@/hooks/useEditorStore";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const Editor = () => {
-  const { activeSheet, setActiveSheet } = useEditorStore();
+  const { activeSheet, setActiveSheet, loadProject } = useEditorStore();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const projectId = searchParams.get("project");
+    if (projectId) {
+      loadProject(projectId);
+    }
+  }, [searchParams, loadProject]);
 
   return (
     <div className="flex flex-col h-screen w-full overflow-hidden bg-editor-preview">
