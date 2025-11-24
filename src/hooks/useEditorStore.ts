@@ -173,8 +173,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         elements: [],
         style: {
           backgroundColor: '#ffffff',
-          padding: 20,
-          minHeight: 200,
+          padding: 2,
+          minHeight: 120,
         },
       };
 
