@@ -1,37 +1,34 @@
-import { EditorSidebar } from "@/components/editor/EditorSidebar";
 import { MobilePreview } from "@/components/editor/MobilePreview";
-import { PropertiesPanel } from "@/components/editor/PropertiesPanel";
-import { PageSelector } from "@/components/editor/PageSelector";
-import { Button } from "@/components/ui/button";
-import { Settings, Eye } from "lucide-react";
+import { FloatingBottomBar } from "@/components/editor/FloatingBottomBar";
+import { AddBlockSheet } from "@/components/editor/AddBlockSheet";
+import { PropertiesSheet } from "@/components/editor/PropertiesSheet";
+import { PageSettingsSheet } from "@/components/editor/PageSettingsSheet";
+import { useEditorStore } from "@/hooks/useEditorStore";
 
 const Editor = () => {
-  return (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
-      {/* Header */}
-      <div className="fixed top-0 left-0 right-0 h-14 bg-card border-b border-border flex items-center justify-between px-4 z-50">
-        <div className="flex items-center gap-4">
-          <h1 className="text-xl font-display font-bold">CreatePage</h1>
-          <PageSelector />
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Settings className="h-4 w-4" />
-            Configurações
-          </Button>
-          <Button size="sm" className="gap-2">
-            <Eye className="h-4 w-4" />
-            Visualizar
-          </Button>
-        </div>
-      </div>
+  const { activeSheet, setActiveSheet } = useEditorStore();
 
-      {/* Main Content */}
-      <div className="flex w-full pt-14">
-        <EditorSidebar />
-        <MobilePreview />
-        <PropertiesPanel />
-      </div>
+  return (
+    <div className="flex flex-col h-screen w-full overflow-hidden bg-editor-preview">
+      {/* Full screen mobile preview */}
+      <MobilePreview />
+
+      {/* Floating bottom navigation bar */}
+      <FloatingBottomBar />
+
+      {/* Sheets for different actions */}
+      <AddBlockSheet 
+        open={activeSheet === "add-block"} 
+        onOpenChange={(open) => !open && setActiveSheet(null)} 
+      />
+      <PropertiesSheet 
+        open={activeSheet === "properties"} 
+        onOpenChange={(open) => !open && setActiveSheet(null)} 
+      />
+      <PageSettingsSheet 
+        open={activeSheet === "page-settings"} 
+        onOpenChange={(open) => !open && setActiveSheet(null)} 
+      />
     </div>
   );
 };
