@@ -6,6 +6,13 @@ import { Slider } from "@/components/ui/slider";
 import { Trash2, ArrowUp, ArrowDown, X, Plus } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function PropertiesPanel() {
   const {
@@ -133,22 +140,32 @@ export function PropertiesPanel() {
                 )}
 
                 {(config.template === "social" || config.template === "detailed") && (
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <Label>Redes Sociais</Label>
                     {config.socialLinks?.map((social, index) => (
-                      <div key={index} className="flex gap-2">
-                        <Input
-                          placeholder="Plataforma"
-                          value={social.platform}
-                          onChange={(e) => {
+                      <div key={index} className="flex gap-2 items-center">
+                        <Select
+                          value={social.platform.toLowerCase()}
+                          onValueChange={(value) => {
                             const newLinks = [...(config.socialLinks || [])];
-                            newLinks[index].platform = e.target.value;
+                            newLinks[index].platform = value;
                             updateConfig(currentPage.id, { socialLinks: newLinks });
                           }}
-                          className="flex-1"
-                        />
+                        >
+                          <SelectTrigger className="w-32">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="facebook">Facebook</SelectItem>
+                            <SelectItem value="instagram">Instagram</SelectItem>
+                            <SelectItem value="twitter">Twitter</SelectItem>
+                            <SelectItem value="linkedin">LinkedIn</SelectItem>
+                            <SelectItem value="youtube">YouTube</SelectItem>
+                            <SelectItem value="site">Site</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <Input
-                          placeholder="URL"
+                          placeholder="https://"
                           value={social.url}
                           onChange={(e) => {
                             const newLinks = [...(config.socialLinks || [])];
@@ -176,7 +193,7 @@ export function PropertiesPanel() {
                       onClick={() => {
                         const newLinks = [
                           ...(config.socialLinks || []),
-                          { platform: "Instagram", url: "#" },
+                          { platform: "Instagram", url: "https://" },
                         ];
                         updateConfig(currentPage.id, { socialLinks: newLinks });
                       }}
