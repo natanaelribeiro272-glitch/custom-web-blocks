@@ -202,65 +202,55 @@ export function PropertiesPanel() {
       selectedHeaderFooter === "header" ? updatePageHeader : updatePageFooter;
 
     return (
-      <div className="w-80 bg-editor-panel border-l border-border flex flex-col h-screen">
-        <div className="p-4 border-b border-border flex items-center justify-between">
-          <div>
-            <h3 className="font-display font-semibold">
-              {selectedHeaderFooter === "header" ? "Header" : "Footer"}
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              Edite o {selectedHeaderFooter === "header" ? "cabeçalho" : "rodapé"}
-            </p>
-          </div>
+      <div className="space-y-4">
+        <div className="space-y-1.5">
+          <Label className="text-xs">Template</Label>
+          <div className="text-sm font-medium capitalize">{config.template}</div>
         </div>
 
-        <ScrollArea className="flex-1">
-          <div className="p-4 space-y-6">
-            <div className="space-y-2">
-              <Label>Template</Label>
-              <div className="text-sm font-medium capitalize">{config.template}</div>
+        <Separator />
+
+        {selectedHeaderFooter === "header" && (
+          <>
+            <div className="space-y-1.5">
+              <Label htmlFor="brand-name" className="text-xs">Nome da Marca</Label>
+              <Input
+                id="brand-name"
+                value={config.brandName || ""}
+                onChange={(e) =>
+                  updateConfig(currentPage.id, { brandName: e.target.value })
+                }
+                className="h-8 text-sm"
+              />
             </div>
 
-            <Separator />
-
-            {selectedHeaderFooter === "header" && (
-              <>
-                <div className="space-y-2">
-                  <Label htmlFor="brand-name">Nome da Marca</Label>
-                  <Input
-                    id="brand-name"
-                    value={config.brandName || ""}
-                    onChange={(e) =>
-                      updateConfig(currentPage.id, { brandName: e.target.value })
-                    }
-                  />
-                </div>
-
-                {config.template === "with-logo" && (
-                  <div className="space-y-2">
-                    <Label htmlFor="logo-url">URL do Logo</Label>
-                    <Input
-                      id="logo-url"
-                      placeholder="https://"
-                      value={config.logo || ""}
-                      onChange={(e) => updateConfig(currentPage.id, { logo: e.target.value })}
-                    />
-                  </div>
-                )}
-
-                {config.template === "centered" && (
-                  <div className="space-y-2">
-                    <Label htmlFor="tagline">Tagline/Slogan</Label>
-                    <Input
-                      id="tagline"
-                      placeholder="Seu slogan aqui"
-                      value={config.tagline || ""}
-                      onChange={(e) => updateConfig(currentPage.id, { tagline: e.target.value })}
-                    />
-                  </div>
-                )}
-              </>
+            {config.template === "with-logo" && (
+              <div className="space-y-1.5">
+                <Label htmlFor="logo-url" className="text-xs">URL do Logo</Label>
+                <Input
+                  id="logo-url"
+                  placeholder="https://"
+                  value={config.logo || ""}
+                  onChange={(e) => updateConfig(currentPage.id, { logo: e.target.value })}
+                  className="h-8 text-sm"
+                />
+              </div>
             )}
+
+            {config.template === "centered" && (
+              <div className="space-y-1.5">
+                <Label htmlFor="tagline" className="text-xs">Tagline/Slogan</Label>
+                <Input
+                  id="tagline"
+                  placeholder="Seu slogan aqui"
+                  value={config.tagline || ""}
+                  onChange={(e) => updateConfig(currentPage.id, { tagline: e.target.value })}
+                  className="h-8 text-sm"
+                />
+              </div>
+            )}
+          </>
+        )}
 
             {selectedHeaderFooter === "footer" && (
               <>
@@ -448,22 +438,20 @@ export function PropertiesPanel() {
                 <Input
                   id="text-color"
                   type="color"
-                  className="w-16 h-10"
+                  className="w-16 h-8 p-1"
                   value={config.textColor}
                   onChange={(e) => updateConfig(currentPage.id, { textColor: e.target.value })}
                 />
                 <Input
                   value={config.textColor}
                   onChange={(e) => updateConfig(currentPage.id, { textColor: e.target.value })}
-                  className="flex-1"
+                  className="flex-1 h-8 text-sm"
                 />
               </div>
             </div>
           </div>
-        </ScrollArea>
-      </div>
-    );
-  }
+        );
+      }
 
   // Element Properties
   if (selectedElement && selectedBlockId) {
@@ -841,120 +829,105 @@ export function PropertiesPanel() {
   // Block Properties
   if (selectedBlock) {
     return (
-      <div className="w-80 bg-editor-panel border-l border-border flex flex-col h-screen">
-        <div className="p-4 border-b border-border flex items-center justify-between">
-          <div>
-            <h3 className="font-display font-semibold">Propriedades do Bloco</h3>
-            <p className="text-xs text-muted-foreground">Personalize seu bloco</p>
+      <div className="space-y-4">
+        <div className="space-y-1.5">
+          <Label className="text-xs">Tipo de Bloco</Label>
+          <div className="text-sm font-medium capitalize">
+            {selectedBlock.type.replace("-", " ")}
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => {
-              removeBlock(selectedBlock.id);
-            }}
-          >
-            <X className="h-4 w-4" />
-          </Button>
         </div>
 
-        <ScrollArea className="flex-1">
-          <div className="p-4 space-y-6">
-            <div className="space-y-2">
-              <Label>Tipo de Bloco</Label>
-              <div className="text-sm font-medium capitalize">
-                {selectedBlock.type.replace("-", " ")}
-              </div>
-            </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="bg-color" className="text-xs">Cor de Fundo</Label>
+          <div className="flex gap-2">
+            <Input
+              id="bg-color"
+              type="color"
+              className="w-16 h-8 p-1"
+              value={selectedBlock.style.backgroundColor}
+              onChange={(e) =>
+                updateBlock(selectedBlock.id, {
+                  style: { ...selectedBlock.style, backgroundColor: e.target.value },
+                })
+              }
+            />
+            <Input
+              value={selectedBlock.style.backgroundColor}
+              onChange={(e) =>
+                updateBlock(selectedBlock.id, {
+                  style: { ...selectedBlock.style, backgroundColor: e.target.value },
+                })
+              }
+              className="flex-1 h-8 text-sm"
+            />
+          </div>
+        </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="bg-color">Cor de Fundo</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="bg-color"
-                  type="color"
-                  className="w-16 h-10"
-                  value={selectedBlock.style.backgroundColor}
-                  onChange={(e) =>
-                    updateBlock(selectedBlock.id, {
-                      style: { ...selectedBlock.style, backgroundColor: e.target.value },
-                    })
-                  }
-                />
-                <Input
-                  value={selectedBlock.style.backgroundColor}
-                  onChange={(e) =>
-                    updateBlock(selectedBlock.id, {
-                      style: { ...selectedBlock.style, backgroundColor: e.target.value },
-                    })
-                  }
-                  className="flex-1"
-                />
-              </div>
-            </div>
+        <div className="space-y-1.5">
+          <Label className="text-xs">Espaçamento: {selectedBlock.style.padding}rem</Label>
+          <Slider
+            value={[selectedBlock.style.padding || 2]}
+            onValueChange={([value]) =>
+              updateBlock(selectedBlock.id, {
+                style: { ...selectedBlock.style, padding: value },
+              })
+            }
+            min={0}
+            max={6}
+            step={0.5}
+            className="py-2"
+          />
+        </div>
 
-            <div className="space-y-2">
-              <Label>Espaçamento Interno: {selectedBlock.style.padding}rem</Label>
-              <Slider
-                value={[selectedBlock.style.padding || 2]}
-                onValueChange={([value]) =>
-                  updateBlock(selectedBlock.id, {
-                    style: { ...selectedBlock.style, padding: value },
-                  })
-                }
-                min={0}
-                max={6}
-                step={0.5}
-              />
-            </div>
+        <div className="space-y-1.5">
+          <Label className="text-xs">Altura: {selectedBlock.style.minHeight}px</Label>
+          <Slider
+            value={[selectedBlock.style.minHeight || 120]}
+            onValueChange={([value]) =>
+              updateBlock(selectedBlock.id, {
+                style: { ...selectedBlock.style, minHeight: value },
+              })
+            }
+            min={80}
+            max={500}
+            step={10}
+            className="py-2"
+          />
+        </div>
 
-            <div className="space-y-2">
-              <Label>Altura Mínima: {selectedBlock.style.minHeight}px</Label>
-              <Slider
-                value={[selectedBlock.style.minHeight || 120]}
-                onValueChange={([value]) =>
-                  updateBlock(selectedBlock.id, {
-                    style: { ...selectedBlock.style, minHeight: value },
-                  })
-                }
-                min={80}
-                max={500}
-                step={10}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Ordem do Bloco</Label>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => moveBlock(selectedBlock.id, "up")}
-                >
-                  <ArrowUp className="h-4 w-4 mr-2" />
-                  Mover para Cima
-                </Button>
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => moveBlock(selectedBlock.id, "down")}
-                >
-                  <ArrowDown className="h-4 w-4 mr-2" />
-                  Mover para Baixo
-                </Button>
-              </div>
-            </div>
-
+        <div className="space-y-1.5">
+          <Label className="text-xs">Reordenar Bloco</Label>
+          <div className="flex gap-2">
             <Button
-              variant="destructive"
-              className="w-full"
-              onClick={() => removeBlock(selectedBlock.id)}
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              onClick={() => moveBlock(selectedBlock.id, "up")}
             >
-              <Trash2 className="h-4 w-4 mr-2" />
-              Remover Bloco
+              <ArrowUp className="h-3 w-3 mr-1" />
+              Cima
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              onClick={() => moveBlock(selectedBlock.id, "down")}
+            >
+              <ArrowDown className="h-3 w-3 mr-1" />
+              Baixo
             </Button>
           </div>
-        </ScrollArea>
+        </div>
+
+        <Button
+          variant="destructive"
+          size="sm"
+          className="w-full"
+          onClick={() => removeBlock(selectedBlock.id)}
+        >
+          <Trash2 className="h-4 w-4 mr-2" />
+          Remover Bloco
+        </Button>
       </div>
     );
   }
