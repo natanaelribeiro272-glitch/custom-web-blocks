@@ -130,7 +130,7 @@ export function PropertiesPanel() {
                       </div>
                     )}
                   </div>
-                  <div className="scale-75 origin-top-left">
+                  <div className="w-full">
                     <TemplatePreview type="header" template={template.value} />
                   </div>
                 </Label>
@@ -178,7 +178,7 @@ export function PropertiesPanel() {
                       </div>
                     )}
                   </div>
-                  <div className="scale-75 origin-top-left">
+                  <div className="w-full">
                     <TemplatePreview type="footer" template={template.value} />
                   </div>
                 </Label>
