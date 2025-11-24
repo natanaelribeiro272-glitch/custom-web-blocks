@@ -12,6 +12,7 @@ interface EditorStore extends EditorState {
   
   // Block actions
   addBlock: (type: Block['type']) => void;
+  addBlockAt: (type: Block['type'], index: number) => void;
   removeBlock: (blockId: string) => void;
   updateBlock: (blockId: string, updates: Partial<Block>) => void;
   selectBlock: (blockId: string | null) => void;
@@ -28,6 +29,10 @@ interface EditorStore extends EditorState {
   
   // Page config
   togglePageConfig: () => void;
+  
+  // Sheet management
+  setActiveSheet: (sheet: "add-block" | "properties" | "page-settings" | null) => void;
+  setInsertBlockIndex: (index: number) => void;
 }
 
 const createDefaultHeader = (): HeaderFooterConfig => ({
@@ -68,6 +73,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   selectedElementId: null,
   selectedHeaderFooter: null,
   showingPageConfig: false,
+  activeSheet: null,
+  insertBlockIndex: 0,
 
   // Page actions
   addPage: () =>
@@ -152,6 +159,36 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
             ? { ...p, blocks: [...p.blocks, newBlock] }
             : p
         ),
+      };
+    }),
+
+  addBlockAt: (type, index) =>
+    set((state) => {
+      const currentPage = state.pages.find((p) => p.id === state.currentPageId);
+      if (!currentPage) return state;
+
+      const newBlock: Block = {
+        id: `block-${Date.now()}`,
+        type,
+        elements: [],
+        style: {
+          backgroundColor: '#ffffff',
+          padding: 20,
+          minHeight: 200,
+        },
+      };
+
+      const blocks = [...currentPage.blocks];
+      blocks.splice(index, 0, newBlock);
+
+      return {
+        pages: state.pages.map((p) =>
+          p.id === state.currentPageId
+            ? { ...p, blocks }
+            : p
+        ),
+        selectedBlockId: newBlock.id,
+        activeSheet: null,
       };
     }),
 
@@ -267,4 +304,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       selectedElementId: null,
       selectedHeaderFooter: null,
     })),
+
+  setActiveSheet: (sheet) =>
+    set({ activeSheet: sheet }),
+
+  setInsertBlockIndex: (index) =>
+    set({ insertBlockIndex: index }),
 }));

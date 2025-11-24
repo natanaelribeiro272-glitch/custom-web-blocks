@@ -9,7 +9,7 @@ interface BlockRendererProps {
 }
 
 export function BlockRenderer({ block }: BlockRendererProps) {
-  const { selectedBlockId, selectBlock } = useEditorStore();
+  const { selectedBlockId, selectBlock, setActiveSheet } = useEditorStore();
   const isSelected = selectedBlockId === block.id;
 
   const getBlockClasses = () => {
@@ -28,6 +28,12 @@ export function BlockRenderer({ block }: BlockRendererProps) {
     }
   };
 
+  const handleBlockClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    selectBlock(block.id);
+    setActiveSheet("properties");
+  };
+
   return (
     <div
       className={getBlockClasses()}
@@ -36,10 +42,7 @@ export function BlockRenderer({ block }: BlockRendererProps) {
         padding: `${block.style.padding}rem`,
         minHeight: `${block.style.minHeight}px`,
       }}
-      onClick={(e) => {
-        e.stopPropagation();
-        selectBlock(block.id);
-      }}
+      onClick={handleBlockClick}
     >
       {isSelected && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">

@@ -75,4 +75,6 @@ export interface EditorState {
   selectedElementId: string | null;
   selectedHeaderFooter: "header" | "footer" | null;
   showingPageConfig: boolean;
+  activeSheet: "add-block" | "properties" | "page-settings" | null;
+  insertBlockIndex: number;
 }
