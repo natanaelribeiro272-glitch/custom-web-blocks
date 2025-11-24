@@ -19,7 +19,7 @@ interface HeaderFooterRendererProps {
 }
 
 export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRendererProps) {
-  const { selectedHeaderFooter, selectHeaderFooter } = useEditorStore();
+  const { selectedHeaderFooter, selectHeaderFooter, setActiveSheet } = useEditorStore();
   const isSelected = selectedHeaderFooter === type;
 
   if (config.template === "none") {
@@ -29,6 +29,7 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     selectHeaderFooter(type);
+    setActiveSheet("properties");
   };
 
   const baseClasses = cn(
