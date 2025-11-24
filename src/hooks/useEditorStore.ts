@@ -25,6 +25,9 @@ interface EditorStore extends EditorState {
   
   // Header/Footer selection
   selectHeaderFooter: (type: "header" | "footer" | null) => void;
+  
+  // Page config
+  togglePageConfig: () => void;
 }
 
 const createDefaultHeader = (): HeaderFooterConfig => ({
@@ -64,6 +67,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   selectedBlockId: null,
   selectedElementId: null,
   selectedHeaderFooter: null,
+  showingPageConfig: false,
 
   // Page actions
   addPage: () =>
@@ -108,6 +112,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       selectedBlockId: null,
       selectedElementId: null,
       selectedHeaderFooter: null,
+      showingPageConfig: false,
     }),
 
   updatePageHeader: (pageId, header) =>
@@ -173,7 +178,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     })),
 
   selectBlock: (blockId) =>
-    set({ selectedBlockId: blockId, selectedElementId: null, selectedHeaderFooter: null }),
+    set({ selectedBlockId: blockId, selectedElementId: null, selectedHeaderFooter: null, showingPageConfig: false }),
 
   moveBlock: (blockId, direction) =>
     set((state) => {
@@ -250,8 +255,16 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     })),
 
   selectElement: (elementId) =>
-    set({ selectedElementId: elementId, selectedHeaderFooter: null }),
+    set({ selectedElementId: elementId, selectedHeaderFooter: null, showingPageConfig: false }),
 
   selectHeaderFooter: (type) =>
-    set({ selectedHeaderFooter: type, selectedBlockId: null, selectedElementId: null }),
+    set({ selectedHeaderFooter: type, selectedBlockId: null, selectedElementId: null, showingPageConfig: false }),
+
+  togglePageConfig: () =>
+    set((state) => ({
+      showingPageConfig: !state.showingPageConfig,
+      selectedBlockId: null,
+      selectedElementId: null,
+      selectedHeaderFooter: null,
+    })),
 }));
