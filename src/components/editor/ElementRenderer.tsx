@@ -71,9 +71,15 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
     case "title":
       return (
         <h2
-          className={cn(baseClasses, "text-2xl font-display font-bold px-2 py-1 cursor-pointer")}
+          className={cn(baseClasses, "text-2xl font-bold px-2 py-1 cursor-pointer")}
           onClick={handleClick}
-          style={element.content.style || {}}
+          style={{
+            fontFamily: element.content.style?.fontFamily,
+            textAlign: element.content.style?.textAlign as any,
+            color: element.content.style?.color,
+            fontSize: element.content.style?.fontSize,
+            ...element.content.style,
+          }}
         >
           {element.content.text || "Título"}
         </h2>
@@ -84,7 +90,13 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
         <p
           className={cn(baseClasses, "text-sm leading-relaxed px-2 py-1 cursor-pointer")}
           onClick={handleClick}
-          style={element.content.style || {}}
+          style={{
+            fontFamily: element.content.style?.fontFamily,
+            textAlign: element.content.style?.textAlign as any,
+            color: element.content.style?.color,
+            fontSize: element.content.style?.fontSize,
+            ...element.content.style,
+          }}
         >
           {element.content.text || "Texto"}
         </p>
@@ -102,6 +114,8 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
             borderWidth: element.content.style?.borderWidth,
             borderColor: element.content.style?.borderColor,
             borderStyle: element.content.style?.borderWidth ? 'solid' : undefined,
+            marginLeft: element.content.style?.marginLeft,
+            marginRight: element.content.style?.marginRight,
           }}
         >
           {element.content.url ? (
@@ -132,6 +146,8 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
             height: element.content.style?.height || 'auto',
             borderRadius: element.content.style?.borderRadius,
             aspectRatio: !element.content.style?.height ? '16/9' : undefined,
+            marginLeft: element.content.style?.marginLeft,
+            marginRight: element.content.style?.marginRight,
           }}
         >
           {element.content.url ? (
@@ -158,7 +174,14 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
 
     case "button":
       return (
-        <div onClick={handleClick} className="cursor-pointer">
+        <div 
+          onClick={handleClick} 
+          className="cursor-pointer"
+          style={{
+            marginLeft: element.content.style?.marginLeft,
+            marginRight: element.content.style?.marginRight,
+          }}
+        >
           <Button 
             className={cn(baseClasses)} 
             size="lg"
@@ -172,6 +195,7 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
               borderColor: element.content.style?.borderColor,
               borderStyle: element.content.style?.borderWidth ? 'solid' : undefined,
               padding: element.content.style?.padding,
+              fontFamily: element.content.style?.fontFamily,
             }}
           >
             {element.content.text || "Botão"}
