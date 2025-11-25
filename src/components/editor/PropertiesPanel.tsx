@@ -537,7 +537,7 @@ export function PropertiesPanel() {
               placeholder="https://"
               value={selectedElement.content.href || ""}
               onChange={(e) =>
-                updateElement(selectedBlockId, selectedElement.id, {
+                updateElement(blockId, selectedElement.id, {
                   content: { ...selectedElement.content, href: e.target.value },
                 })
               }
@@ -555,7 +555,7 @@ export function PropertiesPanel() {
                 placeholder="https://"
                 value={selectedElement.content.url || ""}
                 onChange={(e) =>
-                  updateElement(selectedBlockId, selectedElement.id, {
+                  updateElement(blockId, selectedElement.id, {
                     content: { ...selectedElement.content, url: e.target.value },
                   })
                 }
@@ -576,7 +576,7 @@ export function PropertiesPanel() {
                       const reader = new FileReader();
                       reader.onload = (event) => {
                         const dataUrl = event.target?.result as string;
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, url: dataUrl },
                         });
                       };
@@ -592,7 +592,7 @@ export function PropertiesPanel() {
                 id="element-alt"
                 value={selectedElement.content.alt || ""}
                 onChange={(e) =>
-                  updateElement(selectedBlockId, selectedElement.id, {
+                  updateElement(blockId, selectedElement.id, {
                     content: { ...selectedElement.content, alt: e.target.value },
                   })
                 }
@@ -611,7 +611,7 @@ export function PropertiesPanel() {
                 placeholder="https://www.youtube.com/embed/..."
                 value={selectedElement.content.url || ""}
                 onChange={(e) =>
-                  updateElement(selectedBlockId, selectedElement.id, {
+                  updateElement(blockId, selectedElement.id, {
                     content: { ...selectedElement.content, url: e.target.value },
                   })
                 }
@@ -632,7 +632,7 @@ export function PropertiesPanel() {
                       const reader = new FileReader();
                       reader.onload = (event) => {
                         const dataUrl = event.target?.result as string;
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, url: dataUrl },
                         });
                       };
@@ -657,7 +657,7 @@ export function PropertiesPanel() {
                     id="countdown-label"
                     value={selectedElement.content.countdownLabel || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, countdownLabel: e.target.value },
                       })
                     }
@@ -675,7 +675,7 @@ export function PropertiesPanel() {
                         : ""
                     }
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, targetDate: new Date(e.target.value).toISOString() },
                       })
                     }
@@ -694,7 +694,7 @@ export function PropertiesPanel() {
                     placeholder="https://"
                     value={selectedElement.content.productImage || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, productImage: e.target.value },
                       })
                     }
@@ -712,7 +712,7 @@ export function PropertiesPanel() {
                           const reader = new FileReader();
                           reader.onload = (event) => {
                             const dataUrl = event.target?.result as string;
-                            updateElement(selectedBlockId, selectedElement.id, {
+                            updateElement(blockId, selectedElement.id, {
                               content: { ...selectedElement.content, productImage: dataUrl },
                             });
                           };
@@ -728,7 +728,7 @@ export function PropertiesPanel() {
                     id="product-name"
                     value={selectedElement.content.productName || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, productName: e.target.value },
                       })
                     }
@@ -740,7 +740,7 @@ export function PropertiesPanel() {
                     id="product-description"
                     value={selectedElement.content.productDescription || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, productDescription: e.target.value },
                       })
                     }
@@ -755,7 +755,7 @@ export function PropertiesPanel() {
                       placeholder="R$ 49,90"
                       value={selectedElement.content.productPrice || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, productPrice: e.target.value },
                         })
                       }
@@ -768,7 +768,7 @@ export function PropertiesPanel() {
                       placeholder="R$ 59,90"
                       value={selectedElement.content.productOriginalPrice || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, productOriginalPrice: e.target.value },
                         })
                       }
@@ -781,7 +781,7 @@ export function PropertiesPanel() {
                     id="product-button-text"
                     value={selectedElement.content.productButtonText || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, productButtonText: e.target.value },
                       })
                     }
@@ -794,7 +794,7 @@ export function PropertiesPanel() {
                     placeholder="https://"
                     value={selectedElement.content.productButtonLink || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, productButtonLink: e.target.value },
                       })
                     }
@@ -811,7 +811,7 @@ export function PropertiesPanel() {
                   <Select
                     value={selectedElement.content.listStyle || "bullet"}
                     onValueChange={(value) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, listStyle: value as any },
                       })
                     }
@@ -836,7 +836,7 @@ export function PropertiesPanel() {
                         onChange={(e) => {
                           const newItems = [...(selectedElement.content.listItems || [])];
                           newItems[index] = e.target.value;
-                          updateElement(selectedBlockId, selectedElement.id, {
+                          updateElement(blockId, selectedElement.id, {
                             content: { ...selectedElement.content, listItems: newItems },
                           });
                         }}
@@ -847,7 +847,7 @@ export function PropertiesPanel() {
                         variant="ghost"
                         onClick={() => {
                           const newItems = selectedElement.content.listItems?.filter((_, i) => i !== index);
-                          updateElement(selectedBlockId, selectedElement.id, {
+                          updateElement(blockId, selectedElement.id, {
                             content: { ...selectedElement.content, listItems: newItems },
                           });
                         }}
@@ -862,7 +862,7 @@ export function PropertiesPanel() {
                     className="w-full"
                     onClick={() => {
                       const newItems = [...(selectedElement.content.listItems || []), "Novo item"];
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, listItems: newItems },
                       });
                     }}
@@ -887,7 +887,7 @@ export function PropertiesPanel() {
                           onChange={(e) => {
                             const newImages = [...(selectedElement.content.carouselImages || [])];
                             newImages[index] = e.target.value;
-                            updateElement(selectedBlockId, selectedElement.id, {
+                            updateElement(blockId, selectedElement.id, {
                               content: { ...selectedElement.content, carouselImages: newImages },
                             });
                           }}
@@ -898,7 +898,7 @@ export function PropertiesPanel() {
                           variant="ghost"
                           onClick={() => {
                             const newImages = selectedElement.content.carouselImages?.filter((_, i) => i !== index);
-                            updateElement(selectedBlockId, selectedElement.id, {
+                            updateElement(blockId, selectedElement.id, {
                               content: { ...selectedElement.content, carouselImages: newImages },
                             });
                           }}
@@ -918,7 +918,7 @@ export function PropertiesPanel() {
                               const dataUrl = event.target?.result as string;
                               const newImages = [...(selectedElement.content.carouselImages || [])];
                               newImages[index] = dataUrl;
-                              updateElement(selectedBlockId, selectedElement.id, {
+                              updateElement(blockId, selectedElement.id, {
                                 content: { ...selectedElement.content, carouselImages: newImages },
                               });
                             };
@@ -934,7 +934,7 @@ export function PropertiesPanel() {
                     className="w-full"
                     onClick={() => {
                       const newImages = [...(selectedElement.content.carouselImages || []), ""];
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, carouselImages: newImages },
                       });
                     }}
@@ -950,7 +950,7 @@ export function PropertiesPanel() {
                       id="carousel-autoplay"
                       checked={selectedElement.content.carouselAutoplay || false}
                       onCheckedChange={(checked) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, carouselAutoplay: checked },
                         })
                       }
@@ -965,7 +965,7 @@ export function PropertiesPanel() {
                       type="number"
                       value={selectedElement.content.carouselInterval || 3000}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, carouselInterval: parseInt(e.target.value) },
                         })
                       }
@@ -990,7 +990,7 @@ export function PropertiesPanel() {
                       placeholder="16px"
                       value={elementStyle.fontSize || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, fontSize: e.target.value } },
                         })
                       }
@@ -1002,7 +1002,7 @@ export function PropertiesPanel() {
                     <Select
                       value={elementStyle.fontWeight || "normal"}
                       onValueChange={(value) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, fontWeight: value } },
                         })
                       }
@@ -1027,7 +1027,7 @@ export function PropertiesPanel() {
                       className="w-12 h-8 p-1 cursor-pointer"
                       value={elementStyle.color || "#000000"}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
                         })
                       }
@@ -1035,7 +1035,7 @@ export function PropertiesPanel() {
                     <Input
                       value={elementStyle.color || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
                         })
                       }
@@ -1049,7 +1049,7 @@ export function PropertiesPanel() {
                   <Select
                     value={elementStyle.textAlign || "left"}
                     onValueChange={(value) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, style: { ...elementStyle, textAlign: value } },
                       })
                     }
@@ -1080,7 +1080,7 @@ export function PropertiesPanel() {
                       className="w-12 h-8 p-1 cursor-pointer"
                       value={elementStyle.backgroundColor || "#000000"}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
                         })
                       }
@@ -1088,7 +1088,7 @@ export function PropertiesPanel() {
                     <Input
                       value={elementStyle.backgroundColor || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
                         })
                       }
@@ -1106,7 +1106,7 @@ export function PropertiesPanel() {
                       className="w-12 h-8 p-1 cursor-pointer"
                       value={elementStyle.color || "#ffffff"}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
                         })
                       }
@@ -1114,7 +1114,7 @@ export function PropertiesPanel() {
                     <Input
                       value={elementStyle.color || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
                         })
                       }
@@ -1131,7 +1131,7 @@ export function PropertiesPanel() {
                       placeholder="auto, 100%, 200px"
                       value={elementStyle.width || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
                         })
                       }
@@ -1145,7 +1145,7 @@ export function PropertiesPanel() {
                       placeholder="auto, 40px"
                       value={elementStyle.height || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
                         })
                       }
@@ -1161,7 +1161,7 @@ export function PropertiesPanel() {
                       placeholder="8px"
                       value={elementStyle.borderRadius || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
                         })
                       }
@@ -1175,7 +1175,7 @@ export function PropertiesPanel() {
                       placeholder="2px"
                       value={elementStyle.borderWidth || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, borderWidth: e.target.value } },
                         })
                       }
@@ -1190,7 +1190,7 @@ export function PropertiesPanel() {
                       className="w-full h-8 p-1 cursor-pointer"
                       value={elementStyle.borderColor || "#000000"}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, borderColor: e.target.value } },
                         })
                       }
@@ -1204,7 +1204,7 @@ export function PropertiesPanel() {
                     placeholder="12px 24px"
                     value={elementStyle.padding || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, style: { ...elementStyle, padding: e.target.value } },
                       })
                     }
@@ -1225,7 +1225,7 @@ export function PropertiesPanel() {
                       placeholder="100%, 300px"
                       value={elementStyle.width || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
                         })
                       }
@@ -1239,7 +1239,7 @@ export function PropertiesPanel() {
                       placeholder="auto, 200px"
                       value={elementStyle.height || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
                         })
                       }
@@ -1252,7 +1252,7 @@ export function PropertiesPanel() {
                   <Select
                     value={elementStyle.objectFit || "cover"}
                     onValueChange={(value) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, style: { ...elementStyle, objectFit: value } },
                       })
                     }
@@ -1275,7 +1275,7 @@ export function PropertiesPanel() {
                       placeholder="0px, 8px, 50%"
                       value={elementStyle.borderRadius || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
                         })
                       }
@@ -1289,7 +1289,7 @@ export function PropertiesPanel() {
                       placeholder="0px, 2px"
                       value={elementStyle.borderWidth || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, borderWidth: e.target.value } },
                         })
                       }
@@ -1307,7 +1307,7 @@ export function PropertiesPanel() {
                         className="w-12 h-8 p-1 cursor-pointer"
                         value={elementStyle.borderColor || "#000000"}
                         onChange={(e) =>
-                          updateElement(selectedBlockId, selectedElement.id, {
+                          updateElement(blockId, selectedElement.id, {
                             content: { ...selectedElement.content, style: { ...elementStyle, borderColor: e.target.value } },
                           })
                         }
@@ -1315,7 +1315,7 @@ export function PropertiesPanel() {
                       <Input
                         value={elementStyle.borderColor || ""}
                         onChange={(e) =>
-                          updateElement(selectedBlockId, selectedElement.id, {
+                          updateElement(blockId, selectedElement.id, {
                             content: { ...selectedElement.content, style: { ...elementStyle, borderColor: e.target.value } },
                           })
                         }
@@ -1339,7 +1339,7 @@ export function PropertiesPanel() {
                       placeholder="100%, 640px"
                       value={elementStyle.width || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
                         })
                       }
@@ -1353,7 +1353,7 @@ export function PropertiesPanel() {
                       placeholder="auto, 360px"
                       value={elementStyle.height || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
                         })
                       }
@@ -1368,7 +1368,7 @@ export function PropertiesPanel() {
                     placeholder="0px, 8px"
                     value={elementStyle.borderRadius || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
                       })
                     }
@@ -1390,7 +1390,7 @@ export function PropertiesPanel() {
                       className="w-12 h-8 p-1 cursor-pointer"
                       value={elementStyle.color || "#0000ff"}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
                         })
                       }
@@ -1398,7 +1398,7 @@ export function PropertiesPanel() {
                     <Input
                       value={elementStyle.color || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
                         })
                       }
@@ -1412,7 +1412,7 @@ export function PropertiesPanel() {
                   <Select
                     value={elementStyle.textDecoration || "underline"}
                     onValueChange={(value) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, style: { ...elementStyle, textDecoration: value } },
                       })
                     }
@@ -1433,7 +1433,7 @@ export function PropertiesPanel() {
                     placeholder="16px"
                     value={elementStyle.fontSize || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, style: { ...elementStyle, fontSize: e.target.value } },
                       })
                     }
@@ -1455,7 +1455,7 @@ export function PropertiesPanel() {
                       className="w-12 h-8 p-1 cursor-pointer"
                       value={elementStyle.color || "#000000"}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
                         })
                       }
@@ -1463,7 +1463,7 @@ export function PropertiesPanel() {
                     <Input
                       value={elementStyle.color || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, color: e.target.value } },
                         })
                       }
@@ -1480,7 +1480,7 @@ export function PropertiesPanel() {
                       placeholder="16px"
                       value={elementStyle.fontSize || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, fontSize: e.target.value } },
                         })
                       }
@@ -1494,7 +1494,7 @@ export function PropertiesPanel() {
                       placeholder="8px"
                       value={elementStyle.gap || ""}
                       onChange={(e) =>
-                        updateElement(selectedBlockId, selectedElement.id, {
+                        updateElement(blockId, selectedElement.id, {
                           content: { ...selectedElement.content, style: { ...elementStyle, gap: e.target.value } },
                         })
                       }
@@ -1515,7 +1515,7 @@ export function PropertiesPanel() {
                     placeholder="300px, 400px"
                     value={elementStyle.height || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
                       })
                     }
@@ -1529,7 +1529,7 @@ export function PropertiesPanel() {
                     placeholder="0px, 12px"
                     value={elementStyle.borderRadius || ""}
                     onChange={(e) =>
-                      updateElement(selectedBlockId, selectedElement.id, {
+                      updateElement(blockId, selectedElement.id, {
                         content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
                       })
                     }
@@ -1543,7 +1543,7 @@ export function PropertiesPanel() {
               variant="destructive"
               size="sm"
               className="w-full"
-              onClick={() => removeElement(selectedBlockId, selectedElement.id)}
+              onClick={() => removeElement(blockId, selectedElement.id)}
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Remover Elemento
