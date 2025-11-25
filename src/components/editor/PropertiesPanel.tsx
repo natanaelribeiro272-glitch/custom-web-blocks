@@ -1154,40 +1154,36 @@ export function PropertiesPanel() {
                     }
                     className="h-8 text-sm"
                   />
-                  {elementStyle.width?.includes('px') && (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <Input
-                            type="number"
-                            min="50"
-                            max="500"
-                            step="10"
-                            value={parseInt(elementStyle.width) || 200}
-                            onChange={(e) =>
-                              updateElement(blockId, selectedElement.id, {
-                                content: { ...selectedElement.content, style: { ...elementStyle, width: `${e.target.value}px` } },
-                              })
-                            }
-                            className="w-16 h-7 text-xs text-right"
-                          />
-                          <span className="text-xs text-muted-foreground">px</span>
-                        </div>
-                      </div>
-                      <Slider
-                        value={[parseInt(elementStyle.width) || 200]}
-                        onValueChange={([value]) =>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="50"
+                        max="500"
+                        step="10"
+                        value={parseInt(elementStyle.width) || 0}
+                        onChange={(e) =>
                           updateElement(blockId, selectedElement.id, {
-                            content: { ...selectedElement.content, style: { ...elementStyle, width: `${value}px` } },
+                            content: { ...selectedElement.content, style: { ...elementStyle, width: `${e.target.value}px` } },
                           })
                         }
-                        min={50}
-                        max={500}
-                        step={10}
-                        className="py-1"
+                        className="w-16 h-7 text-xs text-right"
                       />
-                    </>
-                  )}
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.width) || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, width: `${value}px` } },
+                      })
+                    }
+                    min={50}
+                    max={500}
+                    step={10}
+                    className="py-1"
+                  />
                 </div>
 
                 <div className="space-y-1.5">
@@ -1202,40 +1198,36 @@ export function PropertiesPanel() {
                     }
                     className="h-8 text-sm"
                   />
-                  {elementStyle.height?.includes('px') && (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <Input
-                            type="number"
-                            min="20"
-                            max="200"
-                            step="5"
-                            value={parseInt(elementStyle.height) || 40}
-                            onChange={(e) =>
-                              updateElement(blockId, selectedElement.id, {
-                                content: { ...selectedElement.content, style: { ...elementStyle, height: `${e.target.value}px` } },
-                              })
-                            }
-                            className="w-16 h-7 text-xs text-right"
-                          />
-                          <span className="text-xs text-muted-foreground">px</span>
-                        </div>
-                      </div>
-                      <Slider
-                        value={[parseInt(elementStyle.height) || 40]}
-                        onValueChange={([value]) =>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="20"
+                        max="200"
+                        step="5"
+                        value={parseInt(elementStyle.height) || 0}
+                        onChange={(e) =>
                           updateElement(blockId, selectedElement.id, {
-                            content: { ...selectedElement.content, style: { ...elementStyle, height: `${value}px` } },
+                            content: { ...selectedElement.content, style: { ...elementStyle, height: `${e.target.value}px` } },
                           })
                         }
-                        min={20}
-                        max={200}
-                        step={5}
-                        className="py-1"
+                        className="w-16 h-7 text-xs text-right"
                       />
-                    </>
-                  )}
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.height) || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, height: `${value}px` } },
+                      })
+                    }
+                    min={20}
+                    max={200}
+                    step={5}
+                    className="py-1"
+                  />
                 </div>
 
                 <div className="space-y-1.5">
@@ -1348,40 +1340,36 @@ export function PropertiesPanel() {
                     }
                     className="h-8 text-sm"
                   />
-                  {elementStyle.padding?.includes('px') && !elementStyle.padding?.includes(' ') && (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <Input
-                            type="number"
-                            min="0"
-                            max="50"
-                            step="2"
-                            value={parseInt(elementStyle.padding) || 12}
-                            onChange={(e) =>
-                              updateElement(blockId, selectedElement.id, {
-                                content: { ...selectedElement.content, style: { ...elementStyle, padding: `${e.target.value}px` } },
-                              })
-                            }
-                            className="w-16 h-7 text-xs text-right"
-                          />
-                          <span className="text-xs text-muted-foreground">px</span>
-                        </div>
-                      </div>
-                      <Slider
-                        value={[parseInt(elementStyle.padding) || 12]}
-                        onValueChange={([value]) =>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="0"
+                        max="50"
+                        step="2"
+                        value={parseInt(elementStyle.padding) || 0}
+                        onChange={(e) =>
                           updateElement(blockId, selectedElement.id, {
-                            content: { ...selectedElement.content, style: { ...elementStyle, padding: `${value}px` } },
+                            content: { ...selectedElement.content, style: { ...elementStyle, padding: `${e.target.value}px` } },
                           })
                         }
-                        min={0}
-                        max={50}
-                        step={2}
-                        className="py-1"
+                        className="w-16 h-7 text-xs text-right"
                       />
-                    </>
-                  )}
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.padding) || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, padding: `${value}px` } },
+                      })
+                    }
+                    min={0}
+                    max={50}
+                    step={2}
+                    className="py-1"
+                  />
                 </div>
               </>
             )}
@@ -1401,40 +1389,36 @@ export function PropertiesPanel() {
                     }
                     className="h-8 text-sm"
                   />
-                  {elementStyle.width?.includes('px') && (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <Input
-                            type="number"
-                            min="50"
-                            max="800"
-                            step="10"
-                            value={parseInt(elementStyle.width) || 300}
-                            onChange={(e) =>
-                              updateElement(blockId, selectedElement.id, {
-                                content: { ...selectedElement.content, style: { ...elementStyle, width: `${e.target.value}px` } },
-                              })
-                            }
-                            className="w-16 h-7 text-xs text-right"
-                          />
-                          <span className="text-xs text-muted-foreground">px</span>
-                        </div>
-                      </div>
-                      <Slider
-                        value={[parseInt(elementStyle.width) || 300]}
-                        onValueChange={([value]) =>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="50"
+                        max="800"
+                        step="10"
+                        value={parseInt(elementStyle.width) || 0}
+                        onChange={(e) =>
                           updateElement(blockId, selectedElement.id, {
-                            content: { ...selectedElement.content, style: { ...elementStyle, width: `${value}px` } },
+                            content: { ...selectedElement.content, style: { ...elementStyle, width: `${e.target.value}px` } },
                           })
                         }
-                        min={50}
-                        max={800}
-                        step={10}
-                        className="py-1"
+                        className="w-16 h-7 text-xs text-right"
                       />
-                    </>
-                  )}
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.width) || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, width: `${value}px` } },
+                      })
+                    }
+                    min={50}
+                    max={800}
+                    step={10}
+                    className="py-1"
+                  />
                 </div>
 
                 <div className="space-y-1.5">
@@ -1449,40 +1433,36 @@ export function PropertiesPanel() {
                     }
                     className="h-8 text-sm"
                   />
-                  {elementStyle.height?.includes('px') && (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <Input
-                            type="number"
-                            min="50"
-                            max="800"
-                            step="10"
-                            value={parseInt(elementStyle.height) || 200}
-                            onChange={(e) =>
-                              updateElement(blockId, selectedElement.id, {
-                                content: { ...selectedElement.content, style: { ...elementStyle, height: `${e.target.value}px` } },
-                              })
-                            }
-                            className="w-16 h-7 text-xs text-right"
-                          />
-                          <span className="text-xs text-muted-foreground">px</span>
-                        </div>
-                      </div>
-                      <Slider
-                        value={[parseInt(elementStyle.height) || 200]}
-                        onValueChange={([value]) =>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="50"
+                        max="800"
+                        step="10"
+                        value={parseInt(elementStyle.height) || 0}
+                        onChange={(e) =>
                           updateElement(blockId, selectedElement.id, {
-                            content: { ...selectedElement.content, style: { ...elementStyle, height: `${value}px` } },
+                            content: { ...selectedElement.content, style: { ...elementStyle, height: `${e.target.value}px` } },
                           })
                         }
-                        min={50}
-                        max={800}
-                        step={10}
-                        className="py-1"
+                        className="w-16 h-7 text-xs text-right"
                       />
-                    </>
-                  )}
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.height) || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, height: `${value}px` } },
+                      })
+                    }
+                    min={50}
+                    max={800}
+                    step={10}
+                    className="py-1"
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="img-object-fit" className="text-xs">Ajuste</Label>
@@ -1616,40 +1596,36 @@ export function PropertiesPanel() {
                     }
                     className="h-8 text-sm"
                   />
-                  {elementStyle.width?.includes('px') && (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <Input
-                            type="number"
-                            min="200"
-                            max="1000"
-                            step="20"
-                            value={parseInt(elementStyle.width) || 640}
-                            onChange={(e) =>
-                              updateElement(blockId, selectedElement.id, {
-                                content: { ...selectedElement.content, style: { ...elementStyle, width: `${e.target.value}px` } },
-                              })
-                            }
-                            className="w-16 h-7 text-xs text-right"
-                          />
-                          <span className="text-xs text-muted-foreground">px</span>
-                        </div>
-                      </div>
-                      <Slider
-                        value={[parseInt(elementStyle.width) || 640]}
-                        onValueChange={([value]) =>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="200"
+                        max="1000"
+                        step="20"
+                        value={parseInt(elementStyle.width) || 0}
+                        onChange={(e) =>
                           updateElement(blockId, selectedElement.id, {
-                            content: { ...selectedElement.content, style: { ...elementStyle, width: `${value}px` } },
+                            content: { ...selectedElement.content, style: { ...elementStyle, width: `${e.target.value}px` } },
                           })
                         }
-                        min={200}
-                        max={1000}
-                        step={20}
-                        className="py-1"
+                        className="w-16 h-7 text-xs text-right"
                       />
-                    </>
-                  )}
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.width) || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, width: `${value}px` } },
+                      })
+                    }
+                    min={200}
+                    max={1000}
+                    step={20}
+                    className="py-1"
+                  />
                 </div>
 
                 <div className="space-y-1.5">
@@ -1664,40 +1640,36 @@ export function PropertiesPanel() {
                     }
                     className="h-8 text-sm"
                   />
-                  {elementStyle.height?.includes('px') && (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <Input
-                            type="number"
-                            min="150"
-                            max="800"
-                            step="10"
-                            value={parseInt(elementStyle.height) || 360}
-                            onChange={(e) =>
-                              updateElement(blockId, selectedElement.id, {
-                                content: { ...selectedElement.content, style: { ...elementStyle, height: `${e.target.value}px` } },
-                              })
-                            }
-                            className="w-16 h-7 text-xs text-right"
-                          />
-                          <span className="text-xs text-muted-foreground">px</span>
-                        </div>
-                      </div>
-                      <Slider
-                        value={[parseInt(elementStyle.height) || 360]}
-                        onValueChange={([value]) =>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="150"
+                        max="800"
+                        step="10"
+                        value={parseInt(elementStyle.height) || 0}
+                        onChange={(e) =>
                           updateElement(blockId, selectedElement.id, {
-                            content: { ...selectedElement.content, style: { ...elementStyle, height: `${value}px` } },
+                            content: { ...selectedElement.content, style: { ...elementStyle, height: `${e.target.value}px` } },
                           })
                         }
-                        min={150}
-                        max={800}
-                        step={10}
-                        className="py-1"
+                        className="w-16 h-7 text-xs text-right"
                       />
-                    </>
-                  )}
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.height) || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, height: `${value}px` } },
+                      })
+                    }
+                    min={150}
+                    max={800}
+                    step={10}
+                    className="py-1"
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
