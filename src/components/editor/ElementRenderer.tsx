@@ -23,7 +23,7 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
 
   const baseClasses = cn(
     "transition-all rounded-lg",
-    isSelected ? "ring-2 ring-accent ring-offset-2" : "hover:bg-hover/50"
+    isSelected ? "ring-2 ring-accent ring-offset-2" : ""
   );
 
   // Countdown effect
@@ -74,6 +74,7 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
           className={cn(baseClasses, "text-2xl font-bold px-2 py-1 cursor-pointer")}
           onClick={handleClick}
           style={{
+            backgroundColor: element.content.style?.backgroundColor || 'transparent',
             fontFamily: element.content.style?.fontFamily,
             textAlign: element.content.style?.textAlign as any,
             color: element.content.style?.color,
@@ -91,6 +92,7 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
           className={cn(baseClasses, "text-sm leading-relaxed px-2 py-1 cursor-pointer")}
           onClick={handleClick}
           style={{
+            backgroundColor: element.content.style?.backgroundColor || 'transparent',
             fontFamily: element.content.style?.fontFamily,
             textAlign: element.content.style?.textAlign as any,
             color: element.content.style?.color,
@@ -203,8 +205,8 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
             className={cn(baseClasses)} 
             size="lg"
             style={{
-              backgroundColor: element.content.style?.backgroundColor,
-              color: element.content.style?.color,
+              backgroundColor: element.content.style?.backgroundColor || 'hsl(var(--primary))',
+              color: element.content.style?.color || 'hsl(var(--primary-foreground))',
               width: element.content.style?.width,
               height: element.content.style?.height,
               borderRadius: element.content.style?.borderRadius,
@@ -227,6 +229,7 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
           className={cn(baseClasses, "flex items-center gap-2 px-2 py-1 cursor-pointer")}
           onClick={handleClick}
           style={{
+            backgroundColor: element.content.style?.backgroundColor || 'transparent',
             color: element.content.style?.color || 'hsl(var(--primary))',
             textDecoration: element.content.style?.textDecoration || 'underline',
             fontSize: element.content.style?.fontSize,
@@ -242,6 +245,9 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
         <div
           className={cn(baseClasses, "p-4 cursor-pointer")}
           onClick={handleClick}
+          style={{
+            backgroundColor: element.content.style?.backgroundColor || 'transparent',
+          }}
         >
           {element.content.countdownLabel && (
             <div className="text-sm text-center mb-2 text-muted-foreground">
@@ -309,6 +315,9 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
         <div 
           className={cn(baseClasses, "px-2 py-1 cursor-pointer")} 
           onClick={handleClick}
+          style={{
+            backgroundColor: element.content.style?.backgroundColor || 'transparent',
+          }}
         >
           <ul 
             className="space-y-2"
