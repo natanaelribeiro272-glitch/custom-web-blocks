@@ -1036,6 +1036,33 @@ export function PropertiesPanel() {
                     </SelectContent>
                   </Select>
                 </div>
+                
+                <div className="space-y-1.5">
+                  <Label htmlFor="font-family" className="text-xs">Tipografia</Label>
+                  <Select
+                    value={elementStyle.fontFamily || "inherit"}
+                    onValueChange={(value) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, fontFamily: value === "inherit" ? undefined : value } },
+                      })
+                    }
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="inherit">Padrão</SelectItem>
+                      <SelectItem value="Arial, sans-serif">Arial</SelectItem>
+                      <SelectItem value="'Times New Roman', serif">Times New Roman</SelectItem>
+                      <SelectItem value="'Courier New', monospace">Courier New</SelectItem>
+                      <SelectItem value="Georgia, serif">Georgia</SelectItem>
+                      <SelectItem value="Verdana, sans-serif">Verdana</SelectItem>
+                      <SelectItem value="'Trebuchet MS', sans-serif">Trebuchet MS</SelectItem>
+                      <SelectItem value="Impact, sans-serif">Impact</SelectItem>
+                      <SelectItem value="'Comic Sans MS', cursive">Comic Sans MS</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="text-color" className="text-xs">Cor do Texto</Label>
                   <div className="flex gap-2">
@@ -1063,25 +1090,45 @@ export function PropertiesPanel() {
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="text-align" className="text-xs">Alinhamento</Label>
-                  <Select
-                    value={elementStyle.textAlign || "left"}
-                    onValueChange={(value) =>
-                      updateElement(blockId, selectedElement.id, {
-                        content: { ...selectedElement.content, style: { ...elementStyle, textAlign: value } },
-                      })
-                    }
-                  >
-                    <SelectTrigger className="h-8">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="left">Esquerda</SelectItem>
-                      <SelectItem value="center">Centro</SelectItem>
-                      <SelectItem value="right">Direita</SelectItem>
-                      <SelectItem value="justify">Justificado</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="text-align" className="text-xs">Alinhamento de Texto</Label>
+                  <div className="flex gap-1">
+                    <Button
+                      variant={elementStyle.textAlign === "left" || !elementStyle.textAlign ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, textAlign: "left" } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Esquerda</span>
+                    </Button>
+                    <Button
+                      variant={elementStyle.textAlign === "center" ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, textAlign: "center" } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Centro</span>
+                    </Button>
+                    <Button
+                      variant={elementStyle.textAlign === "right" ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, textAlign: "right" } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Direita</span>
+                    </Button>
+                  </div>
                 </div>
               </>
             )}
@@ -1089,6 +1136,74 @@ export function PropertiesPanel() {
             {/* Estilos para Botão */}
             {selectedElement.type === "button" && (
               <>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Alinhamento do Elemento</Label>
+                  <div className="flex gap-1">
+                    <Button
+                      variant={!elementStyle.marginLeft && !elementStyle.marginRight ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, marginLeft: undefined, marginRight: "auto" } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Esquerda</span>
+                    </Button>
+                    <Button
+                      variant={elementStyle.marginLeft === "auto" && elementStyle.marginRight === "auto" ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, marginLeft: "auto", marginRight: "auto" } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Centro</span>
+                    </Button>
+                    <Button
+                      variant={elementStyle.marginLeft === "auto" && !elementStyle.marginRight ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, marginLeft: "auto", marginRight: undefined } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Direita</span>
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="btn-font-family" className="text-xs">Tipografia</Label>
+                  <Select
+                    value={elementStyle.fontFamily || "inherit"}
+                    onValueChange={(value) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, fontFamily: value === "inherit" ? undefined : value } },
+                      })
+                    }
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="inherit">Padrão</SelectItem>
+                      <SelectItem value="Arial, sans-serif">Arial</SelectItem>
+                      <SelectItem value="'Times New Roman', serif">Times New Roman</SelectItem>
+                      <SelectItem value="'Courier New', monospace">Courier New</SelectItem>
+                      <SelectItem value="Georgia, serif">Georgia</SelectItem>
+                      <SelectItem value="Verdana, sans-serif">Verdana</SelectItem>
+                      <SelectItem value="'Trebuchet MS', sans-serif">Trebuchet MS</SelectItem>
+                      <SelectItem value="Impact, sans-serif">Impact</SelectItem>
+                      <SelectItem value="'Comic Sans MS', cursive">Comic Sans MS</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="btn-bg-color" className="text-xs">Cor de Fundo</Label>
                   <div className="flex gap-2">
@@ -1578,6 +1693,48 @@ export function PropertiesPanel() {
                     </div>
                   </div>
                 )}
+                
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Alinhamento do Elemento</Label>
+                  <div className="flex gap-1">
+                    <Button
+                      variant={!elementStyle.marginLeft && !elementStyle.marginRight ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, marginLeft: undefined, marginRight: "auto" } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Esquerda</span>
+                    </Button>
+                    <Button
+                      variant={elementStyle.marginLeft === "auto" && elementStyle.marginRight === "auto" ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, marginLeft: "auto", marginRight: "auto" } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Centro</span>
+                    </Button>
+                    <Button
+                      variant={elementStyle.marginLeft === "auto" && !elementStyle.marginRight ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, marginLeft: "auto", marginRight: undefined } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Direita</span>
+                    </Button>
+                  </div>
+                </div>
               </>
             )}
 
@@ -1703,6 +1860,48 @@ export function PropertiesPanel() {
                     step={1}
                     className="py-1"
                   />
+                </div>
+                
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Alinhamento do Elemento</Label>
+                  <div className="flex gap-1">
+                    <Button
+                      variant={!elementStyle.marginLeft && !elementStyle.marginRight ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, marginLeft: undefined, marginRight: "auto" } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Esquerda</span>
+                    </Button>
+                    <Button
+                      variant={elementStyle.marginLeft === "auto" && elementStyle.marginRight === "auto" ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, marginLeft: "auto", marginRight: "auto" } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Centro</span>
+                    </Button>
+                    <Button
+                      variant={elementStyle.marginLeft === "auto" && !elementStyle.marginRight ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 h-8"
+                      onClick={() =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, marginLeft: "auto", marginRight: undefined } },
+                        })
+                      }
+                    >
+                      <span className="text-xs">Direita</span>
+                    </Button>
+                  </div>
                 </div>
               </>
             )}
