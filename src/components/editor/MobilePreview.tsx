@@ -24,12 +24,14 @@ export function MobilePreview() {
   return (
     <div className="flex-1 overflow-auto pb-20">
       <div 
-        className="min-h-screen w-full relative"
+        className="min-h-screen w-full relative px-2"
         style={{ backgroundColor: currentPage?.backgroundColor || "#ffffff" }}
         onClick={handleBackgroundClick}
       >
         {/* Header */}
-        {currentPage && <HeaderFooterRenderer config={currentPage.header} type="header" pageId={currentPage.id} />}
+        <div onClick={(e) => e.stopPropagation()}>
+          {currentPage && <HeaderFooterRenderer config={currentPage.header} type="header" pageId={currentPage.id} />}
+        </div>
         
         {blocks.length === 0 ? (
           <div 
@@ -53,9 +55,9 @@ export function MobilePreview() {
             </Button>
           </div>
         ) : (
-          <div className="space-y-0">
+          <div className="space-y-4 py-4">
             {blocks.map((block) => (
-              <div key={block.id}>
+              <div key={block.id} onClick={(e) => e.stopPropagation()}>
                 <BlockRenderer block={block} />
               </div>
             ))}
@@ -78,7 +80,9 @@ export function MobilePreview() {
         )}
         
         {/* Footer */}
-        {currentPage && <HeaderFooterRenderer config={currentPage.footer} type="footer" pageId={currentPage.id} />}
+        <div onClick={(e) => e.stopPropagation()}>
+          {currentPage && <HeaderFooterRenderer config={currentPage.footer} type="footer" pageId={currentPage.id} />}
+        </div>
       </div>
     </div>
   );
