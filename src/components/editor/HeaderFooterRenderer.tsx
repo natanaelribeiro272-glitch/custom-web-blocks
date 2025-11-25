@@ -46,7 +46,7 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
       return (
         <header
           className={baseClasses}
-          style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
+          style={{ backgroundColor: config.backgroundColor || 'transparent', color: config.textColor }}
           onClick={handleClick}
         >
           <div className="flex items-center justify-between px-4 py-3">
@@ -106,7 +106,7 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
       return (
         <header
           className={baseClasses}
-          style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
+          style={{ backgroundColor: config.backgroundColor || 'transparent', color: config.textColor }}
           onClick={handleClick}
         >
           <div className="flex flex-col items-center text-center px-4 py-4">
@@ -173,7 +173,7 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
       return (
         <header
           className={baseClasses}
-          style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
+          style={{ backgroundColor: config.backgroundColor || 'transparent', color: config.textColor }}
           onClick={handleClick}
         >
           <div className="flex items-center justify-between px-4 py-3">
@@ -245,7 +245,7 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
       return (
         <footer
           className={baseClasses}
-          style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
+          style={{ backgroundColor: config.backgroundColor || 'transparent', color: config.textColor }}
           onClick={handleClick}
         >
           <div className="px-4 py-4 text-center">
@@ -266,7 +266,7 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
       return (
         <footer
           className={baseClasses}
-          style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
+          style={{ backgroundColor: config.backgroundColor || 'transparent', color: config.textColor }}
           onClick={handleClick}
         >
           <div className="px-4 py-4 space-y-3">
@@ -297,7 +297,7 @@ export function HeaderFooterRenderer({ config, type, pageId }: HeaderFooterRende
       return (
         <footer
           className={baseClasses}
-          style={{ backgroundColor: config.backgroundColor, color: config.textColor }}
+          style={{ backgroundColor: config.backgroundColor || 'transparent', color: config.textColor }}
           onClick={handleClick}
         >
           <div className="px-4 py-4 space-y-3">

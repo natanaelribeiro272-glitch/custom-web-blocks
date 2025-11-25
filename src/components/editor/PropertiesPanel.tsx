@@ -461,18 +461,30 @@ export function PropertiesPanel() {
                   id="bg-color"
                   type="color"
                   className="w-16 h-10"
-                  value={config.backgroundColor}
+                  value={config.backgroundColor || "#ffffff"}
                   onChange={(e) =>
                     updateConfig(currentPage.id, { backgroundColor: e.target.value })
                   }
                 />
                 <Input
-                  value={config.backgroundColor}
+                  value={config.backgroundColor || ""}
                   onChange={(e) =>
                     updateConfig(currentPage.id, { backgroundColor: e.target.value })
                   }
                   className="flex-1"
+                  placeholder="transparent"
                 />
+                {config.backgroundColor && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() =>
+                      updateConfig(currentPage.id, { backgroundColor: undefined })
+                    }
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -483,13 +495,14 @@ export function PropertiesPanel() {
                   id="text-color"
                   type="color"
                   className="w-16 h-8 p-1"
-                  value={config.textColor}
+                  value={config.textColor || "#000000"}
                   onChange={(e) => updateConfig(currentPage.id, { textColor: e.target.value })}
                 />
                 <Input
-                  value={config.textColor}
+                  value={config.textColor || ""}
                   onChange={(e) => updateConfig(currentPage.id, { textColor: e.target.value })}
                   className="flex-1 h-8 text-sm"
+                  placeholder="#000000"
                 />
               </div>
             </div>
@@ -680,6 +693,46 @@ export function PropertiesPanel() {
                       })
                     }
                   />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="countdown-bg-color" className="text-xs">Cor de Fundo</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="countdown-bg-color"
+                      type="color"
+                      className="w-12 h-8 p-1 cursor-pointer"
+                      value={elementStyle.backgroundColor || "#ffffff"}
+                      onChange={(e) =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
+                        })
+                      }
+                    />
+                    <Input
+                      value={elementStyle.backgroundColor || ""}
+                      onChange={(e) =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
+                        })
+                      }
+                      className="flex-1 h-8 text-sm"
+                      placeholder="transparent"
+                    />
+                    {elementStyle.backgroundColor && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 px-2"
+                        onClick={() =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: undefined } },
+                          })
+                        }
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </>
             )}
@@ -1128,6 +1181,46 @@ export function PropertiesPanel() {
                     >
                       <span className="text-xs">Direita</span>
                     </Button>
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="element-bg-color" className="text-xs">Cor de Fundo</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="element-bg-color"
+                      type="color"
+                      className="w-12 h-8 p-1 cursor-pointer"
+                      value={elementStyle.backgroundColor || "#ffffff"}
+                      onChange={(e) =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
+                        })
+                      }
+                    />
+                    <Input
+                      value={elementStyle.backgroundColor || ""}
+                      onChange={(e) =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
+                        })
+                      }
+                      className="flex-1 h-8 text-sm"
+                      placeholder="transparent"
+                    />
+                    {elementStyle.backgroundColor && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 px-2"
+                        onClick={() =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: undefined } },
+                          })
+                        }
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               </>
@@ -1955,6 +2048,46 @@ export function PropertiesPanel() {
                   </Select>
                 </div>
                 <div className="space-y-1.5">
+                  <Label htmlFor="link-bg-color" className="text-xs">Cor de Fundo</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="link-bg-color"
+                      type="color"
+                      className="w-12 h-8 p-1 cursor-pointer"
+                      value={elementStyle.backgroundColor || "#ffffff"}
+                      onChange={(e) =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
+                        })
+                      }
+                    />
+                    <Input
+                      value={elementStyle.backgroundColor || ""}
+                      onChange={(e) =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
+                        })
+                      }
+                      className="flex-1 h-8 text-sm"
+                      placeholder="transparent"
+                    />
+                    {elementStyle.backgroundColor && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 px-2"
+                        onClick={() =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: undefined } },
+                          })
+                        }
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <Label className="text-xs">Tamanho</Label>
                     <div className="flex items-center gap-1">
@@ -2084,6 +2217,46 @@ export function PropertiesPanel() {
                     step={2}
                     className="py-1"
                   />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="list-bg-color" className="text-xs">Cor de Fundo</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="list-bg-color"
+                      type="color"
+                      className="w-12 h-8 p-1 cursor-pointer"
+                      value={elementStyle.backgroundColor || "#ffffff"}
+                      onChange={(e) =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
+                        })
+                      }
+                    />
+                    <Input
+                      value={elementStyle.backgroundColor || ""}
+                      onChange={(e) =>
+                        updateElement(blockId, selectedElement.id, {
+                          content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: e.target.value } },
+                        })
+                      }
+                      className="flex-1 h-8 text-sm"
+                      placeholder="transparent"
+                    />
+                    {elementStyle.backgroundColor && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 px-2"
+                        onClick={() =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, backgroundColor: undefined } },
+                          })
+                        }
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </>
             )}
