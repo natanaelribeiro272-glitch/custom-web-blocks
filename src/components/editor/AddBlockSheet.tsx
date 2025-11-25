@@ -19,8 +19,8 @@ export function AddBlockSheet({ open, onOpenChange }: AddBlockSheetProps) {
   const { addBlockAt, insertBlockIndex } = useEditorStore();
 
   const handleAddBlock = (type: typeof blockTypes[0]["type"]) => {
+    // addBlockAt já fecha o sheet internamente
     addBlockAt(type, insertBlockIndex);
-    onOpenChange(false);
   };
 
   return (
