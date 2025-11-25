@@ -56,8 +56,8 @@ export default {
         hover: "hsl(var(--hover-element))",
       },
       fontFamily: {
-        sans: ["DM Sans", "sans-serif"],
-        display: ["Outfit", "sans-serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["Inter", "system-ui", "sans-serif"],
       },
       transitionProperty: {
         smooth: "var(--transition-smooth)",

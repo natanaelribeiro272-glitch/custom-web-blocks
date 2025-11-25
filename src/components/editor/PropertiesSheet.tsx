@@ -25,9 +25,9 @@ export function PropertiesSheet({ open, onOpenChange }: PropertiesSheetProps) {
   return (
     <div className="fixed inset-0 z-50 pointer-events-none">
       <div className="absolute bottom-0 left-0 right-0 pointer-events-auto">
-        <div className="bg-card border-t border-x border-border shadow-2xl rounded-t-3xl max-w-2xl mx-auto overflow-hidden flex flex-col max-h-[75vh]">
+        <div className="bg-card border-t border-border max-w-2xl mx-auto overflow-hidden flex flex-col max-h-[75vh] rounded-t-2xl">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
             <h3 className="font-semibold text-sm">{getTitle()}</h3>
             <Button
               variant="ghost"

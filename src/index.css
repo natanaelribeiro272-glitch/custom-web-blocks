@@ -8,42 +8,43 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 220 15% 20%;
+    /* Dark theme - Figma style */
+    --background: 0 0% 12%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 20%;
+    --card: 0 0% 17%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 20%;
+    --popover: 0 0% 15%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 187 85% 43%;
+    --primary: 203 88% 53%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 10% 96%;
-    --secondary-foreground: 220 15% 20%;
+    --secondary: 0 0% 22%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 220 10% 95%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 0 0% 25%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 187 85% 43%;
+    --accent: 203 88% 53%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 187 85% 43%;
+    --border: 0 0% 25%;
+    --input: 0 0% 22%;
+    --ring: 203 88% 53%;
 
     --radius: 0.75rem;
 
-    --editor-sidebar: 0 0% 100%;
-    --editor-preview: 220 10% 95%;
-    --editor-panel: 0 0% 100%;
+    --editor-sidebar: 0 0% 15%;
+    --editor-preview: 0 0% 12%;
+    --editor-panel: 0 0% 17%;
     
-    --selected-block: 187 85% 43%;
-    --hover-element: 187 60% 92%;
+    --selected-block: 203 88% 53%;
+    --hover-element: 203 88% 20%;
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s ease-out;

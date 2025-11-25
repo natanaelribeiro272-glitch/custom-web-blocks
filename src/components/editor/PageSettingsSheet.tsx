@@ -22,44 +22,46 @@ export function PageSettingsSheet({ open, onOpenChange }: PageSettingsSheetProps
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl p-0">
-        <SheetHeader className="px-6 pt-6 pb-4 border-b">
-          <SheetTitle>Configurações da Página</SheetTitle>
+      <SheetContent side="bottom" className="h-[85vh] rounded-t-2xl p-0">
+        <SheetHeader className="px-6 pt-6 pb-4 border-b border-border">
+          <SheetTitle className="font-semibold">Configurações da Página</SheetTitle>
         </SheetHeader>
         
         <ScrollArea className="h-[calc(85vh-80px)]">
           <div className="px-6 py-6 space-y-8">
             {/* Page Name */}
             <div className="space-y-2">
-              <Label>Nome da Página</Label>
+              <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Nome da Página</Label>
               <Input
                 value={currentPage.name}
                 onChange={(e) => updatePage(currentPage.id, { name: e.target.value })}
                 placeholder="Ex: Home, Sobre, Contato"
+                className="font-medium"
               />
             </div>
 
             {/* Background Color */}
             <div className="space-y-2">
-              <Label>Cor de Fundo</Label>
+              <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Cor de Fundo</Label>
               <div className="flex gap-2">
                 <Input
                   type="color"
                   value={currentPage.backgroundColor}
                   onChange={(e) => updatePage(currentPage.id, { backgroundColor: e.target.value })}
-                  className="w-20 h-10"
+                  className="w-16 h-10"
                 />
                 <Input
                   value={currentPage.backgroundColor}
                   onChange={(e) => updatePage(currentPage.id, { backgroundColor: e.target.value })}
                   placeholder="#ffffff"
+                  className="font-mono text-sm"
                 />
               </div>
             </div>
 
             {/* Header Template */}
             <div className="space-y-3">
-              <Label>Template de Cabeçalho</Label>
+              <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Template de Cabeçalho</Label>
               <RadioGroup
                 value={currentPage.header.template}
                 onValueChange={(value) =>
