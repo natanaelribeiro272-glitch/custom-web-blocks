@@ -1,6 +1,6 @@
 import { useEditorStore } from "@/hooks/useEditorStore";
 import { Button } from "@/components/ui/button";
-import { Settings, FileText, Eye, Plus, GripVertical, Minimize2, ArrowLeft } from "lucide-react";
+import { Settings, FileText, Eye, Plus, ArrowLeft, ChevronRight, ChevronLeft } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -21,14 +21,10 @@ export function FloatingBottomBar() {
     setActiveSheet, 
     selectedBlockId, 
     selectedElementId,
-    selectedHeaderFooter,
-    floatingBarPosition,
-    setFloatingBarPosition
+    selectedHeaderFooter
   } = useEditorStore();
   
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const barRef = useRef<HTMLDivElement>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleOpenProperties = () => {
     setActiveSheet("properties");
@@ -42,226 +38,140 @@ export function FloatingBottomBar() {
     setActiveSheet("add-element");
   };
 
-  const handleDockBar = () => {
-    setFloatingBarPosition({ x: 0, y: 0, isDocked: true });
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (floatingBarPosition.isDocked) {
-      // Undock the bar
-      const rect = barRef.current?.getBoundingClientRect();
-      if (rect) {
-        setFloatingBarPosition({
-          x: rect.left,
-          y: rect.top,
-          isDocked: false
-        });
-      }
-    }
-    setIsDragging(true);
-    setDragOffset({
-      x: e.clientX - (floatingBarPosition.isDocked ? 0 : floatingBarPosition.x),
-      y: e.clientY - (floatingBarPosition.isDocked ? window.innerHeight - 70 : floatingBarPosition.y)
-    });
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    if (floatingBarPosition.isDocked) {
-      const rect = barRef.current?.getBoundingClientRect();
-      if (rect) {
-        setFloatingBarPosition({
-          x: rect.left,
-          y: rect.top,
-          isDocked: false
-        });
-      }
-    }
-    setIsDragging(true);
-    setDragOffset({
-      x: touch.clientX - (floatingBarPosition.isDocked ? 0 : floatingBarPosition.x),
-      y: touch.clientY - (floatingBarPosition.isDocked ? window.innerHeight - 70 : floatingBarPosition.y)
-    });
-  };
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging && !floatingBarPosition.isDocked) {
-        const newX = Math.max(0, Math.min(window.innerWidth - 400, e.clientX - dragOffset.x));
-        const newY = Math.max(0, Math.min(window.innerHeight - 70, e.clientY - dragOffset.y));
-        setFloatingBarPosition({ x: newX, y: newY, isDocked: false });
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (isDragging && !floatingBarPosition.isDocked) {
-        const touch = e.touches[0];
-        const newX = Math.max(0, Math.min(window.innerWidth - 400, touch.clientX - dragOffset.x));
-        const newY = Math.max(0, Math.min(window.innerHeight - 70, touch.clientY - dragOffset.y));
-        setFloatingBarPosition({ x: newX, y: newY, isDocked: false });
-      }
-    };
-
-    const handleMouseUp = () => {
-      setIsDragging(false);
-    };
-
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('touchmove', handleTouchMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      document.addEventListener('touchend', handleMouseUp);
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('touchend', handleMouseUp);
-    };
-  }, [isDragging, dragOffset, floatingBarPosition.isDocked, setFloatingBarPosition]);
-
   // Determine what's selected and what to show
   const hasSelection = selectedBlockId || selectedElementId || selectedHeaderFooter;
   const showAddElement = selectedBlockId && !selectedElementId;
 
   return (
-    <div
-      ref={barRef}
-      className={cn(
-        "bg-card border border-border shadow-2xl rounded-2xl z-50 transition-all",
-        floatingBarPosition.isDocked 
-          ? "fixed bottom-0 left-0 right-0 rounded-b-none" 
-          : "fixed"
-      )}
-      style={
-        floatingBarPosition.isDocked 
-          ? undefined 
-          : {
-              left: `${floatingBarPosition.x}px`,
-              top: `${floatingBarPosition.y}px`,
-              maxWidth: '400px',
-              width: '90vw'
-            }
-      }
-    >
-      {/* Drag handle */}
-      <div
-        className="flex items-center justify-center py-1 cursor-move touch-none bg-muted/50 rounded-t-2xl"
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleTouchStart}
+    <>
+      {/* Toggle button - Always visible on the right side */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="fixed right-0 top-1/2 -translate-y-1/2 z-50 bg-primary text-primary-foreground p-3 rounded-l-xl shadow-lg hover:bg-primary/90 transition-all"
+        aria-label={isExpanded ? "Fechar menu" : "Abrir menu"}
       >
-        <GripVertical className="h-4 w-4 text-muted-foreground" />
-      </div>
+        {isExpanded ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+      </button>
 
-      <div className="flex items-center justify-between px-4 py-3 gap-2">
-        {/* Back button - always visible */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate("/dashboard")}
-          className="h-9 w-9 p-0 shrink-0"
-          title="Voltar para Dashboard"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-
-        {/* Page selector with add button - only show when nothing is selected */}
-        {!hasSelection && (
-          <div className="flex items-center gap-1">
-            <Select value={currentPageId || ""} onValueChange={setCurrentPage}>
-              <SelectTrigger className="w-[140px] h-9 text-sm">
-                <SelectValue placeholder="Página" />
-              </SelectTrigger>
-              <SelectContent>
-                {pages.map((page) => (
-                  <SelectItem key={page.id} value={page.id}>
-                    {page.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                const { addPage } = useEditorStore.getState();
-                addPage();
-              }}
-              className="h-9 w-9 p-0"
-              title="Nova página"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
+      {/* Sidebar menu */}
+      <div
+        className={cn(
+          "fixed right-0 top-0 h-full w-80 bg-card border-l border-border shadow-2xl z-40 transition-transform duration-300 ease-in-out",
+          isExpanded ? "translate-x-0" : "translate-x-full"
         )}
+      >
+        <div className="flex flex-col h-full p-4 gap-4 overflow-y-auto">
+          {/* Back button - always visible */}
+          <Button
+            variant="outline"
+            size="default"
+            onClick={() => navigate("/dashboard")}
+            className="w-full justify-start gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span>Voltar para Dashboard</span>
+          </Button>
 
-        <div className="flex items-center gap-2 flex-wrap">
+          {/* Page selector with add button - only show when nothing is selected */}
+          {!hasSelection && (
+            <>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-muted-foreground">Página Atual</label>
+                <div className="flex items-center gap-2">
+                  <Select value={currentPageId || ""} onValueChange={setCurrentPage}>
+                    <SelectTrigger className="flex-1">
+                      <SelectValue placeholder="Selecione uma página" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {pages.map((page) => (
+                        <SelectItem key={page.id} value={page.id}>
+                          {page.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => {
+                      const { addPage } = useEditorStore.getState();
+                      addPage();
+                    }}
+                    title="Nova página"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="border-t pt-4 space-y-2">
+                <Button
+                  variant="outline"
+                  size="default"
+                  onClick={handleOpenPageSettings}
+                  className="w-full justify-start gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  <span>Configurações da Página</span>
+                </Button>
+
+                <Button
+                  size="default"
+                  className="w-full justify-start gap-2"
+                >
+                  <Eye className="h-4 w-4" />
+                  <span>Visualizar Site</span>
+                </Button>
+              </div>
+            </>
+          )}
+
           {/* Show add element and properties when block is selected */}
           {showAddElement && (
-            <>
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-muted-foreground">Bloco Selecionado</p>
               <Button
                 variant="default"
-                size="sm"
+                size="default"
                 onClick={handleAddElement}
-                className="gap-2"
+                className="w-full justify-start gap-2"
               >
                 <Plus className="h-4 w-4" />
                 <span>Adicionar Elemento</span>
               </Button>
               <Button
                 variant="outline"
-                size="sm"
+                size="default"
                 onClick={handleOpenProperties}
-                className="gap-2"
+                className="w-full justify-start gap-2"
               >
                 <Settings className="h-4 w-4" />
-                <span>Propriedades</span>
+                <span>Propriedades do Bloco</span>
               </Button>
-            </>
+            </div>
           )}
 
           {/* Show only properties when element, header, or footer is selected */}
           {(selectedElementId || selectedHeaderFooter) && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleOpenProperties}
-              className="gap-2"
-            >
-              <Settings className="h-4 w-4" />
-              <span>
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-muted-foreground">
                 {selectedHeaderFooter ? 
-                  (selectedHeaderFooter === "header" ? "Propriedades Header" : "Propriedades Rodapé") : 
-                  "Propriedades Elemento"}
-              </span>
-            </Button>
-          )}
-
-          {/* Show Page settings and Preview buttons only when nothing is selected */}
-          {!hasSelection && (
-            <>
+                  (selectedHeaderFooter === "header" ? "Header Selecionado" : "Rodapé Selecionado") : 
+                  "Elemento Selecionado"}
+              </p>
               <Button
                 variant="outline"
-                size="sm"
-                onClick={handleOpenPageSettings}
-                className="gap-2"
+                size="default"
+                onClick={handleOpenProperties}
+                className="w-full justify-start gap-2"
               >
-                <FileText className="h-4 w-4" />
-                <span className="hidden sm:inline">Página</span>
+                <Settings className="h-4 w-4" />
+                <span>Propriedades</span>
               </Button>
-
-              <Button
-                size="sm"
-                className="gap-2"
-              >
-                <Eye className="h-4 w-4" />
-                <span className="hidden sm:inline">Visualizar</span>
-              </Button>
-            </>
+            </div>
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
