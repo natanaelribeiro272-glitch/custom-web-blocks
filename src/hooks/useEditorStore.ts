@@ -309,6 +309,9 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       const currentPage = state.pages.find((p) => p.id === state.currentPageId);
       if (!currentPage) return state;
 
+      // Garante que o index é válido
+      const validIndex = Math.max(0, Math.min(index ?? 0, currentPage.blocks.length));
+
       const newBlock: Block = {
         id: `block-${Date.now()}`,
         type,
@@ -325,7 +328,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       };
 
       const blocks = [...currentPage.blocks];
-      blocks.splice(index, 0, newBlock);
+      blocks.splice(validIndex, 0, newBlock);
 
       const newState = {
         pages: state.pages.map((p) =>
@@ -333,7 +336,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
             ? { ...p, blocks }
             : p
         ),
-        selectedBlockId: newBlock.id,
+        // Não seleciona o bloco automaticamente para evitar conflitos no mobile
         activeSheet: null,
       };
       if (state.projectId) {
