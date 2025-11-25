@@ -40,6 +40,7 @@ export interface Block {
   id: string;
   type: BlockType;
   elements: BlockElement[];
+  layout?: "vertical" | "horizontal" | "two-columns" | "grid";
   style: {
     backgroundColor?: string;
     backgroundImage?: string;
