@@ -982,41 +982,59 @@ export function PropertiesPanel() {
             {/* Estilos para Título e Texto */}
             {(selectedElement.type === "title" || selectedElement.type === "text") && (
               <>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1.5">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
                     <Label htmlFor="font-size" className="text-xs">Tamanho</Label>
-                    <Input
-                      id="font-size"
-                      placeholder="16px"
-                      value={elementStyle.fontSize || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, fontSize: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
+                    <div className="flex items-center gap-1">
+                      <Input
+                        id="font-size"
+                        type="number"
+                        min="8"
+                        max="120"
+                        step="1"
+                        value={parseInt(elementStyle.fontSize || "16") || 16}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, fontSize: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
                   </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="font-weight" className="text-xs">Peso</Label>
-                    <Select
-                      value={elementStyle.fontWeight || "normal"}
-                      onValueChange={(value) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, fontWeight: value } },
-                        })
-                      }
-                    >
-                      <SelectTrigger className="h-8">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="normal">Normal</SelectItem>
-                        <SelectItem value="bold">Negrito</SelectItem>
-                        <SelectItem value="lighter">Fino</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.fontSize || "16") || 16]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, fontSize: `${value}px` } },
+                      })
+                    }
+                    min={8}
+                    max={120}
+                    step={1}
+                    className="py-1"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="font-weight" className="text-xs">Peso</Label>
+                  <Select
+                    value={elementStyle.fontWeight || "normal"}
+                    onValueChange={(value) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, fontWeight: value } },
+                      })
+                    }
+                  >
+                    <SelectTrigger className="h-8">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="normal">Normal</SelectItem>
+                      <SelectItem value="bold">Negrito</SelectItem>
+                      <SelectItem value="lighter">Fino</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="text-color" className="text-xs">Cor do Texto</Label>
@@ -1123,80 +1141,128 @@ export function PropertiesPanel() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="btn-width" className="text-xs">Largura</Label>
-                    <Input
-                      id="btn-width"
-                      placeholder="auto, 100%, 200px"
-                      value={elementStyle.width || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="btn-height" className="text-xs">Altura</Label>
-                    <Input
-                      id="btn-height"
-                      placeholder="auto, 40px"
-                      value={elementStyle.height || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
-                  </div>
+                
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Largura e Altura</Label>
+                  <Input
+                    placeholder="auto, 100%, 200px"
+                    value={elementStyle.width || ""}
+                    onChange={(e) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
+                      })
+                    }
+                    className="h-8 text-sm"
+                  />
+                  <Input
+                    placeholder="auto, 40px"
+                    value={elementStyle.height || ""}
+                    onChange={(e) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
+                      })
+                    }
+                    className="h-8 text-sm"
+                  />
                 </div>
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="btn-border-radius" className="text-xs">Raio</Label>
-                    <Input
-                      id="btn-border-radius"
-                      placeholder="8px"
-                      value={elementStyle.borderRadius || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Raio da Borda</Label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="0"
+                        max="50"
+                        step="1"
+                        value={parseInt(elementStyle.borderRadius || "0") || 0}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
                   </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="btn-border-width" className="text-xs">Borda</Label>
-                    <Input
-                      id="btn-border-width"
-                      placeholder="2px"
-                      value={elementStyle.borderWidth || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, borderWidth: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="btn-border-color" className="text-xs">Cor Borda</Label>
-                    <Input
-                      id="btn-border-color"
-                      type="color"
-                      className="w-full h-8 p-1 cursor-pointer"
-                      value={elementStyle.borderColor || "#000000"}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, borderColor: e.target.value } },
-                        })
-                      }
-                    />
-                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.borderRadius || "0") || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: `${value}px` } },
+                      })
+                    }
+                    min={0}
+                    max={50}
+                    step={1}
+                    className="py-1"
+                  />
                 </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Espessura da Borda</Label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="0"
+                        max="10"
+                        step="1"
+                        value={parseInt(elementStyle.borderWidth || "0") || 0}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, borderWidth: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.borderWidth || "0") || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, borderWidth: `${value}px` } },
+                      })
+                    }
+                    min={0}
+                    max={10}
+                    step={1}
+                    className="py-1"
+                  />
+                </div>
+
+                {elementStyle.borderWidth && parseInt(elementStyle.borderWidth) > 0 && (
+                  <div className="space-y-1.5">
+                    <Label htmlFor="btn-border-color" className="text-xs">Cor da Borda</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="btn-border-color"
+                        type="color"
+                        className="w-12 h-8 p-1 cursor-pointer"
+                        value={elementStyle.borderColor || "#000000"}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, borderColor: e.target.value } },
+                          })
+                        }
+                      />
+                      <Input
+                        value={elementStyle.borderColor || ""}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, borderColor: e.target.value } },
+                          })
+                        }
+                        className="flex-1 h-8 text-sm"
+                        placeholder="#000000"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <div className="space-y-1.5">
                   <Label htmlFor="btn-padding" className="text-xs">Padding</Label>
                   <Input
@@ -1217,35 +1283,28 @@ export function PropertiesPanel() {
             {/* Estilos para Imagem */}
             {selectedElement.type === "image" && (
               <>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="img-width" className="text-xs">Largura</Label>
-                    <Input
-                      id="img-width"
-                      placeholder="100%, 300px"
-                      value={elementStyle.width || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="img-height" className="text-xs">Altura</Label>
-                    <Input
-                      id="img-height"
-                      placeholder="auto, 200px"
-                      value={elementStyle.height || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
-                  </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Largura e Altura</Label>
+                  <Input
+                    placeholder="100%, 300px, auto"
+                    value={elementStyle.width || ""}
+                    onChange={(e) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
+                      })
+                    }
+                    className="h-8 text-sm"
+                  />
+                  <Input
+                    placeholder="auto, 200px"
+                    value={elementStyle.height || ""}
+                    onChange={(e) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
+                      })
+                    }
+                    className="h-8 text-sm"
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="img-object-fit" className="text-xs">Ajuste</Label>
@@ -1267,35 +1326,71 @@ export function PropertiesPanel() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="img-border-radius" className="text-xs">Raio da Borda</Label>
-                    <Input
-                      id="img-border-radius"
-                      placeholder="0px, 8px, 50%"
-                      value={elementStyle.borderRadius || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Raio da Borda</Label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="0"
+                        max="50"
+                        step="1"
+                        value={parseInt(elementStyle.borderRadius || "0") || 0}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
                   </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="img-border-width" className="text-xs">Espessura</Label>
-                    <Input
-                      id="img-border-width"
-                      placeholder="0px, 2px"
-                      value={elementStyle.borderWidth || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, borderWidth: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
+                  <Slider
+                    value={[parseInt(elementStyle.borderRadius || "0") || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: `${value}px` } },
+                      })
+                    }
+                    min={0}
+                    max={50}
+                    step={1}
+                    className="py-1"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Espessura da Borda</Label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="0"
+                        max="10"
+                        step="1"
+                        value={parseInt(elementStyle.borderWidth || "0") || 0}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, borderWidth: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
                   </div>
+                  <Slider
+                    value={[parseInt(elementStyle.borderWidth || "0") || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, borderWidth: `${value}px` } },
+                      })
+                    }
+                    min={0}
+                    max={10}
+                    step={1}
+                    className="py-1"
+                  />
                 </div>
                 {elementStyle.borderWidth && (
                   <div className="space-y-1.5">
@@ -1331,48 +1426,60 @@ export function PropertiesPanel() {
             {/* Estilos para Vídeo */}
             {selectedElement.type === "video" && (
               <>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="video-width" className="text-xs">Largura</Label>
-                    <Input
-                      id="video-width"
-                      placeholder="100%, 640px"
-                      value={elementStyle.width || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="video-height" className="text-xs">Altura</Label>
-                    <Input
-                      id="video-height"
-                      placeholder="auto, 360px"
-                      value={elementStyle.height || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="video-border-radius" className="text-xs">Raio da Borda</Label>
+                  <Label className="text-xs">Largura e Altura</Label>
                   <Input
-                    id="video-border-radius"
-                    placeholder="0px, 8px"
-                    value={elementStyle.borderRadius || ""}
+                    placeholder="100%, 640px, auto"
+                    value={elementStyle.width || ""}
                     onChange={(e) =>
                       updateElement(blockId, selectedElement.id, {
-                        content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
+                        content: { ...selectedElement.content, style: { ...elementStyle, width: e.target.value } },
                       })
                     }
                     className="h-8 text-sm"
+                  />
+                  <Input
+                    placeholder="auto, 360px"
+                    value={elementStyle.height || ""}
+                    onChange={(e) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
+                      })
+                    }
+                    className="h-8 text-sm"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Raio da Borda</Label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="0"
+                        max="50"
+                        step="1"
+                        value={parseInt(elementStyle.borderRadius || "0") || 0}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.borderRadius || "0") || 0]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: `${value}px` } },
+                      })
+                    }
+                    min={0}
+                    max={50}
+                    step={1}
+                    className="py-1"
                   />
                 </div>
               </>
@@ -1427,17 +1534,36 @@ export function PropertiesPanel() {
                   </Select>
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="link-font-size" className="text-xs">Tamanho</Label>
-                  <Input
-                    id="link-font-size"
-                    placeholder="16px"
-                    value={elementStyle.fontSize || ""}
-                    onChange={(e) =>
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Tamanho</Label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="8"
+                        max="48"
+                        step="1"
+                        value={parseInt(elementStyle.fontSize || "16") || 16}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, fontSize: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.fontSize || "16") || 16]}
+                    onValueChange={([value]) =>
                       updateElement(blockId, selectedElement.id, {
-                        content: { ...selectedElement.content, style: { ...elementStyle, fontSize: e.target.value } },
+                        content: { ...selectedElement.content, style: { ...elementStyle, fontSize: `${value}px` } },
                       })
                     }
-                    className="h-8 text-sm"
+                    min={8}
+                    max={48}
+                    step={1}
+                    className="py-1"
                   />
                 </div>
               </>
@@ -1472,35 +1598,71 @@ export function PropertiesPanel() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="list-font-size" className="text-xs">Tamanho</Label>
-                    <Input
-                      id="list-font-size"
-                      placeholder="16px"
-                      value={elementStyle.fontSize || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, fontSize: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Tamanho</Label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="8"
+                        max="32"
+                        step="1"
+                        value={parseInt(elementStyle.fontSize || "16") || 16}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, fontSize: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
                   </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="list-spacing" className="text-xs">Espaçamento</Label>
-                    <Input
-                      id="list-spacing"
-                      placeholder="8px"
-                      value={elementStyle.gap || ""}
-                      onChange={(e) =>
-                        updateElement(blockId, selectedElement.id, {
-                          content: { ...selectedElement.content, style: { ...elementStyle, gap: e.target.value } },
-                        })
-                      }
-                      className="h-8 text-sm"
-                    />
+                  <Slider
+                    value={[parseInt(elementStyle.fontSize || "16") || 16]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, fontSize: `${value}px` } },
+                      })
+                    }
+                    min={8}
+                    max={32}
+                    step={1}
+                    className="py-1"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Espaçamento</Label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="0"
+                        max="40"
+                        step="2"
+                        value={parseInt(elementStyle.gap || "8") || 8}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, gap: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
                   </div>
+                  <Slider
+                    value={[parseInt(elementStyle.gap || "8") || 8]}
+                    onValueChange={([value]) =>
+                      updateElement(blockId, selectedElement.id, {
+                        content: { ...selectedElement.content, style: { ...elementStyle, gap: `${value}px` } },
+                      })
+                    }
+                    min={0}
+                    max={40}
+                    step={2}
+                    className="py-1"
+                  />
                 </div>
               </>
             )}
@@ -1509,31 +1671,69 @@ export function PropertiesPanel() {
             {selectedElement.type === "carousel" && (
               <>
                 <div className="space-y-1.5">
-                  <Label htmlFor="carousel-height" className="text-xs">Altura</Label>
-                  <Input
-                    id="carousel-height"
-                    placeholder="300px, 400px"
-                    value={elementStyle.height || ""}
-                    onChange={(e) =>
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Altura</Label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="100"
+                        max="800"
+                        step="10"
+                        value={parseInt(elementStyle.height || "300") || 300}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, height: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.height || "300") || 300]}
+                    onValueChange={([value]) =>
                       updateElement(blockId, selectedElement.id, {
-                        content: { ...selectedElement.content, style: { ...elementStyle, height: e.target.value } },
+                        content: { ...selectedElement.content, style: { ...elementStyle, height: `${value}px` } },
                       })
                     }
-                    className="h-8 text-sm"
+                    min={100}
+                    max={800}
+                    step={10}
+                    className="py-1"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="carousel-border-radius" className="text-xs">Raio da Borda</Label>
-                  <Input
-                    id="carousel-border-radius"
-                    placeholder="0px, 12px"
-                    value={elementStyle.borderRadius || ""}
-                    onChange={(e) =>
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs">Raio da Borda</Label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        type="number"
+                        min="0"
+                        max="50"
+                        step="1"
+                        value={parseInt(elementStyle.borderRadius || "0") || 0}
+                        onChange={(e) =>
+                          updateElement(blockId, selectedElement.id, {
+                            content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: `${e.target.value}px` } },
+                          })
+                        }
+                        className="w-16 h-7 text-xs text-right"
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  <Slider
+                    value={[parseInt(elementStyle.borderRadius || "0") || 0]}
+                    onValueChange={([value]) =>
                       updateElement(blockId, selectedElement.id, {
-                        content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: e.target.value } },
+                        content: { ...selectedElement.content, style: { ...elementStyle, borderRadius: `${value}px` } },
                       })
                     }
-                    className="h-8 text-sm"
+                    min={0}
+                    max={50}
+                    step={1}
+                    className="py-1"
                   />
                 </div>
               </>
