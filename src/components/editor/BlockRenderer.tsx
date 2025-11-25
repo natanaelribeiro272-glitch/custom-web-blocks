@@ -106,7 +106,12 @@ export function BlockRenderer({ block }: BlockRendererProps) {
           </p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className={cn(
+          block.layout === "horizontal" ? "flex flex-row gap-3 overflow-x-auto" :
+          block.layout === "two-columns" ? "grid grid-cols-2 gap-3" :
+          block.layout === "grid" ? "grid grid-cols-2 sm:grid-cols-3 gap-3" :
+          "space-y-3" // vertical (default)
+        )}>
           {block.elements.map((element) => (
             <ElementRenderer key={element.id} element={element} blockId={block.id} />
           ))}

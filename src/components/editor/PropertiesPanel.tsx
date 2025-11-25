@@ -2177,6 +2177,91 @@ export function PropertiesPanel() {
   if (selectedBlock) {
     return (
       <div className="space-y-3">
+        {/* Layout do Bloco */}
+        <div className="space-y-1.5">
+          <Label className="text-xs">Layout dos Elementos</Label>
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              variant={!selectedBlock.layout || selectedBlock.layout === "vertical" ? "default" : "outline"}
+              size="sm"
+              className="h-auto py-2 flex flex-col gap-1"
+              onClick={() =>
+                updateBlock(selectedBlock.id, {
+                  layout: "vertical",
+                })
+              }
+            >
+              <div className="flex flex-col gap-0.5 w-full">
+                <div className="h-1.5 bg-current rounded opacity-70"></div>
+                <div className="h-1.5 bg-current rounded opacity-70"></div>
+                <div className="h-1.5 bg-current rounded opacity-70"></div>
+              </div>
+              <span className="text-xs">Vertical</span>
+            </Button>
+            <Button
+              variant={selectedBlock.layout === "horizontal" ? "default" : "outline"}
+              size="sm"
+              className="h-auto py-2 flex flex-col gap-1"
+              onClick={() =>
+                updateBlock(selectedBlock.id, {
+                  layout: "horizontal",
+                })
+              }
+            >
+              <div className="flex gap-0.5 w-full">
+                <div className="w-1.5 h-6 bg-current rounded opacity-70"></div>
+                <div className="w-1.5 h-6 bg-current rounded opacity-70"></div>
+                <div className="w-1.5 h-6 bg-current rounded opacity-70"></div>
+              </div>
+              <span className="text-xs">Horizontal</span>
+            </Button>
+            <Button
+              variant={selectedBlock.layout === "two-columns" ? "default" : "outline"}
+              size="sm"
+              className="h-auto py-2 flex flex-col gap-1"
+              onClick={() =>
+                updateBlock(selectedBlock.id, {
+                  layout: "two-columns",
+                })
+              }
+            >
+              <div className="flex gap-0.5 w-full">
+                <div className="flex-1 flex flex-col gap-0.5">
+                  <div className="h-1 bg-current rounded opacity-70"></div>
+                  <div className="h-1 bg-current rounded opacity-70"></div>
+                </div>
+                <div className="flex-1 flex flex-col gap-0.5">
+                  <div className="h-1 bg-current rounded opacity-70"></div>
+                  <div className="h-1 bg-current rounded opacity-70"></div>
+                </div>
+              </div>
+              <span className="text-xs">2 Colunas</span>
+            </Button>
+            <Button
+              variant={selectedBlock.layout === "grid" ? "default" : "outline"}
+              size="sm"
+              className="h-auto py-2 flex flex-col gap-1"
+              onClick={() =>
+                updateBlock(selectedBlock.id, {
+                  layout: "grid",
+                })
+              }
+            >
+              <div className="grid grid-cols-3 gap-0.5 w-full">
+                <div className="h-3 bg-current rounded opacity-70"></div>
+                <div className="h-3 bg-current rounded opacity-70"></div>
+                <div className="h-3 bg-current rounded opacity-70"></div>
+                <div className="h-3 bg-current rounded opacity-70"></div>
+                <div className="h-3 bg-current rounded opacity-70"></div>
+                <div className="h-3 bg-current rounded opacity-70"></div>
+              </div>
+              <span className="text-xs">Grade</span>
+            </Button>
+          </div>
+        </div>
+
+        <Separator />
+
         <div className="space-y-1.5">
           <Label htmlFor="bg-color" className="text-xs">Cor de Fundo</Label>
           <div className="flex gap-2">
