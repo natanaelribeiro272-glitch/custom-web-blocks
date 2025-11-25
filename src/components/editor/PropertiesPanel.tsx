@@ -1267,7 +1267,7 @@ export function PropertiesPanel() {
                   <Label htmlFor="btn-padding" className="text-xs">Padding</Label>
                   <Input
                     id="btn-padding"
-                    placeholder="12px 24px"
+                    placeholder="12px 24px ou 16px"
                     value={elementStyle.padding || ""}
                     onChange={(e) =>
                       updateElement(blockId, selectedElement.id, {
