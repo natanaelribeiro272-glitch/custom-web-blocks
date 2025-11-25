@@ -1,6 +1,6 @@
 import { useEditorStore } from "@/hooks/useEditorStore";
 import { Button } from "@/components/ui/button";
-import { Settings, FileText, Eye, Plus, ArrowLeft, ChevronRight, ChevronLeft } from "lucide-react";
+import { Settings, FileText, Eye, Plus, ArrowLeft } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -43,134 +43,145 @@ export function FloatingBottomBar() {
   const showAddElement = selectedBlockId && !selectedElementId;
 
   return (
-    <>
-      {/* Toggle button - Always visible on the right side */}
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="fixed right-0 top-1/2 -translate-y-1/2 z-50 bg-primary text-primary-foreground p-3 rounded-l-xl shadow-lg hover:bg-primary/90 transition-all"
-        aria-label={isExpanded ? "Fechar menu" : "Abrir menu"}
-      >
-        {isExpanded ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
-      </button>
-
-      <div
-        className={cn(
-          "fixed right-0 top-0 h-full w-80 bg-card border-l border-border z-40 transition-transform duration-300 ease-in-out",
-          isExpanded ? "translate-x-0" : "translate-x-full"
-        )}
-      >
-        <div className="flex flex-col h-full p-4 gap-4 overflow-y-auto">
-          {/* Back button - always visible */}
-          <Button
-            variant="outline"
-            size="default"
-            onClick={() => navigate("/dashboard")}
-            className="w-full justify-start gap-2 font-medium"
+    <div
+      className={cn(
+        "fixed left-0 right-0 z-50 transition-all duration-300 ease-in-out",
+        "bottom-2"
+      )}
+    >
+      <div className="max-w-2xl mx-auto px-2">
+        <div 
+          className={cn(
+            "bg-card border border-border rounded-xl shadow-xl overflow-hidden transition-all duration-300",
+            isExpanded ? "max-h-[80vh]" : "max-h-14"
+          )}
+        >
+          {/* Toggle bar - always visible */}
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="w-full p-3 flex items-center justify-center hover:bg-muted/50 transition-colors"
           >
-            <ArrowLeft className="h-4 w-4" />
-            <span>Voltar para Dashboard</span>
-          </Button>
+            <div className="w-12 h-1 bg-muted-foreground/30 rounded-full" />
+          </button>
 
-          {/* Page selector with add button - only show when nothing is selected */}
-          {!hasSelection && (
-            <>
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Página Atual</label>
-                <div className="flex items-center gap-2">
-                  <Select value={currentPageId || ""} onValueChange={setCurrentPage}>
-                    <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="Selecione uma página" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {pages.map((page) => (
-                        <SelectItem key={page.id} value={page.id}>
-                          {page.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => {
-                      const { addPage } = useEditorStore.getState();
-                      addPage();
-                    }}
-                    title="Nova página"
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-
-              <div className="border-t border-border pt-4 space-y-2">
+          {/* Expanded content */}
+          {isExpanded && (
+            <div className="max-h-[calc(80vh-3.5rem)] overflow-y-auto">
+              <div className="p-4 space-y-4">
+                {/* Back button - always visible */}
                 <Button
                   variant="outline"
                   size="default"
-                  onClick={handleOpenPageSettings}
+                  onClick={() => navigate("/dashboard")}
                   className="w-full justify-start gap-2 font-medium"
                 >
-                  <FileText className="h-4 w-4" />
-                  <span>Configurações da Página</span>
+                  <ArrowLeft className="h-4 w-4" />
+                  <span>Voltar para Dashboard</span>
                 </Button>
 
-                <Button
-                  size="default"
-                  className="w-full justify-start gap-2 font-medium"
-                >
-                  <Eye className="h-4 w-4" />
-                  <span>Visualizar Site</span>
-                </Button>
+                {/* Page selector with add button - only show when nothing is selected */}
+                {!hasSelection && (
+                  <>
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Página Atual</label>
+                      <div className="flex items-center gap-2">
+                        <Select value={currentPageId || ""} onValueChange={setCurrentPage}>
+                          <SelectTrigger className="flex-1">
+                            <SelectValue placeholder="Selecione uma página" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {pages.map((page) => (
+                              <SelectItem key={page.id} value={page.id}>
+                                {page.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => {
+                            const { addPage } = useEditorStore.getState();
+                            addPage();
+                          }}
+                          title="Nova página"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-border pt-4 space-y-2">
+                      <Button
+                        variant="outline"
+                        size="default"
+                        onClick={handleOpenPageSettings}
+                        className="w-full justify-start gap-2 font-medium"
+                      >
+                        <FileText className="h-4 w-4" />
+                        <span>Configurações da Página</span>
+                      </Button>
+
+                      <Button
+                        size="default"
+                        className="w-full justify-start gap-2 font-medium"
+                      >
+                        <Eye className="h-4 w-4" />
+                        <span>Visualizar Site</span>
+                      </Button>
+                    </div>
+                  </>
+                )}
+
+                {/* Show add element and properties when block is selected */}
+                {showAddElement && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Bloco Selecionado</p>
+                    <Button
+                      variant="default"
+                      size="default"
+                      onClick={handleAddElement}
+                      className="w-full justify-start gap-2 font-medium"
+                    >
+                      <Plus className="h-4 w-4" />
+                      <span>Adicionar Elemento</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="default"
+                      onClick={handleOpenProperties}
+                      className="w-full justify-start gap-2 font-medium"
+                    >
+                      <Settings className="h-4 w-4" />
+                      <span>Propriedades do Bloco</span>
+                    </Button>
+                  </div>
+                )}
+
+                {/* Show only properties when element, header, or footer is selected */}
+                {(selectedElementId || selectedHeaderFooter) && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                      {selectedHeaderFooter ? 
+                        (selectedHeaderFooter === "header" ? "Header Selecionado" : "Rodapé Selecionado") : 
+                        "Elemento Selecionado"}
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="default"
+                      onClick={handleOpenProperties}
+                      className="w-full justify-start gap-2 font-medium"
+                    >
+                      <Settings className="h-4 w-4" />
+                      <span>Propriedades</span>
+                    </Button>
+                  </div>
+                )}
               </div>
-            </>
-          )}
-
-          {/* Show add element and properties when block is selected */}
-          {showAddElement && (
-            <div className="space-y-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Bloco Selecionado</p>
-              <Button
-                variant="default"
-                size="default"
-                onClick={handleAddElement}
-                className="w-full justify-start gap-2 font-medium"
-              >
-                <Plus className="h-4 w-4" />
-                <span>Adicionar Elemento</span>
-              </Button>
-              <Button
-                variant="outline"
-                size="default"
-                onClick={handleOpenProperties}
-                className="w-full justify-start gap-2 font-medium"
-              >
-                <Settings className="h-4 w-4" />
-                <span>Propriedades do Bloco</span>
-              </Button>
-            </div>
-          )}
-
-          {/* Show only properties when element, header, or footer is selected */}
-          {(selectedElementId || selectedHeaderFooter) && (
-            <div className="space-y-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                {selectedHeaderFooter ? 
-                  (selectedHeaderFooter === "header" ? "Header Selecionado" : "Rodapé Selecionado") : 
-                  "Elemento Selecionado"}
-              </p>
-              <Button
-                variant="outline"
-                size="default"
-                onClick={handleOpenProperties}
-                className="w-full justify-start gap-2 font-medium"
-              >
-                <Settings className="h-4 w-4" />
-                <span>Propriedades</span>
-              </Button>
             </div>
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
