@@ -1,199 +1,269 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Plus, Globe, Calendar, Trash2, Edit } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Plus, ExternalLink, Trash2, LogOut, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Project {
   id: string;
   name: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
 }
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
+  const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
-    // Carregar projetos salvos do localStorage
-    const savedProjects = localStorage.getItem("userProjects");
-    if (savedProjects) {
-      setProjects(JSON.parse(savedProjects));
+    if (!user) {
+      navigate("/auth");
+      return;
     }
-  }, []);
+    loadProjects();
+  }, [user, navigate]);
 
-  const handleCreateProject = () => {
-    const trimmedName = newProjectName.trim();
+  const loadProjects = async () => {
+    if (!user) return;
     
-    if (!trimmedName) {
-      toast.error("Por favor, digite um nome para o site");
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      toast({
+        title: "Erro ao carregar projetos",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      setProjects(data || []);
+    }
+    setLoading(false);
+  };
+
+  const handleCreateProject = async () => {
+    if (!newProjectName.trim()) {
+      toast({
+        title: "Nome obrigatório",
+        description: "Por favor, dê um nome ao seu projeto.",
+        variant: "destructive",
+      });
       return;
     }
 
-    if (trimmedName.length > 50) {
-      toast.error("Nome muito longo (máximo 50 caracteres)");
+    if (!user) return;
+
+    const newProjectId = `project-${Date.now()}`;
+
+    const { error } = await supabase
+      .from('projects')
+      .insert({
+        id: newProjectId,
+        user_id: user.id,
+        name: newProjectName.trim(),
+      });
+
+    if (error) {
+      toast({
+        title: "Erro ao criar projeto",
+        description: error.message,
+        variant: "destructive",
+      });
       return;
     }
 
-    const newProject: Project = {
-      id: `project-${Date.now()}`,
-      name: trimmedName,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    // Initialize empty project data in localStorage
+    localStorage.setItem(newProjectId, JSON.stringify({
+      pages: [{
+        id: "page-1",
+        name: "Home",
+        backgroundColor: "#ffffff",
+        header: {
+          template: "none",
+          links: [],
+        },
+        footer: {
+          template: "none",
+          links: [],
+        },
+        blocks: [],
+      }],
+      currentPageId: "page-1",
+    }));
 
-    const updatedProjects = [...projects, newProject];
-    setProjects(updatedProjects);
-    localStorage.setItem("userProjects", JSON.stringify(updatedProjects));
-    
-    // Limpar e fechar
-    setNewProjectName("");
+    toast({
+      title: "Projeto criado!",
+      description: `${newProjectName} foi criado com sucesso.`,
+    });
+
     setShowCreateDialog(false);
-    
-    toast.success(`Site "${trimmedName}" criado com sucesso!`);
-    
-    // Redirecionar para o editor com o novo projeto
-    navigate(`/editor?project=${newProject.id}`);
+    setNewProjectName("");
+    loadProjects();
+    navigate(`/editor?project=${newProjectId}`);
   };
 
-  const deleteProject = (projectId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    const updatedProjects = projects.filter((p) => p.id !== projectId);
-    setProjects(updatedProjects);
-    localStorage.setItem("userProjects", JSON.stringify(updatedProjects));
-    
-    // Limpar dados do projeto deletado
-    localStorage.removeItem(`editorState-${projectId}`);
-    
-    toast.success("Site removido");
-  };
+  const handleDeleteProject = async (id: string) => {
+    const { error } = await supabase
+      .from('projects')
+      .delete()
+      .eq('id', id);
 
-  const openProject = (projectId: string) => {
-    navigate(`/editor?project=${projectId}`);
-  };
+    if (error) {
+      toast({
+        title: "Erro ao excluir projeto",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
+    localStorage.removeItem(id);
+    setProjectToDelete(null);
+    loadProjects();
+    toast({
+      title: "Projeto removido",
+      description: "O projeto foi removido com sucesso.",
     });
   };
 
+  const openEditor = (projectId: string) => {
+    navigate(`/editor?project=${projectId}`);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold tracking-tight">Meus Sites</h1>
-              <p className="text-sm text-muted-foreground mt-1 font-light">
-                Gerencie todos os seus projetos
-              </p>
-            </div>
-            <Button onClick={() => setShowCreateDialog(true)} size="lg" className="gap-2 font-medium">
-              <Plus className="h-4 w-4" />
-              Novo Site
+    <div className="min-h-screen bg-background p-4 md:p-8">
+      <div className="max-w-6xl mx-auto space-y-8">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h1 className="text-4xl font-bold tracking-tight">Meus Projetos</h1>
+            <p className="text-muted-foreground mt-2 flex items-center gap-2">
+              <User className="h-4 w-4" />
+              {user?.email}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button 
+              size="lg" 
+              onClick={() => setShowCreateDialog(true)}
+              className="gap-2"
+            >
+              <Plus className="h-5 w-5" />
+              Novo Projeto
+            </Button>
+            <Button 
+              variant="outline"
+              size="lg" 
+              onClick={handleSignOut}
+              className="gap-2"
+            >
+              <LogOut className="h-5 w-5" />
+              Sair
             </Button>
           </div>
         </div>
-      </header>
 
-      {/* Projects Grid */}
-      <div className="container mx-auto px-4 py-8">
-        {projects.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-16 h-16 bg-card border border-border rounded-xl flex items-center justify-center mb-6">
-              <Globe className="h-8 w-8 text-muted-foreground" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Nenhum site ainda</h3>
-            <p className="text-muted-foreground mb-6 max-w-md text-sm font-light">
-              Comece criando seu primeiro site. É rápido, fácil e totalmente
-              personalizável!
-            </p>
-            <Button onClick={() => setShowCreateDialog(true)} size="lg" className="gap-2 font-medium">
-              <Plus className="h-4 w-4" />
-              Criar Primeiro Site
-            </Button>
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </CardContent>
+              </Card>
+            ))}
           </div>
+        ) : projects.length === 0 ? (
+          <Card className="border-dashed">
+            <CardContent className="flex flex-col items-center justify-center py-16 text-center">
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                <Plus className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Nenhum projeto criado ainda</h3>
+              <p className="text-muted-foreground mb-6 max-w-sm">
+                Comece criando seu primeiro projeto. É rápido e fácil!
+              </p>
+              <Button onClick={() => setShowCreateDialog(true)} className="gap-2">
+                <Plus className="h-4 w-4" />
+                Criar Primeiro Projeto
+              </Button>
+            </CardContent>
+          </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project) => (
-              <Card
-                key={project.id}
-                className="group hover:border-primary/50 transition-all cursor-pointer overflow-hidden bg-card"
-                onClick={() => openProject(project.id)}
-              >
-                <div className="aspect-video bg-muted flex items-center justify-center border-b border-border">
-                  <Globe className="h-12 w-12 text-muted-foreground/40" />
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-base mb-2 group-hover:text-primary transition-colors">
-                    {project.name}
-                  </h3>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4 font-light">
-                    <Calendar className="h-3 w-3" />
-                    <span>Atualizado {formatDate(project.updatedAt)}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 font-medium"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openProject(project.id);
-                      }}
-                    >
-                      <Edit className="h-3 w-3 mr-1" />
-                      Editar
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={(e) => deleteProject(project.id, e)}
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
+              <Card key={project.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <span className="truncate">{project.name}</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Criado em {new Date(project.created_at).toLocaleDateString('pt-BR')}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Button 
+                    className="w-full gap-2" 
+                    onClick={() => openEditor(project.id)}
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Abrir Editor
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full gap-2 text-destructive hover:text-destructive" 
+                    onClick={() => setProjectToDelete(project.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Excluir
+                  </Button>
+                </CardContent>
               </Card>
             ))}
           </div>
         )}
       </div>
 
-      {/* Create Project Dialog */}
+      {/* Create Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Criar Novo Site</DialogTitle>
+            <DialogTitle>Criar Novo Projeto</DialogTitle>
             <DialogDescription>
-              Escolha um nome para o seu novo site. Você pode alterá-lo depois.
+              Dê um nome ao seu novo projeto. Você poderá alterá-lo depois.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="site-name">Nome do Site</Label>
+              <Label htmlFor="project-name">Nome do Projeto</Label>
               <Input
-                id="site-name"
-                placeholder="Ex: Meu Portfólio, Landing Page..."
+                id="project-name"
+                placeholder="Ex: Meu Portfólio, Loja Virtual, etc."
                 value={newProjectName}
                 onChange={(e) => setNewProjectName(e.target.value)}
                 onKeyDown={(e) => {
@@ -201,27 +271,40 @@ const Dashboard = () => {
                     handleCreateProject();
                   }
                 }}
-                maxLength={50}
-                autoFocus
               />
-              <p className="text-xs text-muted-foreground">
-                {newProjectName.length}/50 caracteres
-              </p>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => {
-              setShowCreateDialog(false);
-              setNewProjectName("");
-            }}>
+            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
               Cancelar
             </Button>
             <Button onClick={handleCreateProject}>
-              Criar Site
+              Criar Projeto
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!projectToDelete} onOpenChange={() => setProjectToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação não pode ser desfeita. O projeto será permanentemente removido.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => projectToDelete && handleDeleteProject(projectToDelete)}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
