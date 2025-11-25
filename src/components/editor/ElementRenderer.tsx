@@ -103,21 +103,26 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
       );
 
     case "image":
+      const getImageJustify = () => {
+        if (element.content.style?.marginLeft === "auto" && element.content.style?.marginRight === "auto") return "center";
+        if (element.content.style?.marginLeft === "auto") return "flex-end";
+        return "flex-start";
+      };
+
       return (
-        <div
-          className={cn(baseClasses, "cursor-pointer overflow-hidden")}
-          onClick={handleClick}
-          style={{
-            width: element.content.style?.width || '100%',
-            height: element.content.style?.height || 'auto',
-            borderRadius: element.content.style?.borderRadius,
-            borderWidth: element.content.style?.borderWidth,
-            borderColor: element.content.style?.borderColor,
-            borderStyle: element.content.style?.borderWidth ? 'solid' : undefined,
-            marginLeft: element.content.style?.marginLeft,
-            marginRight: element.content.style?.marginRight,
-          }}
-        >
+        <div className="flex" style={{ justifyContent: getImageJustify() }}>
+          <div
+            className={cn(baseClasses, "cursor-pointer overflow-hidden")}
+            onClick={handleClick}
+            style={{
+              width: element.content.style?.width || '100%',
+              height: element.content.style?.height || 'auto',
+              borderRadius: element.content.style?.borderRadius,
+              borderWidth: element.content.style?.borderWidth,
+              borderColor: element.content.style?.borderColor,
+              borderStyle: element.content.style?.borderWidth ? 'solid' : undefined,
+            }}
+          >
           {element.content.url ? (
             <img 
               src={element.content.url} 
@@ -133,23 +138,29 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
               <span className="text-xs">Adicione uma imagem</span>
             </div>
           )}
+          </div>
         </div>
       );
 
     case "video":
+      const getVideoJustify = () => {
+        if (element.content.style?.marginLeft === "auto" && element.content.style?.marginRight === "auto") return "center";
+        if (element.content.style?.marginLeft === "auto") return "flex-end";
+        return "flex-start";
+      };
+
       return (
-        <div
-          className={cn(baseClasses, "bg-muted flex items-center justify-center cursor-pointer overflow-hidden")}
-          onClick={handleClick}
-          style={{
-            width: element.content.style?.width || '100%',
-            height: element.content.style?.height || 'auto',
-            borderRadius: element.content.style?.borderRadius,
-            aspectRatio: !element.content.style?.height ? '16/9' : undefined,
-            marginLeft: element.content.style?.marginLeft,
-            marginRight: element.content.style?.marginRight,
-          }}
-        >
+        <div className="flex" style={{ justifyContent: getVideoJustify() }}>
+          <div
+            className={cn(baseClasses, "bg-muted flex items-center justify-center cursor-pointer overflow-hidden")}
+            onClick={handleClick}
+            style={{
+              width: element.content.style?.width || '100%',
+              height: element.content.style?.height || 'auto',
+              borderRadius: element.content.style?.borderRadius,
+              aspectRatio: !element.content.style?.height ? '16/9' : undefined,
+            }}
+          >
           {element.content.url ? (
             element.content.url.startsWith('data:') ? (
               <video controls className="w-full h-full">
@@ -169,17 +180,23 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
               <span className="text-xs">URL do vídeo</span>
             </div>
           )}
+          </div>
         </div>
       );
 
     case "button":
+      const getButtonJustify = () => {
+        if (element.content.style?.marginLeft === "auto" && element.content.style?.marginRight === "auto") return "center";
+        if (element.content.style?.marginLeft === "auto") return "flex-end";
+        return "flex-start";
+      };
+
       return (
         <div 
           onClick={handleClick} 
-          className="cursor-pointer"
+          className="cursor-pointer flex"
           style={{
-            marginLeft: element.content.style?.marginLeft,
-            marginRight: element.content.style?.marginRight,
+            justifyContent: getButtonJustify(),
           }}
         >
           <Button 
@@ -188,7 +205,7 @@ export function ElementRenderer({ element, blockId }: ElementRendererProps) {
             style={{
               backgroundColor: element.content.style?.backgroundColor,
               color: element.content.style?.color,
-              width: element.content.style?.width || '100%',
+              width: element.content.style?.width,
               height: element.content.style?.height,
               borderRadius: element.content.style?.borderRadius,
               borderWidth: element.content.style?.borderWidth,
