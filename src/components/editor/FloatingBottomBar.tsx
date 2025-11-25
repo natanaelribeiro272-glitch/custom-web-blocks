@@ -8,9 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { PropertiesPanel } from "./PropertiesPanel";
 
 export function FloatingBottomBar() {
   const navigate = useNavigate();
@@ -26,9 +27,12 @@ export function FloatingBottomBar() {
   
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleOpenProperties = () => {
-    setActiveSheet("properties");
-  };
+  // Auto expand when something is selected
+  useEffect(() => {
+    if (selectedBlockId || selectedElementId || selectedHeaderFooter) {
+      setIsExpanded(true);
+    }
+  }, [selectedBlockId, selectedElementId, selectedHeaderFooter]);
 
   const handleOpenPageSettings = () => {
     setActiveSheet("page-settings");
@@ -133,48 +137,38 @@ export function FloatingBottomBar() {
                   </>
                 )}
 
-                {/* Show add element and properties when block is selected */}
+                {/* Show properties when block is selected */}
                 {showAddElement && (
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Bloco Selecionado</p>
-                    <Button
-                      variant="default"
-                      size="default"
-                      onClick={handleAddElement}
-                      className="w-full justify-start gap-2 font-medium"
-                    >
-                      <Plus className="h-4 w-4" />
-                      <span>Adicionar Elemento</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="default"
-                      onClick={handleOpenProperties}
-                      className="w-full justify-start gap-2 font-medium"
-                    >
-                      <Settings className="h-4 w-4" />
-                      <span>Propriedades do Bloco</span>
-                    </Button>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Bloco Selecionado</p>
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={handleAddElement}
+                        className="gap-2 font-medium"
+                      >
+                        <Plus className="h-3 w-3" />
+                        <span>Adicionar Elemento</span>
+                      </Button>
+                    </div>
+                    <div className="border-t border-border pt-4">
+                      <PropertiesPanel />
+                    </div>
                   </div>
                 )}
 
-                {/* Show only properties when element, header, or footer is selected */}
+                {/* Show properties when element, header, or footer is selected */}
                 {(selectedElementId || selectedHeaderFooter) && (
-                  <div className="space-y-2">
+                  <div className="space-y-4">
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                       {selectedHeaderFooter ? 
                         (selectedHeaderFooter === "header" ? "Header Selecionado" : "Rodapé Selecionado") : 
                         "Elemento Selecionado"}
                     </p>
-                    <Button
-                      variant="outline"
-                      size="default"
-                      onClick={handleOpenProperties}
-                      className="w-full justify-start gap-2 font-medium"
-                    >
-                      <Settings className="h-4 w-4" />
-                      <span>Propriedades</span>
-                    </Button>
+                    <div className="border-t border-border pt-4">
+                      <PropertiesPanel />
+                    </div>
                   </div>
                 )}
               </div>

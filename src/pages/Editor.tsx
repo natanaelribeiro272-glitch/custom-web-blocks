@@ -2,7 +2,6 @@ import { MobilePreview } from "@/components/editor/MobilePreview";
 import { FloatingBottomBar } from "@/components/editor/FloatingBottomBar";
 import { AddBlockSheet } from "@/components/editor/AddBlockSheet";
 import { AddElementSheet } from "@/components/editor/AddElementSheet";
-import { PropertiesSheet } from "@/components/editor/PropertiesSheet";
 import { PageSettingsSheet } from "@/components/editor/PageSettingsSheet";
 import { useEditorStore } from "@/hooks/useEditorStore";
 import { useEffect } from "react";
@@ -36,10 +35,7 @@ const Editor = () => {
         open={activeSheet === "add-element"} 
         onOpenChange={(open) => !open && setActiveSheet(null)} 
       />
-      <PropertiesSheet 
-        open={activeSheet === "properties"} 
-        onOpenChange={(open) => !open && setActiveSheet(null)} 
-      />
+      {/* Properties are now shown in the FloatingBottomBar */}
       <PageSettingsSheet 
         open={activeSheet === "page-settings"} 
         onOpenChange={(open) => !open && setActiveSheet(null)} 
