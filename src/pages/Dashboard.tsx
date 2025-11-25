@@ -98,17 +98,17 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-4">
+      <header className="border-b border-border bg-card/50 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-display font-bold">Meus Sites</h1>
-              <p className="text-sm text-muted-foreground mt-1">
+              <h1 className="text-2xl font-semibold tracking-tight">Meus Sites</h1>
+              <p className="text-sm text-muted-foreground mt-1 font-light">
                 Gerencie todos os seus projetos
               </p>
             </div>
-            <Button onClick={() => setShowCreateDialog(true)} size="lg" className="gap-2">
-              <Plus className="h-5 w-5" />
+            <Button onClick={() => setShowCreateDialog(true)} size="lg" className="gap-2 font-medium">
+              <Plus className="h-4 w-4" />
               Novo Site
             </Button>
           </div>
@@ -119,35 +119,35 @@ const Dashboard = () => {
       <div className="container mx-auto px-4 py-8">
         {projects.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-              <Globe className="h-10 w-10 text-primary" />
+            <div className="w-16 h-16 bg-card border border-border rounded-xl flex items-center justify-center mb-6">
+              <Globe className="h-8 w-8 text-muted-foreground" />
             </div>
             <h3 className="text-xl font-semibold mb-2">Nenhum site ainda</h3>
-            <p className="text-muted-foreground mb-6 max-w-md">
+            <p className="text-muted-foreground mb-6 max-w-md text-sm font-light">
               Comece criando seu primeiro site. É rápido, fácil e totalmente
               personalizável!
             </p>
-            <Button onClick={() => setShowCreateDialog(true)} size="lg" className="gap-2">
-              <Plus className="h-5 w-5" />
+            <Button onClick={() => setShowCreateDialog(true)} size="lg" className="gap-2 font-medium">
+              <Plus className="h-4 w-4" />
               Criar Primeiro Site
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {projects.map((project) => (
               <Card
                 key={project.id}
-                className="group hover:shadow-lg transition-all cursor-pointer overflow-hidden"
+                className="group hover:border-primary/50 transition-all cursor-pointer overflow-hidden bg-card"
                 onClick={() => openProject(project.id)}
               >
-                <div className="aspect-video bg-gradient-to-br from-primary/20 via-accent/20 to-primary/10 flex items-center justify-center border-b">
-                  <Globe className="h-12 w-12 text-primary/40" />
+                <div className="aspect-video bg-muted flex items-center justify-center border-b border-border">
+                  <Globe className="h-12 w-12 text-muted-foreground/40" />
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
+                  <h3 className="font-semibold text-base mb-2 group-hover:text-primary transition-colors">
                     {project.name}
                   </h3>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4 font-light">
                     <Calendar className="h-3 w-3" />
                     <span>Atualizado {formatDate(project.updatedAt)}</span>
                   </div>
@@ -155,7 +155,7 @@ const Dashboard = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1"
+                      className="flex-1 font-medium"
                       onClick={(e) => {
                         e.stopPropagation();
                         openProject(project.id);

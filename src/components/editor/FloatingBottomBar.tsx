@@ -53,10 +53,9 @@ export function FloatingBottomBar() {
         {isExpanded ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
       </button>
 
-      {/* Sidebar menu */}
       <div
         className={cn(
-          "fixed right-0 top-0 h-full w-80 bg-card border-l border-border shadow-2xl z-40 transition-transform duration-300 ease-in-out",
+          "fixed right-0 top-0 h-full w-80 bg-card border-l border-border z-40 transition-transform duration-300 ease-in-out",
           isExpanded ? "translate-x-0" : "translate-x-full"
         )}
       >
@@ -66,7 +65,7 @@ export function FloatingBottomBar() {
             variant="outline"
             size="default"
             onClick={() => navigate("/dashboard")}
-            className="w-full justify-start gap-2"
+            className="w-full justify-start gap-2 font-medium"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Voltar para Dashboard</span>
@@ -76,7 +75,7 @@ export function FloatingBottomBar() {
           {!hasSelection && (
             <>
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-muted-foreground">Página Atual</label>
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Página Atual</label>
                 <div className="flex items-center gap-2">
                   <Select value={currentPageId || ""} onValueChange={setCurrentPage}>
                     <SelectTrigger className="flex-1">
@@ -104,12 +103,12 @@ export function FloatingBottomBar() {
                 </div>
               </div>
 
-              <div className="border-t pt-4 space-y-2">
+              <div className="border-t border-border pt-4 space-y-2">
                 <Button
                   variant="outline"
                   size="default"
                   onClick={handleOpenPageSettings}
-                  className="w-full justify-start gap-2"
+                  className="w-full justify-start gap-2 font-medium"
                 >
                   <FileText className="h-4 w-4" />
                   <span>Configurações da Página</span>
@@ -117,7 +116,7 @@ export function FloatingBottomBar() {
 
                 <Button
                   size="default"
-                  className="w-full justify-start gap-2"
+                  className="w-full justify-start gap-2 font-medium"
                 >
                   <Eye className="h-4 w-4" />
                   <span>Visualizar Site</span>
@@ -129,12 +128,12 @@ export function FloatingBottomBar() {
           {/* Show add element and properties when block is selected */}
           {showAddElement && (
             <div className="space-y-2">
-              <p className="text-xs font-semibold text-muted-foreground">Bloco Selecionado</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Bloco Selecionado</p>
               <Button
                 variant="default"
                 size="default"
                 onClick={handleAddElement}
-                className="w-full justify-start gap-2"
+                className="w-full justify-start gap-2 font-medium"
               >
                 <Plus className="h-4 w-4" />
                 <span>Adicionar Elemento</span>
@@ -143,7 +142,7 @@ export function FloatingBottomBar() {
                 variant="outline"
                 size="default"
                 onClick={handleOpenProperties}
-                className="w-full justify-start gap-2"
+                className="w-full justify-start gap-2 font-medium"
               >
                 <Settings className="h-4 w-4" />
                 <span>Propriedades do Bloco</span>
@@ -154,7 +153,7 @@ export function FloatingBottomBar() {
           {/* Show only properties when element, header, or footer is selected */}
           {(selectedElementId || selectedHeaderFooter) && (
             <div className="space-y-2">
-              <p className="text-xs font-semibold text-muted-foreground">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                 {selectedHeaderFooter ? 
                   (selectedHeaderFooter === "header" ? "Header Selecionado" : "Rodapé Selecionado") : 
                   "Elemento Selecionado"}
@@ -163,7 +162,7 @@ export function FloatingBottomBar() {
                 variant="outline"
                 size="default"
                 onClick={handleOpenProperties}
-                className="w-full justify-start gap-2"
+                className="w-full justify-start gap-2 font-medium"
               >
                 <Settings className="h-4 w-4" />
                 <span>Propriedades</span>

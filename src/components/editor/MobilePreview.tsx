@@ -36,19 +36,19 @@ export function MobilePreview() {
             className="flex flex-col items-center justify-center min-h-[60vh] px-8 text-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
-              <Plus className="h-10 w-10 text-primary" />
+            <div className="w-16 h-16 bg-card border border-border rounded-xl flex items-center justify-center mb-6">
+              <Plus className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h3 className="font-display font-semibold text-xl mb-2">Comece seu site</h3>
-            <p className="text-sm text-muted-foreground mb-6">
+            <h3 className="font-semibold text-lg mb-2">Comece seu site</h3>
+            <p className="text-sm text-muted-foreground mb-6 font-light">
               Toque no botão abaixo para adicionar seu primeiro bloco
             </p>
             <Button
               onClick={() => handleAddBlockAt(0)}
               size="lg"
-              className="gap-2"
+              className="gap-2 font-medium"
             >
-              <Plus className="h-5 w-5" />
+              <Plus className="h-4 w-4" />
               Adicionar primeiro bloco
             </Button>
           </div>
@@ -60,7 +60,6 @@ export function MobilePreview() {
               </div>
             ))}
             
-            {/* Add block button only after last block */}
             <div 
               className="flex items-center justify-center py-4 px-4"
               onClick={(e) => e.stopPropagation()}
@@ -69,7 +68,7 @@ export function MobilePreview() {
                 onClick={() => handleAddBlockAt(blocks.length)}
                 variant="outline"
                 size="sm"
-                className="gap-2 shadow-md border-2 hover:border-primary"
+                className="gap-2 border-dashed font-medium"
               >
                 <Plus className="h-4 w-4" />
                 Adicionar bloco

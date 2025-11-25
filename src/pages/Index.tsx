@@ -6,68 +6,68 @@ const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <div className="inline-block">
-            <div className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <div className="bg-card text-foreground px-4 py-2 rounded-lg text-sm font-medium mb-6 border border-border">
               🚀 Construtor de Sites Mobile-First
             </div>
           </div>
           
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-sans font-semibold leading-tight tracking-tight">
             Crie Sites Incríveis
             <span className="block text-primary mt-2">Focados em Mobile</span>
           </h1>
           
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-light">
             Construa landing pages, portfólios e sites empresariais profissionais com um editor visual poderoso e intuitivo
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Button 
               size="lg" 
-              className="gap-2 text-lg px-8 py-6"
+              className="gap-2 text-base px-8 font-medium"
               onClick={() => navigate("/dashboard")}
             >
               Começar Agora
-              <ArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6">
+            <Button size="lg" variant="outline" className="text-base px-8 font-medium">
               Ver Exemplos
             </Button>
           </div>
         </div>
 
         {/* Features */}
-        <div className="grid md:grid-cols-3 gap-8 mt-24 max-w-5xl mx-auto">
-          <div className="bg-card rounded-2xl p-8 border border-border hover:shadow-lg transition-all">
-            <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-              <Smartphone className="h-7 w-7 text-primary" />
+        <div className="grid md:grid-cols-3 gap-6 mt-24 max-w-5xl mx-auto">
+          <div className="bg-card rounded-xl p-6 border border-border hover:border-primary/50 transition-colors">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+              <Smartphone className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-display font-semibold mb-3">Mobile-First</h3>
-            <p className="text-muted-foreground">
+            <h3 className="text-lg font-semibold mb-2">Mobile-First</h3>
+            <p className="text-sm text-muted-foreground font-light">
               Otimizado para dispositivos móveis desde o início. Seus sites ficam perfeitos em qualquer tela.
             </p>
           </div>
 
-          <div className="bg-card rounded-2xl p-8 border border-border hover:shadow-lg transition-all">
-            <div className="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mb-4">
-              <Zap className="h-7 w-7 text-accent" />
+          <div className="bg-card rounded-xl p-6 border border-border hover:border-primary/50 transition-colors">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+              <Zap className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-display font-semibold mb-3">Super Rápido</h3>
-            <p className="text-muted-foreground">
+            <h3 className="text-lg font-semibold mb-2">Super Rápido</h3>
+            <p className="text-sm text-muted-foreground font-light">
               Sistema de blocos intuitivo. Adicione elementos, personalize e publique em minutos.
             </p>
           </div>
 
-          <div className="bg-card rounded-2xl p-8 border border-border hover:shadow-lg transition-all">
-            <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-              <Palette className="h-7 w-7 text-primary" />
+          <div className="bg-card rounded-xl p-6 border border-border hover:border-primary/50 transition-colors">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+              <Palette className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-display font-semibold mb-3">Totalmente Personalizável</h3>
-            <p className="text-muted-foreground">
+            <h3 className="text-lg font-semibold mb-2">Totalmente Personalizável</h3>
+            <p className="text-sm text-muted-foreground font-light">
               Controle total sobre cores, fontes, espaçamentos e layouts. Seu site, suas regras.
             </p>
           </div>

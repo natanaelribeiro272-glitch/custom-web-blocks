@@ -25,25 +25,25 @@ export function AddBlockSheet({ open, onOpenChange }: AddBlockSheetProps) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="h-[70vh] rounded-t-3xl">
+      <SheetContent side="bottom" className="h-[70vh] rounded-t-2xl">
         <SheetHeader>
-          <SheetTitle className="text-center">Adicionar Bloco</SheetTitle>
+          <SheetTitle className="text-center font-semibold">Adicionar Bloco</SheetTitle>
         </SheetHeader>
         
-        <div className="grid grid-cols-2 gap-4 mt-6">
+        <div className="grid grid-cols-2 gap-3 mt-6">
           {blockTypes.map((block) => (
             <Button
               key={block.type}
               variant="outline"
-              className="h-auto flex flex-col items-center gap-3 p-6 hover:border-primary hover:bg-primary/5"
+              className="h-auto flex flex-col items-center gap-3 p-5 hover:border-primary hover:bg-card font-normal"
               onClick={() => handleAddBlock(block.type)}
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                <block.icon className="h-6 w-6 text-primary" />
+              <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                <block.icon className="h-5 w-5 text-foreground" />
               </div>
               <div className="text-center">
-                <div className="font-semibold text-sm">{block.label}</div>
-                <div className="text-xs text-muted-foreground mt-1">{block.description}</div>
+                <div className="font-medium text-sm">{block.label}</div>
+                <div className="text-xs text-muted-foreground mt-1 font-light">{block.description}</div>
               </div>
             </Button>
           ))}
