@@ -70,10 +70,12 @@ export function MobilePreview() {
             
             <div 
               className="flex items-center justify-center py-8 px-4"
-              onClick={(e) => e.stopPropagation()}
             >
               <Button
-                onClick={() => handleAddBlockAt(blocks.length)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAddBlockAt(blocks.length);
+                }}
                 variant="outline"
                 size="sm"
                 className="gap-2 border-dashed font-medium"
