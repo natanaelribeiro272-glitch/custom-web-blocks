@@ -9,7 +9,7 @@ interface BlockRendererProps {
 }
 
 export function BlockRenderer({ block }: BlockRendererProps) {
-  const { selectedBlockId, selectBlock, setActiveSheet } = useEditorStore();
+  const { selectedBlockId, selectBlock } = useEditorStore();
   const isSelected = selectedBlockId === block.id;
 
   const getBlockClasses = () => {
