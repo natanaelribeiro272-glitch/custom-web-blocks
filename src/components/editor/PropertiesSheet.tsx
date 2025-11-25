@@ -1,8 +1,7 @@
 import { useEditorStore } from "@/hooks/useEditorStore";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { PropertiesPanel } from "./PropertiesPanel";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PropertiesPanel } from "./PropertiesPanel";
 
 interface PropertiesSheetProps {
   open: boolean;
@@ -26,9 +25,9 @@ export function PropertiesSheet({ open, onOpenChange }: PropertiesSheetProps) {
   return (
     <div className="fixed inset-0 z-50 pointer-events-none">
       <div className="absolute bottom-0 left-0 right-0 pointer-events-auto">
-        <div className="bg-card border-t border-x border-border shadow-2xl rounded-t-3xl max-w-2xl mx-auto">
+        <div className="bg-card border-t border-x border-border shadow-2xl rounded-t-3xl max-w-2xl mx-auto overflow-hidden flex flex-col max-h-[75vh]">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b">
+          <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
             <h3 className="font-semibold text-sm">{getTitle()}</h3>
             <Button
               variant="ghost"
@@ -40,12 +39,12 @@ export function PropertiesSheet({ open, onOpenChange }: PropertiesSheetProps) {
             </Button>
           </div>
           
-          {/* Content - Compact scrollable area */}
-          <ScrollArea className="max-h-[65vh]">
+          {/* Content - Scrollable area */}
+          <div className="overflow-y-auto flex-1">
             <div className="px-4 py-3 pb-6">
               <PropertiesPanel />
             </div>
-          </ScrollArea>
+          </div>
         </div>
       </div>
     </div>
