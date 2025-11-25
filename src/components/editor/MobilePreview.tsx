@@ -24,7 +24,7 @@ export function MobilePreview() {
   return (
     <div className="flex-1 overflow-auto pb-20">
       <div 
-        className="min-h-screen w-full relative px-2"
+        className="min-h-screen w-full relative p-4"
         style={{ backgroundColor: currentPage?.backgroundColor || "#ffffff" }}
         onClick={handleBackgroundClick}
       >
@@ -55,15 +55,21 @@ export function MobilePreview() {
             </Button>
           </div>
         ) : (
-          <div className="space-y-4 py-4">
-            {blocks.map((block) => (
-              <div key={block.id} onClick={(e) => e.stopPropagation()}>
-                <BlockRenderer block={block} />
+          <div className="space-y-6 py-4">
+            {blocks.map((block, index) => (
+              <div key={block.id}>
+                <div onClick={(e) => e.stopPropagation()}>
+                  <BlockRenderer block={block} />
+                </div>
+                {/* Clickable area between blocks */}
+                {index < blocks.length - 1 && (
+                  <div className="h-6" onClick={handleBackgroundClick} />
+                )}
               </div>
             ))}
             
             <div 
-              className="flex items-center justify-center py-4 px-4"
+              className="flex items-center justify-center py-8 px-4"
               onClick={(e) => e.stopPropagation()}
             >
               <Button
@@ -83,6 +89,9 @@ export function MobilePreview() {
         <div onClick={(e) => e.stopPropagation()}>
           {currentPage && <HeaderFooterRenderer config={currentPage.footer} type="footer" pageId={currentPage.id} />}
         </div>
+        
+        {/* Extra padding at bottom for easy deselection */}
+        <div className="h-32" onClick={handleBackgroundClick} />
       </div>
     </div>
   );
