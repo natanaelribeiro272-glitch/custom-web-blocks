@@ -27,10 +27,12 @@ export function FloatingBottomBar() {
   
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Auto expand when something is selected
+  // Auto expand when something is selected, keep collapsed when nothing is selected
   useEffect(() => {
     if (selectedBlockId || selectedElementId || selectedHeaderFooter) {
       setIsExpanded(true);
+    } else {
+      setIsExpanded(false);
     }
   }, [selectedBlockId, selectedElementId, selectedHeaderFooter]);
 
@@ -72,20 +74,21 @@ export function FloatingBottomBar() {
           {isExpanded && (
             <div className="max-h-[calc(80vh-3.5rem)] overflow-y-auto">
               <div className="p-4 space-y-4">
-                {/* Back button - always visible */}
-                <Button
-                  variant="outline"
-                  size="default"
-                  onClick={() => navigate("/dashboard")}
-                  className="w-full justify-start gap-2 font-medium"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  <span>Voltar para Dashboard</span>
-                </Button>
-
-                {/* Page selector with add button - only show when nothing is selected */}
+                {/* Show default options when nothing is selected */}
                 {!hasSelection && (
                   <>
+                    {/* Back button */}
+                    <Button
+                      variant="outline"
+                      size="default"
+                      onClick={() => navigate("/dashboard")}
+                      className="w-full justify-start gap-2 font-medium"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      <span>Voltar para Dashboard</span>
+                    </Button>
+
+                    {/* Page selector with add button */}
                     <div className="space-y-2">
                       <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Página Atual</label>
                       <div className="flex items-center gap-2">
