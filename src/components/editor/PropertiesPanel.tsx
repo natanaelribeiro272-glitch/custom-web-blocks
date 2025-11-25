@@ -1683,7 +1683,25 @@ export function PropertiesPanel() {
         </div>
 
         <div className="space-y-1.5">
-          <Label className="text-xs">Opacidade: {selectedBlock.style.backgroundOpacity || 100}%</Label>
+          <div className="flex items-center justify-between">
+            <Label className="text-xs">Opacidade</Label>
+            <div className="flex items-center gap-1">
+              <Input
+                type="number"
+                min="0"
+                max="100"
+                step="5"
+                value={selectedBlock.style.backgroundOpacity || 100}
+                onChange={(e) =>
+                  updateBlock(selectedBlock.id, {
+                    style: { ...selectedBlock.style, backgroundOpacity: parseInt(e.target.value) || 0 },
+                  })
+                }
+                className="w-16 h-7 text-xs text-right"
+              />
+              <span className="text-xs text-muted-foreground">%</span>
+            </div>
+          </div>
           <Slider
             value={[selectedBlock.style.backgroundOpacity || 100]}
             onValueChange={([value]) =>
@@ -1699,7 +1717,25 @@ export function PropertiesPanel() {
         </div>
 
         <div className="space-y-1.5">
-          <Label className="text-xs">Desfoque: {selectedBlock.style.backgroundBlur || 0}px</Label>
+          <div className="flex items-center justify-between">
+            <Label className="text-xs">Desfoque</Label>
+            <div className="flex items-center gap-1">
+              <Input
+                type="number"
+                min="0"
+                max="20"
+                step="1"
+                value={selectedBlock.style.backgroundBlur || 0}
+                onChange={(e) =>
+                  updateBlock(selectedBlock.id, {
+                    style: { ...selectedBlock.style, backgroundBlur: parseInt(e.target.value) || 0 },
+                  })
+                }
+                className="w-16 h-7 text-xs text-right"
+              />
+              <span className="text-xs text-muted-foreground">px</span>
+            </div>
+          </div>
           <Slider
             value={[selectedBlock.style.backgroundBlur || 0]}
             onValueChange={([value]) =>
@@ -1717,7 +1753,25 @@ export function PropertiesPanel() {
         <Separator />
 
         <div className="space-y-1.5">
-          <Label className="text-xs">Espaçamento: {selectedBlock.style.padding}rem</Label>
+          <div className="flex items-center justify-between">
+            <Label className="text-xs">Espaçamento (Padding)</Label>
+            <div className="flex items-center gap-1">
+              <Input
+                type="number"
+                min="0"
+                max="6"
+                step="0.5"
+                value={selectedBlock.style.padding || 2}
+                onChange={(e) =>
+                  updateBlock(selectedBlock.id, {
+                    style: { ...selectedBlock.style, padding: parseFloat(e.target.value) || 0 },
+                  })
+                }
+                className="w-16 h-7 text-xs text-right"
+              />
+              <span className="text-xs text-muted-foreground">rem</span>
+            </div>
+          </div>
           <Slider
             value={[selectedBlock.style.padding || 2]}
             onValueChange={([value]) =>
@@ -1733,7 +1787,25 @@ export function PropertiesPanel() {
         </div>
 
         <div className="space-y-1.5">
-          <Label className="text-xs">Altura: {selectedBlock.style.minHeight}px</Label>
+          <div className="flex items-center justify-between">
+            <Label className="text-xs">Altura Mínima</Label>
+            <div className="flex items-center gap-1">
+              <Input
+                type="number"
+                min="80"
+                max="500"
+                step="10"
+                value={selectedBlock.style.minHeight || 120}
+                onChange={(e) =>
+                  updateBlock(selectedBlock.id, {
+                    style: { ...selectedBlock.style, minHeight: parseInt(e.target.value) || 80 },
+                  })
+                }
+                className="w-16 h-7 text-xs text-right"
+              />
+              <span className="text-xs text-muted-foreground">px</span>
+            </div>
+          </div>
           <Slider
             value={[selectedBlock.style.minHeight || 120]}
             onValueChange={([value]) =>
