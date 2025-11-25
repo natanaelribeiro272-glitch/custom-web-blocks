@@ -36,22 +36,6 @@ export function FloatingBottomBar() {
     }
   }, [selectedBlockId, selectedElementId, selectedHeaderFooter]);
 
-  // Close when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      // Check if click is outside the bottom bar
-      if (!target.closest('[data-bottom-bar]')) {
-        setIsExpanded(false);
-      }
-    };
-
-    if (isExpanded) {
-      document.addEventListener('click', handleClickOutside);
-      return () => document.removeEventListener('click', handleClickOutside);
-    }
-  }, [isExpanded]);
-
   const handleOpenPageSettings = () => {
     setActiveSheet("page-settings");
   };
@@ -66,7 +50,6 @@ export function FloatingBottomBar() {
 
   return (
     <div
-      data-bottom-bar
       className={cn(
         "fixed left-0 right-0 z-50 transition-all duration-300 ease-in-out",
         "bottom-2"

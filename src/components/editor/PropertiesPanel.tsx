@@ -54,7 +54,22 @@ export function PropertiesPanel() {
   const currentPage = pages.find((p) => p.id === currentPageId);
   const blocks = currentPage?.blocks || [];
   const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
-  const selectedElement = selectedBlock?.elements.find((e) => e.id === selectedElementId);
+  
+  // Find selected element across all blocks if not found in selected block
+  let selectedElement = selectedBlock?.elements.find((e) => e.id === selectedElementId);
+  let elementBlockId = selectedBlockId;
+  
+  if (!selectedElement && selectedElementId) {
+    // Search in all blocks for the selected element
+    for (const block of blocks) {
+      const element = block.elements.find((e) => e.id === selectedElementId);
+      if (element) {
+        selectedElement = element;
+        elementBlockId = block.id;
+        break;
+      }
+    }
+  }
 
   // Page Configuration
   if (showingPageConfig && currentPage) {
@@ -483,8 +498,9 @@ export function PropertiesPanel() {
       }
 
   // Element Properties
-  if (selectedElement && selectedBlockId) {
+  if (selectedElement && elementBlockId) {
     const elementStyle = selectedElement.content.style || {};
+    const blockId = elementBlockId; // Use this instead of selectedBlockId for all updates
     
     return (
       <div className="space-y-4">
@@ -504,7 +520,7 @@ export function PropertiesPanel() {
               id="element-text"
               value={selectedElement.content.text || ""}
               onChange={(e) =>
-                updateElement(selectedBlockId, selectedElement.id, {
+                updateElement(blockId, selectedElement.id, {
                   content: { ...selectedElement.content, text: e.target.value },
                 })
               }
