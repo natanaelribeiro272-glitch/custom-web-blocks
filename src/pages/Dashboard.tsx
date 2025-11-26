@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import TemplateSelector from "@/components/TemplateSelector";
 
 interface Project {
   id: string;
@@ -22,7 +23,9 @@ const Dashboard = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showNameDialog, setShowNameDialog] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -58,6 +61,18 @@ const Dashboard = () => {
     setLoading(false);
   };
 
+  const handleSelectTemplate = (templateData: any) => {
+    setSelectedTemplate(templateData);
+    setShowCreateDialog(false);
+    setShowNameDialog(true);
+  };
+
+  const handleStartFromScratch = () => {
+    setSelectedTemplate(null);
+    setShowCreateDialog(false);
+    setShowNameDialog(true);
+  };
+
   const handleCreateProject = async () => {
     if (!newProjectName.trim()) {
       toast({
@@ -89,8 +104,8 @@ const Dashboard = () => {
       return;
     }
 
-    // Initialize empty project data in localStorage
-    localStorage.setItem(newProjectId, JSON.stringify({
+    // Initialize project data in localStorage with template or empty
+    const defaultData = {
       pages: [{
         id: "page-1",
         name: "Home",
@@ -106,15 +121,19 @@ const Dashboard = () => {
         blocks: [],
       }],
       currentPageId: "page-1",
-    }));
+    };
+
+    const projectData = selectedTemplate || defaultData;
+    localStorage.setItem(newProjectId, JSON.stringify(projectData));
 
     toast({
       title: "Projeto criado!",
       description: `${newProjectName} foi criado com sucesso.`,
     });
 
-    setShowCreateDialog(false);
+    setShowNameDialog(false);
     setNewProjectName("");
+    setSelectedTemplate(null);
     loadProjects();
     navigate(`/editor?project=${newProjectId}`);
   };
@@ -249,11 +268,27 @@ const Dashboard = () => {
         )}
       </div>
 
-      {/* Create Dialog */}
+      {/* Template Selection Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Criar Novo Projeto</DialogTitle>
+            <DialogDescription>
+              Escolha um template para começar ou comece do zero
+            </DialogDescription>
+          </DialogHeader>
+          <TemplateSelector
+            onSelectTemplate={handleSelectTemplate}
+            onStartFromScratch={handleStartFromScratch}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Name Project Dialog */}
+      <Dialog open={showNameDialog} onOpenChange={setShowNameDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Nome do Projeto</DialogTitle>
             <DialogDescription>
               Dê um nome ao seu novo projeto. Você poderá alterá-lo depois.
             </DialogDescription>
@@ -275,7 +310,7 @@ const Dashboard = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+            <Button variant="outline" onClick={() => setShowNameDialog(false)}>
               Cancelar
             </Button>
             <Button onClick={handleCreateProject}>
