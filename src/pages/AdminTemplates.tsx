@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,7 +30,8 @@ interface Template {
 
 export default function AdminTemplates() {
   const navigate = useNavigate();
-  const { isAdmin, loading: adminLoading } = useIsAdmin();
+  const { user, loading: authLoading } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,18 +48,42 @@ export default function AdminTemplates() {
   const [templateData, setTemplateData] = useState("");
 
   useEffect(() => {
-    if (!adminLoading && !isAdmin) {
-      navigate("/dashboard");
-      toast.error("Acesso negado. Apenas administradores podem acessar esta página.");
-    }
-  }, [isAdmin, adminLoading, navigate]);
+    const checkAdmin = async () => {
+      if (!user) {
+        navigate("/auth");
+        return;
+      }
 
-  useEffect(() => {
-    if (isAdmin) {
-      loadCategories();
-      loadTemplates();
+      try {
+        const { data, error } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", user.id)
+          .eq("role", "admin")
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+          navigate("/dashboard");
+          toast.error("Acesso negado. Apenas administradores podem acessar esta página.");
+          return;
+        }
+
+        setIsAdmin(true);
+        loadCategories();
+        loadTemplates();
+      } catch (error) {
+        console.error("Error checking admin:", error);
+        navigate("/dashboard");
+        toast.error("Erro ao verificar permissões");
+      }
+    };
+
+    if (!authLoading) {
+      checkAdmin();
     }
-  }, [isAdmin]);
+  }, [user, authLoading, navigate]);
 
   const loadCategories = async () => {
     try {
@@ -193,16 +218,12 @@ export default function AdminTemplates() {
     ? templates.filter((t) => t.category_id === selectedCategory)
     : templates;
 
-  if (adminLoading || loading) {
+  if (authLoading || loading || !isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="w-8 h-8 animate-spin" />
       </div>
     );
-  }
-
-  if (!isAdmin) {
-    return null;
   }
 
   return (
