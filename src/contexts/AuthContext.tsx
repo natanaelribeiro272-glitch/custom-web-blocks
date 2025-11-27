@@ -21,9 +21,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("🔐 AuthContext: Initializing auth");
+    
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log("🔐 AuthContext: Auth state changed", { event, userId: session?.user?.id });
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
@@ -32,6 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("🔐 AuthContext: Got session", { userId: session?.user?.id });
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
