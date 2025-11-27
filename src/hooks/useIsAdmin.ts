@@ -9,7 +9,10 @@ export const useIsAdmin = () => {
 
   useEffect(() => {
     const checkAdminStatus = async () => {
+      console.log("🔍 Checking admin status for user:", user?.id);
+      
       if (!user) {
+        console.log("❌ No user found");
         setIsAdmin(false);
         setLoading(false);
         return;
@@ -23,10 +26,16 @@ export const useIsAdmin = () => {
           .eq("role", "admin")
           .maybeSingle();
 
+        console.log("📊 Admin check result:", { data, error });
+
         if (error) throw error;
-        setIsAdmin(!!data);
+        
+        const hasAdminRole = !!data;
+        console.log(hasAdminRole ? "✅ User is admin" : "❌ User is NOT admin");
+        
+        setIsAdmin(hasAdminRole);
       } catch (error) {
-        console.error("Error checking admin status:", error);
+        console.error("❌ Error checking admin status:", error);
         setIsAdmin(false);
       } finally {
         setLoading(false);
