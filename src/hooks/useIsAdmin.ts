@@ -3,20 +3,27 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const useIsAdmin = () => {
-  const { user } = useAuth();
+  const authContext = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  
+  console.log("🔑 useIsAdmin: Auth context", { 
+    user: authContext?.user?.id, 
+    loading: authContext?.loading 
+  });
 
   useEffect(() => {
     const checkAdminStatus = async () => {
-      console.log("🔍 Checking admin status for user:", user?.id);
+      console.log("🔍 Checking admin status for user:", authContext?.user?.id);
       
-      if (!user) {
+      if (!authContext?.user) {
         console.log("❌ No user found");
         setIsAdmin(false);
         setLoading(false);
         return;
       }
+      
+      const user = authContext.user;
 
       try {
         const { data, error } = await supabase
@@ -43,7 +50,7 @@ export const useIsAdmin = () => {
     };
 
     checkAdminStatus();
-  }, [user]);
+  }, [authContext?.user]);
 
   return { isAdmin, loading };
 };
